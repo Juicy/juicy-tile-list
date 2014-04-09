@@ -13,6 +13,8 @@
         polyfill-next-selector { content: ':host > *'; }
         ::content>* {
             position: absolute;
+            -webkit-transition:width 1s, height 1s, top 1s, left 1s, -webkit-transform 1s;
+            transition:width 1s, height 1s, top 1s, left 1s, transform 1s;
         }
     </style>
     <content></content>
@@ -75,7 +77,7 @@
                     var self = this;
 
                     // debugger;
-                    var childElements = createItemsList( 
+                    this.items = createItemsList( 
                             filterNodes( this.children ),
                                 this.priorities,
                                 this.cellWidth,
@@ -89,7 +91,7 @@
                         direction: this.direction
                     });
                     
-                    this.packItems( childElements, this.priorities, this.package );
+                    this.packItems( this.items, this.priorities );
 
                     // Observe changes
                     // TODO: Make it cleaner
@@ -108,19 +110,108 @@
                     // end of: Observe changes
                 });
             },
-            move: function(what, row, col, rowspan, colspan){
-                what.style.gridColumn = col + "/ span " + colspan;
-                what.style.gridRow = row + "/ span " + rowspan;
-                //FIXME: is something there
+            /**
+             * Resize given item.
+             * @param  {Object | Number} item   item from list, or item index (note that items list is sorted by priority)
+             * @param  {Number} width  number of cells/columns
+             * @param  {Number} height number of cells/rows
+             * @return {pj-sortable-tiles}        self
+             */
+            resizeItem: function(item, width, height){
+                if(typeof item == 'number'){
+                    item = this.items[item];
+                }
+                item.rect.width = width * this.cellWidth;
+                item.rect.height = height * this.cellHeight;
+                this.items.sort( this.sorter ) ;
+                this.package.reset();
+                this.packItems( this.items );
+                return this;
+            },
+
+            /**
+             * Change priority of given item
+             * @param  {Number} itemIndex    item index (note that items list is sorted by priority)
+             * @param  {Boolean} increase  true - increases priority, false - decreases
+             * @param  {Boolean} [end=false] true to move to the end
+             * @return {pj-sortable-tiles}        self
+             * @TODO write tests
+             */
+            reprioritizeItem: function(itemIndex, increase, end){
+                var higher, lower, item;
+                // do nothing if there is nothing to rearrange
+                if( this.items.length < 2){
+                    return this;
+                }
+                //use indexes as input
+                // if(typeof item == 'number'){
+                    item = this.items[itemIndex];
+                // }
+                // move to the end
+                debugger
+                if( end || 
+                    increase && (itemIndex == 1) ||
+                    !increase && (itemIndex == this.items.length - 2 ) 
+                ){
+                    // top
+                    if(increase){
+                        // already on top
+                        if(item.rect.priority == 1){
+                            return this;
+                        }
+                        higher = this.items[0];
+                        // already there, but with different priority
+                        if(higher == item){
+                            item.rect.priority = 1;
+                            // do not rearrange
+                            return this;
+                        } else {
+                            // move to the middle
+                            higher.rect.priority = (this.items[1].rect.priority + 1)/2;
+                            item.rect.priority = 1;
+                        }
+                    } else { // bottom                        
+                        // already at the bottom
+                        if(item.rect.priority == 0){
+                            return this;
+                        }
+                        lower = this.items[this.items.length -1 ];
+                        // already there, but with different priority.
+                        if(lower == item){
+                            item.rect.priority = 0;
+                            return this;
+                        } else {
+                            // move to the middle
+                            lower.rect.priority = this.items[this.items.length -2].rect.priority/2;
+                            item.rect.priority = 0;
+                        }
+
+                    }
+                } else {
+                    // top
+                    if(increase){
+                        higher = this.items[itemIndex-2];
+                        lower = this.items[itemIndex-1];
+                    } else { 
+                        higher = this.items[itemIndex+1];
+                        lower = this.items[itemIndex+2];
+                    }
+                    item.rect.priority = (higher.rect.priority + lower.rect.priority)/2;
+                }
+
+
+                this.items.sort( this.sorter ) ;
+                this.package.reset();
+                this.packItems( this.items );
+                return this;
             },
 
             /**
              * [packItems description]
              * @param  {Array<Object>} collection array of elements
-             * @param  {Array<Object>} setup      setup array
              * @return {Array}            [description]
              */
-            packItems: function( collection, setup ){
+            packItems: function( collection ){
                 var self = this;
                 return collection.map(function(item, index){
                     // TODO: do it more lightweight
