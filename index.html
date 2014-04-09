@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>&lt;pj-sortable-tiles&gt;</title>
+
+    <!-- Importing Web Component's Polyfill -->
+    
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.2.2/platform.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.2.2/polymer.js"></script>
+    <!--
+    <script src="bower_components/platform/platform.js"></script>
+    <script src="bower_components/polymer/polymer.js"></script>
+    -->
+    <!-- Importing Custom Elements -->
+    <link rel="import" href="src/pj-sortable-tiles.html">
+<style>
+* {
+  margin:0px;
+  padding:0px;
+}
+pj-sortable-tiles{
+    /*width: 300px;
+    height: 150px;*/
+    width: 600px;
+    height: 300px;
+}
+pj-sortable-tiles>:first-child {
+    background:lightgreen;
+}
+
+pj-sortable-tiles>:nth-child(2) {
+    background:lightblue;
+}
+
+pj-sortable-tiles>:nth-child(3) {
+    background:yellow;
+    overflow:auto;
+}
+
+pj-sortable-tiles>:nth-child(4) {
+    background:gray;
+    overflow:auto;
+}
+
+pj-sortable-tiles>:nth-child(5) {
+    background:orange;
+    max-height: 100px;
+    overflow:auto;
+}
+</style>
+
+<body>
+    <template bind>
+        <pj-sortable-tiles priorities="{{priorities}}" cellWidth="200" cellHeight="100">
+            <div>Item 0 </div>
+            <div>
+                <button>Item 1</button>
+            </div>
+            <div>
+                <input value="Input2">
+            </div>
+            <section>Item3</section>
+        </pj-sortable-tiles>
+    </template>
+    <script type="text/javascript">
+        // 011
+        // 233
+        // 2
+        // 
+        // prioritized
+        // 
+        // 110
+        // 233
+        // 2
+        model = {
+            priorities: [
+                // 011
+                // 233
+                // 2
+                // prioritized
+                // 
+                // 110
+                // 233
+                // 2
+                {
+                    index:0,
+                    priority:0.6,
+                    height:1,
+                    width:1
+                },
+                {
+                    index:1,
+                    priority:0.9,
+                    height:1,
+                    width:2
+                },
+                {
+                    index:2,
+                    priority:0.3,
+                    height:1,
+                    width:2
+                },
+                {
+                    index:3,
+                    priority:0.4,
+                    height:2,
+                    width:1
+                }
+                // 
+                // 122
+                // 145
+                // 333
+                // 
+                // {
+                //   width: 1,
+                //   height: 2
+                // }, {
+                //   width: 2,
+                //   height: 1
+                // }, {
+                //   width: 3,
+                //   height: 1
+                // }, {
+                //   width: 1,
+                //   height: 1
+                // }, {
+                //   width: 1,
+                //   height: 1
+                // }
+            ]
+        };
+        document.addEventListener("polymer-ready", function(){
+            document.querySelector("template").model = model;
+            
+        })
+
+
+
+
+    </script>
+
+
+
+</body>

@@ -1,0 +1,23 @@
+{
+  "name": "pj-sortable-tiles",
+  "version": "0.0.0",
+  "homepage": "https://github.com/Polyjuice/pj-sortable-tiles",
+  "description": "<pj-sortable-tiles> is a Custom Element with sortable tiles that packs efficiently without changing HTML structure (changes CSS only).",
+  "license": "MIT",
+  "main": "src/pj-sortable-tiles.html",
+  "keywords": [
+    "polymer",
+    "web-components"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "tests/",
+    "examples/"
+  ],
+  "dependencies": {
+    "platform": "Polymer/platform#~0.2.2",
+    "polymer": "Polymer/polymer#~0.2.2"
+  }
+}

@@ -1,0 +1,148 @@
+/**
+ * Rectangle tests
+ **/
+describe('Rectangle', function() {
+  'use strict';
+
+  var assert = chai.assert;
+
+  describe('constructor', function() {
+    it('should create itself with default values', function() {
+      var rect = new Rectangle();
+      assert.equal(rect.x, 0, 'x = 0');
+      assert.equal(rect.y, 0, 'y = 0');
+      assert.equal(rect.width, 0, 'width = 0');
+      assert.equal(rect.height, 0, 'height = 0');
+    });
+
+    it('should create itself with initial values', function() {
+      var rect = new Rectangle({
+        x: 7,
+        y: 11,
+        width: 13,
+        height: -2
+      });
+      assert.equal(rect.x, 7, 'x');
+      assert.equal(rect.y, 11, 'y');
+      assert.equal(rect.width, 13, 'width');
+      assert.equal(rect.height, -2, 'height');
+    });
+  });
+
+  describe('method contains', function() {
+
+    var rectA = new Rectangle({
+      x: 20,
+      y: 10,
+      width: 100,
+      height: 200
+    });
+    it('should return `true` if rectangle contains given', function() {
+      var rectB = new Rectangle({
+        x: 30,
+        y: 20,
+        width: 10,
+        height: 20
+      });
+
+      assert.strictEqual(rectA.contains(rectB), true, 'A contains B');
+
+      rectB = new Rectangle({
+        x: 30,
+        y: 40
+      });
+
+      assert.strictEqual(rectA.contains(rectB), true,
+        'A contains B, B is a point');
+
+      rectB = new Rectangle({
+        x: rectA.x,
+        y: rectA.y,
+        width: rectA.width,
+        height: rectA.height
+      });
+
+      assert.strictEqual(rectA.contains(rectB), true, 'A and B are equal');
+    });
+
+    it('should return `false` if rectangle does not contain given', function() {
+      var rectB = new Rectangle({
+        x: 400,
+        y: 50,
+        width: 10,
+        height: 40
+      });
+
+      assert.strictEqual(rectA.contains(rectB), false, 'A does not contain B');
+
+      rectB = new Rectangle({
+        x: rectA.x - 10,
+        y: rectA.y,
+        width: rectA.width,
+        height: rectA.height
+      });
+
+      assert.strictEqual(rectA.contains(rectB), false,
+        'A contain B. B is same size as A, but in different position');
+    });
+  });
+
+
+  describe('method intersects', function() {
+
+    var rectA = new Rectangle({
+      x: 200,
+      y: 100,
+      width: 600,
+      height: 400
+    });
+    var rectB = new Rectangle({
+      x: 300,
+      y: 200,
+      width: 200,
+      height: 100
+    });
+
+
+    it('should return `true` if rectangle intersects with given', function() {
+      assert.strictEqual(rectA.intersects(rectB), true, 'B &isin; A, A intersects B');
+      assert.strictEqual(rectB.intersects(rectA), true, 'B &isin; A, B intersects A');
+
+      rectB.x = 100;
+
+      assert.strictEqual(rectA.intersects(rectB), true,
+        'B intersects left edge of A, A intersects B');
+      assert.strictEqual(rectB.intersects(rectA), true,
+        'B intersects left edge of A, B intersects A');
+
+      rectB.y = 50;
+
+      assert.strictEqual(rectA.intersects(rectB), true,
+        'B intersects left top corner of A, A intersects B');
+      assert.strictEqual(rectB.intersects(rectA), true,
+        'B intersects left top corner of A, B intersects A');
+
+    });
+
+
+    it('should return `true` if rectangle intersects with given', function() {
+      rectB.x = 0;
+      rectB.y = 0;
+
+      assert.strictEqual(rectA.intersects(rectB), false,
+        'B bottom right corner touches A top left corner, A DOES NOT intersect B');
+      assert.strictEqual(rectB.intersects(rectA), false,
+        'B bottom right corner touches A top left corner, B DOES NOT intersect A');
+
+      rectB.x = rectA.x - rectB.width;
+      rectB.y = rectA.y;
+      rectB.height = rectA.height;
+
+      assert.strictEqual(rectA.intersects(rectB), false,
+        'B is completely adjacent to A, A DOES NOT intersect B');
+      assert.strictEqual(rectB.intersects(rectA), false,
+        'B is completely adjacent to A, B DOES NOT intersect A');
+    });
+  });
+
+});

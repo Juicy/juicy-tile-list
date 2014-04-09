@@ -1,0 +1,145 @@
+<!-- Import Polymer -->
+<script src="rectangle.js"></script>
+<script src="package.js"></script>
+
+<!-- Define your custom element -->
+<polymer-element name="pj-sortable-tiles" attributes="priorities rowspans colspans cellWidth cellHeight">
+    <template>
+    <style>
+        :host {
+            display: block;
+            position: relative;
+        }
+        polyfill-next-selector { content: ':host > *'; }
+        ::content>* {
+            position: absolute;
+        }
+    </style>
+    <content></content>
+    </template>
+    <script>
+        /**
+         * Disregard `<style>`, `<template>` and Text nodes.
+         * @param  {NodesList} nodesList nodes list to filter
+         * @return {Array}           array of sortable items.
+         */
+        function filterNodes( nodesList ){
+            return nodesList.array()
+                        .filter(function filterOutText(child){
+                            return !(child instanceof Text) &&
+                                    !(child instanceof HTMLTemplateElement) &&
+                                    !(child instanceof HTMLScriptElement);
+                        });
+        }
+        /**
+         * [createItemsList description]
+         * @param  {Array<Element>} elements [description]
+         * @return {[type]}          [description]
+         */
+        function createItemsList( elements, setup, cellWidth, cellHeight ){
+            return elements.map(function(element, index){
+                // TODO: do it more lightweight
+                var rect = new Rectangle({
+                        width: setup[index].width * cellWidth,
+                        height: setup[index].height * cellHeight,
+                        //TODO: it looks a bit hacky
+                        priority: setup[index].priority
+                    }); 
+                return {
+                    element: element,
+                    rect: rect
+                }
+            })
+
+        }
+        Polymer('pj-sortable-tiles', {
+            priorities:[],
+            items: null,
+            cellHeight: 50,
+            cellWidth: 100,
+            direction: "downwardLeftToRight",
+            sorter: function byPriority(itemA, itemB){
+                return itemB.rect.priority - itemA.rect.priority;
+            },
+            package: null,
+            created: function (){
+                // this.style.display = "block";
+                // this.style.position = "relative";
+                // debugging:
+                // debugger
+                // globMe = this;
+            },
+            attached: function gridAttached(){
+                //ensure any element upgrades have been processed
+                this.async(function asyncAttached(){
+                    var self = this;
+
+                    // debugger;
+                    var childElements = createItemsList( 
+                            filterNodes( this.children ),
+                                this.priorities,
+                                this.cellWidth,
+                                this.cellHeight
+                            )
+                            .sort( this.sorter );
+
+                    this.package = new Package({
+                        width: this.clientWidth, 
+                        height: this.clientHeight,
+                        direction: this.direction
+                    });
+                    
+                    this.packItems( childElements, this.priorities, this.package );
+
+                    // Observe changes
+                    // TODO: Make it cleaner
+                    // create an observer instance
+                    var observer = new MutationObserver(function(mutations) {
+                      mutations.forEach(function(mutation) {
+                        console.log("observation", mutation.type, arguments, mutations);
+                        if(mutation.addedNodes){
+                            // debugger;
+                            console.log("something was added")
+                        }
+                      });
+                    });
+                    // pass in the target node, as well as the observer options
+                    observer.observe(this, { childList: true });
+                    // end of: Observe changes
+                });
+            },
+            move: function(what, row, col, rowspan, colspan){
+                what.style.gridColumn = col + "/ span " + colspan;
+                what.style.gridRow = row + "/ span " + rowspan;
+                //FIXME: is something there
+            },
+
+            /**
+             * [packItems description]
+             * @param  {Array<Object>} collection array of elements
+             * @param  {Array<Object>} setup      setup array
+             * @return {Array}            [description]
+             */
+            packItems: function( collection, setup ){
+                var self = this;
+                return collection.map(function(item, index){
+                    // TODO: do it more lightweight
+                    var element = item.element;
+                    var rect = item.rect;
+                    self.package.add(rect);
+                    //TODO: consider repaints optimization
+                    var elStyle = element.style;
+                    elStyle.top = rect.y + "px";
+                    elStyle.left = rect.x + "px";
+                    elStyle.width = rect.width + "px";
+                    elStyle.height = rect.height + "px";
+                    return {
+                        element: element,
+                        rect: rect
+                    }
+                })
+            }
+        });
+    </script>
+
+</polymer-element>

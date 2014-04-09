@@ -1,0 +1,30 @@
+{
+  "name": "pj-sortable-tiles",
+  "version": "0.0.0",
+  "description": "<pj-sortable-tiles> is a Custom Element with sortable tiles that packs efficiently without changing HTML structure (changes CSS only).",
+  "main": "src/pj-sortable-tiles.html",
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "~1.9.1",
+    "grunt": "~0.4.4",
+    "grunt-mocha": "~0.4.10",
+    "mocha": "~1.18.2",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-text-replace": "~0.3.11"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Polyjuice/pj-sortable-tiles"
+  },
+  "bugs": {
+    "url": "https://github.com/Polyjuice/pj-sortable-tiles/issues"
+  },
+  "license": "MIT"
+}
