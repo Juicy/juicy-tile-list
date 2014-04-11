@@ -196,8 +196,8 @@
                 // move to the end
                 // debugger
                 if( end || 
-                    increase && (itemIndex == 1) ||
-                    !increase && (itemIndex == this.items.length - 2 ) 
+                    increase && (itemIndex <= 1) ||
+                    !increase && (itemIndex >= this.items.length - 2 ) 
                 ){
                     // top
                     if(increase){
