@@ -45,6 +45,28 @@ Attribute                    | Options             | Default      | Description
 `cellHeight`                 | *Number*            | `50`         | Height of every row (in px)
 `layersOrientation`          | *String*            | `horizontal` | How to align our package (`horizontal` or `vertical`)
 
+## Properties
+
+Name                 | Options        | Description
+---                  | ---            | ---
+`items`              | *Array*        | Tiles setup. Array of following elements, sorted by priority.
+`items[.].element`   | *Element*      | DOM element 
+`items[.].rect`      | *Rectangle*    | Rectanlge that represents `element` position in Package
+`package`            | *Package*      | Package abstract object
+
+## Methods
+
+Name               | Param name | Type               | Default | Description
+---                | ---        | ---                | ---     | ---
+`resizeItem`       |            |                    |         | Resize element
+                   | item       | *Number* or *Item* |         | Item or item index.
+                   | width      | *Number*           | `0`     | new width
+                   | height     | *Number*           | `0`     | new height
+`reprioritizeItem` |            |                    |         | Change priority/weight of item
+                   | itemIndex  | *Number*           |         | Item or item index. Please note, that items array is sorted by priority.
+                   | increase   | *Boolean*          | `false` | `true` - increases, `false` decreases priority
+                   | end        | *Boolean*          | `false` | `true` to move to the end of list
+
 
 ## Contributing
 
