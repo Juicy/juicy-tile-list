@@ -1,0 +1,124 @@
+<!-- Define your custom element -->
+<polymer-element name="element-selector">
+    <script>
+    (function() {
+
+  function CreateMask(color,opacity) {
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    //var svg = document.querySelector("#gridmask3");
+    //var ns = "http://www.w3.org/2000/svg";
+    var ns = null;
+    svg.setAttribute("id","gridmask")
+    svg.style.pointerEvents = "none";
+    svg.style.position = "absolute";
+    svg.style.left = 0;
+    svg.style.top = 0;
+    document.body.appendChild(svg);
+//    var defs = document.createElementNS(ns, 'defs');
+//    svg.appendChild(defs);
+    var p = document.createElementNS("http://www.w3.org/2000/svg", 'path');
+    p.setAttribute("id","mask")
+    p.setAttribute("fill",color);
+    p.setAttribute("fill-rule","evenodd");
+    //p.setAttribute("filter","url(#faded2)");
+  //  var p = svg.getElementById("mask");
+    p.style.opacity = opacity;
+    //newElement.setAttribute("filter","url(#blur)")
+    svg.appendChild(p);
+    return svg;
+  }
+
+  function CreateFocusRect() {
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    var ns = null;
+    svg.setAttribute("id","focusRect")
+    svg.style.pointerEvents = "none";
+    svg.style.position = "absolute";
+    svg.setAttribute("fill","none");
+    svg.style.left = 0;
+    svg.style.top = 0;
+    document.body.appendChild(svg);
+    var p = document.createElementNS("http://www.w3.org/2000/svg", 'path');
+    p.setAttribute("id","focusRectPath")
+    p.setAttribute("stroke","black");
+    p.setAttribute("stroke-width","5px");
+    svg.appendChild(p);
+    return svg;
+  }
+
+
+
+  function calcMask(container,focused) {
+    var cw = container.innerWidth;
+    var ch = container.innerHeight;
+    var mask = "M 0 0 l " + cw + " 0 l 0 " + cw + " l " + -cw +" 0 Z";
+    if (focused) {
+      // Clip out the window for the focused item
+      mask +=  calcFocusRect(focused);
+    }
+    return mask;
+  }
+
+  function GetScreenCoordinates(obj) {
+      var p = {};
+      p.x = obj.offsetLeft;
+      p.y = obj.offsetTop;
+      while (obj.offsetParent) {
+          p.x = p.x + obj.offsetParent.offsetLeft;
+          p.y = p.y + obj.offsetParent.offsetTop;
+          if (obj == document.getElementsByTagName("body")[0]) {
+              break;
+          }
+          else {
+              obj = obj.offsetParent;
+          }
+      }
+      return p;
+  }
+
+  function calcFocusRect(focused) {
+    var fw = focused.offsetWidth+4;
+    var fh = focused.offsetHeight+4;
+    var pos = GetScreenCoordinates(focused);
+    return mask = " M "+(pos.x-2)+" "+(pos.y-2)+" l "+fw+" 0 l 0 "+fh+" l -"+fw+" 0 Z";
+  }
+
+
+  function drawMask(maskElement, svg1, svg2, focusRect) {
+    var str = calcMask(window,maskElement.focused);
+    var mask = svg1.getElementById("mask");
+    mask.setAttribute("d",str);
+    var mask2 = svg2.getElementById("mask");
+    mask2.setAttribute("d",str);
+    if (maskElement.focused) {
+      var rect = focusRect.getElementById("focusRectPath");
+      str = calcFocusRect(maskElement.focused);
+      rect.setAttribute("d", str );
+    }
+  }
+
+
+
+    Polymer('element-selector', {
+        focused: null,
+        attached: function(){
+            var that = this;
+
+            var svg1 = CreateMask("#FFFFFF", 0.5);
+            var svg2 = CreateMask("#000000", 0.5);
+            var focusRect = CreateFocusRect();
+            requestAnimationFrame(drawMask.bind(null, that, svg1, svg2, focusRect)); // just once
+
+            document.onclick = function(e) {
+                that.oldFocused = that.focused;
+                that.focused = e.target;
+                console.log(e.target);
+                drawMask(that, svg1, svg2, focusRect);
+            }
+
+        }
+    });
+
+})();
+    </script>
+</polymer-element>
