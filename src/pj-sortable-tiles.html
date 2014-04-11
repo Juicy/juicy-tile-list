@@ -83,6 +83,15 @@
                 // debugger
                 // globMe = this;
             },
+            createItemsList: function(){
+                return this.items = createItemsList( 
+                            filterNodes( this.children ),
+                                this.priorities,
+                                this.cellWidth,
+                                this.cellHeight
+                            )
+                            .sort( this.sorter );
+            },
             attached: function gridAttached(){
                 //ensure any element upgrades have been processed
                 //TODO Add mutation observer for window resize, and items change
@@ -90,13 +99,7 @@
                     var self = this;
 
                     // debugger;
-                    this.items = createItemsList( 
-                            filterNodes( this.children ),
-                                this.priorities,
-                                this.cellWidth,
-                                this.cellHeight
-                            )
-                            .sort( this.sorter );
+                    this.createItemsList();
                     // TODO: support LTR
                         // debugger
                     this.package = new Package(
@@ -127,21 +130,25 @@
                         self.packItems( self.items, self.priorities );
                     }, true);
 
-                    // // Observe changes
-                    // // TODO: Make it cleaner
-                    // // create an observer instance
-                    // var observer = new MutationObserver(function(mutations) {
-                    //   mutations.forEach(function(mutation) {
-                    //     console.log("observation", mutation.type, arguments, mutations);
-                    //     if(mutation.addedNodes){
-                    //         // debugger;
-                    //         console.log("something was added")
-                    //     }
-                    //   });
-                    // });
-                    // // pass in the target node, as well as the observer options
-                    // observer.observe(this, { childList: true });
-                    // // end of: Observe changes
+                    // Observe changes
+                    // TODO: Make it cleaner
+                    // create an observer instance
+                    var observer = new MutationObserver(function(mutations) {
+                      mutations.forEach(function(mutation) {
+                        console.log("observation", mutation.type, arguments, mutations);
+                        if(mutation.addedNodes){
+                            // debugger;
+                            //DRY, performance
+                            console.log("something was added")
+                            self.package.reset();
+                            self.createItemsList();                            
+                            self.packItems( self.items, self.priorities );
+                        }
+                      });
+                    });
+                    // pass in the target node, as well as the observer options
+                    observer.observe(this, { childList: true });
+                    // end of: Observe changes
                 });
             },
 
