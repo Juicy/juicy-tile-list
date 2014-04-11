@@ -3,10 +3,13 @@
 <script src="package.js"></script>
 
 <!-- Define your custom element -->
-<polymer-element name="pj-sortable-tiles" attributes="priorities rowspans colspans cellWidth cellHeight">
+<polymer-element name="pj-sortable-tiles" attributes="priorities rowspans colspans cellWidth cellHeight layersOrientation">
     <template>
     <style>
         :host {
+            display: table;
+        }
+        #container{
             display: block;
             position: relative;
         }
@@ -17,7 +20,7 @@
             transition:width 1s, height 1s, top 1s, left 1s, transform 1s;
         }
     </style>
-    <content></content>
+    <div id="container"><content></content></div>
     </template>
     <script>
         /**
@@ -59,7 +62,9 @@
             items: null,
             cellHeight: 50,
             cellWidth: 100,
-            direction: "downwardLeftToRight",
+            maxX:0,
+            maxY:0,
+            layersOrientation: "horizontal",
             sorter: function byPriority(itemA, itemB){
                 return itemB.rect.priority - itemA.rect.priority;
             },
@@ -73,6 +78,7 @@
             },
             attached: function gridAttached(){
                 //ensure any element upgrades have been processed
+                //TODO Add mutation observer for window resize, and items change
                 this.async(function asyncAttached(){
                     var self = this;
 
@@ -84,31 +90,44 @@
                                 this.cellHeight
                             )
                             .sort( this.sorter );
-
-                    this.package = new Package({
-                        width: this.clientWidth, 
-                        height: this.clientHeight,
-                        direction: this.direction
-                    });
+                    // TODO: support LTR
+                        // debugger
+                    this.package = new Package(
+                            this.layersOrientation !== "vertical" ?
+                                {
+                                    width: this.clientWidth, 
+                                    height: Number.POSITIVE_INFINITY,
+                                    direction: "rightDown"
+                                } : {
+                                    width: Number.POSITIVE_INFINITY, 
+                                    height: this.clientHeight,
+                                    direction: "downRight"
+                                }
+                    );
                     
                     this.packItems( this.items, this.priorities );
 
-                    // Observe changes
-                    // TODO: Make it cleaner
-                    // create an observer instance
-                    var observer = new MutationObserver(function(mutations) {
-                      mutations.forEach(function(mutation) {
-                        console.log("observation", mutation.type, arguments, mutations);
-                        if(mutation.addedNodes){
-                            // debugger;
-                            console.log("something was added")
-                        }
-                      });
-                    });
-                    // pass in the target node, as well as the observer options
-                    observer.observe(this, { childList: true });
-                    // end of: Observe changes
+                    // // Observe changes
+                    // // TODO: Make it cleaner
+                    // // create an observer instance
+                    // var observer = new MutationObserver(function(mutations) {
+                    //   mutations.forEach(function(mutation) {
+                    //     console.log("observation", mutation.type, arguments, mutations);
+                    //     if(mutation.addedNodes){
+                    //         // debugger;
+                    //         console.log("something was added")
+                    //     }
+                    //   });
+                    // });
+                    // // pass in the target node, as well as the observer options
+                    // observer.observe(this, { childList: true });
+                    // // end of: Observe changes
                 });
+            },
+
+            stretchContainer: function( rectangle ) {
+              this.maxX = Math.max( rectangle.x + rectangle.width, this.maxX );
+              this.maxY = Math.max( rectangle.y + rectangle.height, this.maxY );
             },
             /**
              * Resize given item.
@@ -148,7 +167,7 @@
                     item = this.items[itemIndex];
                 // }
                 // move to the end
-                debugger
+                // debugger
                 if( end || 
                     increase && (itemIndex == 1) ||
                     !increase && (itemIndex == this.items.length - 2 ) 
@@ -213,13 +232,16 @@
              */
             packItems: function( collection ){
                 var self = this;
-                return collection.map(function(item, index){
+                //pack rectangles, and calculate container size
+                collection.forEach(function(item, index){
                     // TODO: do it more lightweight
                     var element = item.element;
                     var rect = item.rect;
-                    self.package.add(rect);
-                    //TODO: consider repaints optimization
                     var elStyle = element.style;
+                    self.package.add(rect);
+
+                    self.stretchContainer(rect);
+
                     elStyle.top = rect.y + "px";
                     elStyle.left = rect.x + "px";
                     elStyle.width = rect.width + "px";
@@ -228,7 +250,11 @@
                         element: element,
                         rect: rect
                     }
-                })
+                });
+
+               self.$.container.style.height = self.maxY + "px";
+               self.$.container.style.width = self.maxX + "px";
+
             }
         });
     </script>
