@@ -23,6 +23,12 @@
     <div id="container"><content></content></div>
     </template>
     <script>
+    (function( scope ){
+        var defaultSetupNode = {
+            width: 1,
+            height: 1,
+            priority: 0
+        }
         /**
          * Disregard `<style>`, `<template>` and Text nodes.
          * @param  {NodesList} nodesList nodes list to filter
@@ -43,12 +49,13 @@
          */
         function createItemsList( elements, setup, cellWidth, cellHeight ){
             return elements.map(function(element, index){
+                var elementSetup = setup[index] || defaultSetupNode;
                 // TODO: do it more lightweight
                 var rect = new Rectangle({
-                        width: setup[index].width * cellWidth,
-                        height: setup[index].height * cellHeight,
+                        width: elementSetup.width * cellWidth,
+                        height: elementSetup.height * cellHeight,
                         //TODO: it looks a bit hacky
-                        priority: setup[index].priority
+                        priority: elementSetup.priority
                     }); 
                 return {
                     element: element,
@@ -273,6 +280,7 @@
 
             }
         });
+    }());
     </script>
 
 </polymer-element>
