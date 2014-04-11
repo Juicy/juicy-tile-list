@@ -107,6 +107,19 @@
                     
                     this.packItems( this.items, this.priorities );
 
+
+                    window.addEventListener('resize', function() {
+                        console.log(self.package.width, self.clientWidth)
+                        // debugger
+                        if( self.layersOrientation !== "vertical"){
+                            self.package.width = self.clientWidth;
+                        } else {
+                            self.package.height = self.clientHeight;
+                        }
+                        self.package.reset();
+                        self.packItems( self.items, self.priorities );
+                    }, true);
+
                     // // Observe changes
                     // // TODO: Make it cleaner
                     // // create an observer instance
@@ -252,8 +265,11 @@
                     }
                 });
 
-               self.$.container.style.height = self.maxY + "px";
-               self.$.container.style.width = self.maxX + "px";
+                if( self.layersOrientation !== "vertical"){
+                    self.$.container.style.height = self.maxY + "px";
+                } else {
+                    self.$.container.style.width = self.maxX + "px";
+                }
 
             }
         });
