@@ -35,14 +35,15 @@
 
 ## Options
 
-Attribute                    | Options             | Default  | Description
----                          | ---                 | ---      | ---
-`priorities`                 | *Array*             | `[]`     | Tiles setup
-`priorities[?].priority`     | *Number* (0-1)      | `0`      | Importance of tile, used for sorting elements.
-`priorities[?].width`        | *Number*            | `1`      | Tile width (number of colums)
-`priorities[?].heigh`        | *Number*            | `1`      | Tile height (number of rows)
-`cellWidth`                  | *Number*            | `100`    | Width of every column (in px)
-`cellHeight`                 | *Number*            | `50`     | Height of every row (in px)
+Attribute                    | Options             | Default      | Description
+---                          | ---                 | ---          | ---
+`priorities`                 | *Array*             | `[]`         | Tiles setup
+`priorities[?].priority`     | *Number* (0-1)      | `0`          | Importance of tile, used for sorting elements.
+`priorities[?].width`        | *Number*            | `1`          | Tile width (number of colums)
+`priorities[?].heigh`        | *Number*            | `1`          | Tile height (number of rows)
+`cellWidth`                  | *Number*            | `100`        | Width of every column (in px)
+`cellHeight`                 | *Number*            | `50`         | Height of every row (in px)
+`layersOrientation`          | *String*            | `horizontal` | How to align our package (`horizontal` or `vertical`)
 
 
 ## Contributing
