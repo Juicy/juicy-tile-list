@@ -14,8 +14,10 @@
     -->
     <!-- Importing Custom Elements -->
     <link rel="import" href="../src/pj-sortable-tiles.html">
-    <link rel="import" href="../src/element-selector.html">
 <style>
+body {
+  padding: 2em;
+}
 * {
   margin:0px;
   padding:0px;
@@ -24,7 +26,7 @@ pj-sortable-tiles{
     /*width: 300px;
     height: 150px;*/
     width: 600px;
-    margin: 2em;
+    margin: 2em 0;
     padding:1em;
     border: 1px dotted gray;
 }
@@ -55,6 +57,7 @@ pj-sortable-tiles>:nth-child(5) {
 
 <body>
     <template bind>
+        <p>Press Ctrl or Command on your keyboard and move your mouse over an item to edit</p>
         <pj-sortable-tiles priorities="{{priorities}}" cellWidth="200" cellHeight="100">
             <div>Item 0 </div>
             <div>

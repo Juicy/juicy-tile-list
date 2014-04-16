@@ -2,6 +2,7 @@
 <script src="rectangle.js"></script>
 <script src="package.js"></script>
 <link rel="import" href="pj-sortable-tiles-editor.html">
+<link rel="import" href="element-selector.html">
 
 <!-- Define your custom element -->
 <polymer-element name="pj-sortable-tiles" attributes="priorities rowspans colspans cellWidth cellHeight layersOrientation">
@@ -36,7 +37,9 @@
       function elementIndex (elem) {
         var i = 0;
         while (elem = elem.previousElementSibling) {
-          ++i
+		  if(elem.nodeName != "TEMPLATE") {
+			++i
+		  }
         }
         return i;
       };
@@ -84,6 +87,7 @@
         Polymer('pj-sortable-tiles', {
             priorities:[],
             items: null,
+            originalItems: null, //DOM order
             cellHeight: 50,
             cellWidth: 100,
             maxX:0,
@@ -103,13 +107,16 @@
                 // globMe = this;
             },
             createItemsList: function(){
-                return this.items = createItemsList(
+				this.originalItems = createItemsList(
                             filterNodes( this.children ),
                                 this.priorities,
                                 this.cellWidth,
                                 this.cellHeight
-                            )
-                            .sort( this.sorter );
+                            );
+							
+				this.items = this.originalItems.slice(0); //shallow copy
+                this.items.sort( this.sorter );
+				return this.items;
             },
             attached: function gridAttached(){
                 //ensure any element upgrades have been processed
@@ -148,20 +155,39 @@
                       that.packItems( that.items, that.priorities );
                     }
 
-                    this.addEventListener('click', function (ev) {
-                      var elem = ev.target;
-                      if (elem != that && elem != that.$.container) {
-                        while (elem.parentNode != that.$.container && elem.parentNode != that) {
-                          elem = elem.parentNode;
+                    var highlightItem = function (elem) {
+                        if (elem != that && elem != that.$.container) {
+                            while (elem.parentNode != that.$.container && elem.parentNode != that) {
+                                elem = elem.parentNode;
+                            }
+                            that.editedItemIndex = elementIndex(elem);
+                            that.editedItem = that.originalItems[that.editedItemIndex];
+                            that.$.elementSelector.show(elem);
                         }
-                        that.editedItemIndex = elementIndex(elem);
-                        that.editedItem = that.items[that.editedItemIndex];
-                        that.$.elementSelector.show(elem);
-                      }
+                    }
+
+                    var keepEditor = false;
+                    this.addEventListener('mouseover', function (ev) {
+                        if(ev.ctrlKey || ev.metaKey) { //meta is Mac command button
+                            highlightItem(ev.target);
+                        }
                     });
+
+                    /*this.addEventListener('mouseout', function (ev) {
+                        if(that.editedItem && !keepEditor) {
+                            that.$.elementSelector.hide();
+                        }
+                    });
+
+                    this.addEventListener('click', function (ev) {
+                        if(ev.ctrlKey || ev.metaKey) { //meta is Mac command button
+                            keepEditor = true;
+                        }
+                    });*/
 
                     this.addEventListener('pj-sortable-tiles-editor-close', function () {
                       that.$.elementSelector.hide();
+                        keepEditor = false;
                     });
 
                     this.addEventListener('pj-sortable-tiles-refresh', refresh, true);
