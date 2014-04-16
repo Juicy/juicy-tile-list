@@ -1,0 +1,115 @@
+<polymer-element name="pj-sortable-tiles-editor" attributes="editedItem editedItemIndex">
+  <template>
+    <style>
+      div {
+        padding: 10px;
+
+      }
+
+      label {
+        display: inline-block;
+        width: 90px;
+      }
+
+      input {
+        width: 60px;
+      }
+
+      :host {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        z-index: 100;
+        background: #fff;
+        font-family: Helvetica, Arial, sans-serif;
+      }
+    </style>
+    <template if="{{displayed}}">
+      <template bind="{{editedItem}}">
+        <div><label>Width</label><input value="{{rect.width}}" type="number" disabled>
+          <button on-click="{{widthIncrease}}">Inc</button>
+          <button on-click="{{widthDecrease}}">Dec</button>
+        </div>
+        <div><label>Height</label><input value="{{rect.height}}" type="number" disabled>
+          <button on-click="{{heightIncrease}}">Inc</button>
+          <button on-click="{{heightDecrease}}">Dec</button>
+        </div>
+        <div><label>Priority ({{rect.priority}})</label>
+          <button on-click="{{priorityIncrease}}">Inc</button>
+          <button on-click="{{priorityDecrease}}">Dec</button>
+        </div>
+        <div><label></label>
+          <button on-click="{{close}}">Done</button>
+        </div>
+      </template>
+    </template>
+  </template>
+  <script>
+    (function () {
+      Polymer('pj-sortable-tiles-editor', {
+        displayed: false,
+        sortableTilesModel: null,
+        editedItem: null,
+        editedItemIndex: 0,
+        attached: function () {
+          this.sortableTilesModel = this.parentNode.host;
+        },
+        widthIncrease: function () {
+          var power = 1;
+          while (power <= this.editedItem.rect.width)
+            power *= 2;
+          this.editedItem.rect.width = power;
+          this.fire("pj-sortable-tiles-refresh");
+        },
+        widthDecrease: function () {
+          var power = 1;
+          while (power * 2 < this.editedItem.rect.width)
+            power *= 2;
+          if (power < 32) {
+            power = 32;
+          }
+          this.editedItem.rect.width = power;
+          this.fire("pj-sortable-tiles-refresh");
+        },
+        heightIncrease: function () {
+          var power = 1;
+          while (power * 2 < this.editedItem.rect.height)
+            power *= 2;
+          if (power < 32) {
+            power = 32;
+          }
+          this.editedItem.rect.height = power;
+          this.fire("pj-sortable-tiles-refresh");
+        },
+        heightDecrease: function () {
+          var power = 1;
+          while (power * 2 < this.editedItem.rect.height)
+            power *= 2;
+          if (power < 32) {
+            power = 32;
+          }
+          this.editedItem.rect.height = power;
+          this.fire("pj-sortable-tiles-refresh");
+        },
+        priorityIncrease: function (sss) {
+          console.log("priorityIncrease", sss);
+          this.sortableTilesModel.reprioritizeItem(this.editedItemIndex, true);
+        },
+        priorityDecrease: function () {
+          console.log("priorityDecrease");
+          this.sortableTilesModel.reprioritizeItem(this.editedItemIndex, false);
+        },
+        editedItemChanged: function () {
+          if (this.editedItem) {
+            this.displayed = true;
+          }
+        },
+        close: function () {
+          this.editedItem = null;
+          this.displayed = false;
+          this.fire("pj-sortable-tiles-editor-close");
+        }
+      });
+    })();
+  </script>
+</polymer-element>

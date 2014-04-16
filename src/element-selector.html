@@ -103,19 +103,32 @@
         focused: null,
         attached: function(){
             var that = this;
-
-            var svg1 = CreateMask("#FFFFFF", 0.5);
-            var svg2 = CreateMask("#000000", 0.5);
-            var focusRect = CreateFocusRect();
-            requestAnimationFrame(drawMask.bind(null, that, svg1, svg2, focusRect)); // just once
-
-            document.onclick = function(e) {
-                that.oldFocused = that.focused;
-                that.focused = e.target;
-                console.log(e.target);
-                drawMask(that, svg1, svg2, focusRect);
-            }
-
+            this.svg1 = CreateMask("#FFFFFF", 0.5);
+            this.svg2 = CreateMask("#000000", 0.5);
+            this.focusRect = CreateFocusRect();
+        },
+        drawMask: function () {
+          drawMask(this, this.svg1, this.svg2, this.focusRect);
+        },
+        show: function(element) {
+          this.oldFocused = this.focused;
+          this.focused = element;
+          if(!this.svg1.parentNode) {
+            document.body.appendChild(this.svg1);
+            document.body.appendChild(this.svg2);
+            document.body.appendChild(this.focusRect);
+          }
+          var repeat = function () {
+            this.drawMask();
+            this.req = window.requestAnimationFrame(repeat.bind(this));
+          }
+          repeat.call(this);
+        },
+        hide: function() {
+          document.body.removeChild(this.svg1);
+          document.body.removeChild(this.svg2);
+          document.body.removeChild(this.focusRect);
+          window.cancelAnimationFrame(this.req);
         }
     });
 

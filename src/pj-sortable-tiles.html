@@ -1,6 +1,7 @@
 <!-- Import Polymer -->
 <script src="rectangle.js"></script>
 <script src="package.js"></script>
+<link rel="import" href="pj-sortable-tiles-editor.html">
 
 <!-- Define your custom element -->
 <polymer-element name="pj-sortable-tiles" attributes="priorities rowspans colspans cellWidth cellHeight layersOrientation">
@@ -21,9 +22,25 @@
         }
     </style>
     <div id="container"><content></content></div>
+    <pj-sortable-tiles-editor editedItem="{{editedItem}}" editedItemIndex="{{editedItemIndex}}"></pj-sortable-tiles-editor>
+    <element-selector id="elementSelector"></element-selector>
     </template>
     <script>
     (function( scope ){
+      /**
+       * Counts index of element within its parent
+       * @see http://jsperf.com/sibling-index/10
+       * @param {Element} elem
+       * @return {Number}
+       */
+      function elementIndex (elem) {
+        var i = 0;
+        while (elem = elem.previousElementSibling) {
+          ++i
+        }
+        return i;
+      };
+
         var defaultSetupNode = {
             width: 1,
             height: 1,
@@ -56,7 +73,7 @@
                         height: elementSetup.height * cellHeight,
                         //TODO: it looks a bit hacky
                         priority: elementSetup.priority
-                    }); 
+                    });
                 return {
                     element: element,
                     rect: rect
@@ -72,6 +89,8 @@
             maxX:0,
             maxY:0,
             layersOrientation: "horizontal",
+            editedItem: null,
+            editedItemIndex: 0,
             sorter: function byPriority(itemA, itemB){
                 return itemB.rect.priority - itemA.rect.priority;
             },
@@ -84,7 +103,7 @@
                 // globMe = this;
             },
             createItemsList: function(){
-                return this.items = createItemsList( 
+                return this.items = createItemsList(
                             filterNodes( this.children ),
                                 this.priorities,
                                 this.cellWidth,
@@ -96,7 +115,7 @@
                 //ensure any element upgrades have been processed
                 //TODO Add mutation observer for window resize, and items change
                 this.async(function asyncAttached(){
-                    var self = this;
+                    var that = this;
 
                     // debugger;
                     this.createItemsList();
@@ -105,30 +124,49 @@
                     this.package = new Package(
                             this.layersOrientation !== "vertical" ?
                                 {
-                                    width: this.clientWidth, 
+                                    width: this.clientWidth,
                                     height: Number.POSITIVE_INFINITY,
                                     direction: "rightDown"
                                 } : {
-                                    width: Number.POSITIVE_INFINITY, 
+                                    width: Number.POSITIVE_INFINITY,
                                     height: this.clientHeight,
                                     direction: "downRight"
                                 }
                     );
-                    
+
                     this.packItems( this.items, this.priorities );
 
+                    var refresh = function() {
+                      // console.log(that.package.width, that.clientWidth)
+                      // debugger
+                      if( that.layersOrientation !== "vertical"){
+                        that.package.width = that.clientWidth;
+                      } else {
+                        that.package.height = that.clientHeight;
+                      }
+                      that.package.reset();
+                      that.packItems( that.items, that.priorities );
+                    }
 
-                    window.addEventListener('resize', function() {
-                        // console.log(self.package.width, self.clientWidth)
-                        // debugger
-                        if( self.layersOrientation !== "vertical"){
-                            self.package.width = self.clientWidth;
-                        } else {
-                            self.package.height = self.clientHeight;
+                    this.addEventListener('click', function (ev) {
+                      var elem = ev.target;
+                      if (elem != that && elem != that.$.container) {
+                        while (elem.parentNode != that.$.container && elem.parentNode != that) {
+                          elem = elem.parentNode;
                         }
-                        self.package.reset();
-                        self.packItems( self.items, self.priorities );
-                    }, true);
+                        that.editedItemIndex = elementIndex(elem);
+                        that.editedItem = that.items[that.editedItemIndex];
+                        that.$.elementSelector.show(elem);
+                      }
+                    });
+
+                    this.addEventListener('pj-sortable-tiles-editor-close', function () {
+                      that.$.elementSelector.hide();
+                    });
+
+                    this.addEventListener('pj-sortable-tiles-refresh', refresh, true);
+
+                    window.addEventListener('resize', refresh, true);var that = this;
 
                     // Observe changes
                     // TODO: Make it cleaner
@@ -140,9 +178,9 @@
                             // debugger;
                             //DRY, performance
                             console.log("something was added")
-                            self.package.reset();
-                            self.createItemsList();                            
-                            self.packItems( self.items, self.priorities );
+                            that.package.reset();
+                            that.createItemsList();
+                            that.packItems( that.items, that.priorities );
                         }
                       });
                     });
@@ -195,9 +233,9 @@
                 // }
                 // move to the end
                 // debugger
-                if( end || 
+                if( end ||
                     increase && (itemIndex <= 1) ||
-                    !increase && (itemIndex >= this.items.length - 2 ) 
+                    !increase && (itemIndex >= this.items.length - 2 )
                 ){
                     // top
                     if(increase){
@@ -216,7 +254,7 @@
                             higher.rect.priority = (this.items[1].rect.priority + 1)/2;
                             item.rect.priority = 1;
                         }
-                    } else { // bottom                        
+                    } else { // bottom
                         // already at the bottom
                         if(item.rect.priority == 0){
                             return this;
@@ -238,7 +276,7 @@
                     if(increase){
                         higher = this.items[itemIndex-2];
                         lower = this.items[itemIndex-1];
-                    } else { 
+                    } else {
                         higher = this.items[itemIndex+1];
                         lower = this.items[itemIndex+2];
                     }
