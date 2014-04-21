@@ -37,9 +37,9 @@
       function elementIndex (elem) {
         var i = 0;
         while (elem = elem.previousElementSibling) {
-		  if(elem.nodeName != "TEMPLATE") {
-			++i
-		  }
+          if(!(elem instanceof HTMLTemplateElement)) {
+            ++i
+          }
         }
         return i;
       };
