@@ -9,7 +9,7 @@
     <template>
     <style>
         :host {
-            display: table;
+            /*display: table;*/
         }
         #container{
             display: block;
@@ -44,9 +44,37 @@
         return i;
       };
 
+      /**
+       * Save JSON tree to the local storage using the provided key
+       * @param {String} key
+       * @param {Object} value
+       */
+      function saveJson(key, value) {
+        if (key) {
+          var str = JSON.stringify(value);
+          localStorage.setItem(key, str);
+        }
+      }
+
+      /**
+       * Loads JSON tree from the local storage using the provided key
+       * @param {String} key
+       * @return {Object}
+       */
+      function loadJson(key) {
+        if (key) {
+          var str = localStorage.getItem(key);
+          return JSON.parse(str);
+        }
+      }
+
         var defaultSetupNode = {
-            width: 1,
-            height: 1,
+            gap: {
+                top: 8,
+                left: 8
+            },
+            width: 0,
+            height: 0,
             priority: 0
         }
         /**
@@ -62,34 +90,52 @@
                                     !(child instanceof HTMLScriptElement);
                         });
         }
+
         /**
-         * [createItemsList description]
-         * @param  {Array<Element>} elements [description]
-         * @return {[type]}          [description]
+         * Modifies setup array with default settings for not mapped elements
+         * @param {Array} elements
+         * @param {Array} setup
+         * @param {Number} cellWidth
+         * @param {Number} cellHeight
          */
         function createItemsList( elements, setup, cellWidth, cellHeight ){
-            return elements.map(function(element, index){
-                var elementSetup = setup[index] || defaultSetupNode;
-                // TODO: do it more lightweight
-                var rect = new Rectangle({
-                        width: elementSetup.width * cellWidth,
-                        height: elementSetup.height * cellHeight,
-                        //TODO: it looks a bit hacky
-                        priority: elementSetup.priority
-                    });
-                return {
-                    element: element,
-                    rect: rect
-                }
-            })
-
+            for(var i = 0, ilen = elements.length - setup.length; i < ilen; i++) {
+              var item = JSON.parse(JSON.stringify(defaultSetupNode));
+              item.width = cellWidth + item.gap.left;
+              item.height = cellHeight + item.gap.top;
+              if(setup.length == 0) {
+                item.priority = 0.5;
+              }
+              else {
+                item.priority = getMinimumPriority(setup) - 0.01
+              }
+              setup.push(item);
+            }
         }
+
+        /**
+         * Returns the minimum value of the priority property from the given array of objects
+         * @param {Array<Object>} arr
+         * @return {Number} number in range from 0 to 1
+         */
+        function getMinimumPriority(arr) {
+          var min = 1;
+          for (var i = 0, ilen = arr.length; i < ilen; i++) {
+            if (arr[i].priority < min) {
+              min = arr[i].priority;
+            }
+          }
+          if (min < 0) {
+            min = 0;
+          }
+          return min;
+        }
+
         Polymer('pj-sortable-tiles', {
             priorities:[],
             items: null,
-            originalItems: null, //DOM order
-            cellHeight: 50,
-            cellWidth: 100,
+            cellHeight: 32,
+            cellWidth: 128,
             maxX:0,
             maxY:0,
             layersOrientation: "horizontal",
@@ -99,30 +145,25 @@
                 return itemB.rect.priority - itemA.rect.priority;
             },
             package: null,
-            created: function (){
-                // this.style.display = "block";
-                // this.style.position = "relative";
-                // debugging:
-                // debugger
-                // globMe = this;
-            },
             createItemsList: function(){
-				this.originalItems = createItemsList(
-                            filterNodes( this.children ),
-                                this.priorities,
-                                this.cellWidth,
-                                this.cellHeight
-                            );
-							
-				this.items = this.originalItems.slice(0); //shallow copy
-                this.items.sort( this.sorter );
-				return this.items;
+              this.items = filterNodes(this.children);
+              createItemsList(
+                this.items,
+                this.priorities,
+                this.cellWidth,
+                this.cellHeight
+              );
             },
             attached: function gridAttached(){
                 //ensure any element upgrades have been processed
                 //TODO Add mutation observer for window resize, and items change
                 this.async(function asyncAttached(){
                     var that = this;
+
+                    var loaded = loadJson(this.id);
+                    if(loaded) {
+                      this.priorities = loaded;
+                    }
 
                     // debugger;
                     this.createItemsList();
@@ -141,7 +182,8 @@
                                 }
                     );
 
-                    this.packItems( this.items, this.priorities );
+                    saveJson(this.id, this.priorities);
+                    this.packItems( this.getSortedCollection() );
 
                     var refresh = function() {
                       // console.log(that.package.width, that.clientWidth)
@@ -151,8 +193,9 @@
                       } else {
                         that.package.height = that.clientHeight;
                       }
+                      saveJson(that.id, that.priorities);
                       that.package.reset();
-                      that.packItems( that.items, that.priorities );
+                      that.packItems( that.getSortedCollection() );
                     }
 
                     var highlightItem = function (elem) {
@@ -161,33 +204,32 @@
                                 elem = elem.parentNode;
                             }
                             that.editedItemIndex = elementIndex(elem);
-                            that.editedItem = that.originalItems[that.editedItemIndex];
-                            that.$.elementSelector.show(elem);
+                            if(that.editedItem !== that.priorities[that.editedItemIndex]) {
+                              that.editedItem = that.priorities[that.editedItemIndex];
+                              that.$.elementSelector.show(elem);
+                            }
                         }
                     }
 
-                    var keepEditor = false;
+                    var lastTarget;
+                    window.addEventListener('keydown', function (ev) {
+                      if(lastTarget && (ev.ctrlKey || ev.metaKey)) { //meta is Mac command button
+                        highlightItem(lastTarget);
+                      }
+                    });
                     this.addEventListener('mouseover', function (ev) {
-                        if(ev.ctrlKey || ev.metaKey) { //meta is Mac command button
-                            highlightItem(ev.target);
-                        }
+                      if(ev.ctrlKey || ev.metaKey) { //meta is Mac command button
+                        highlightItem(ev.target);
+                        lastTarget = null;
+                      }
+                      else {
+                        lastTarget = ev.target;
+                      }
                     });
-
-                    /*this.addEventListener('mouseout', function (ev) {
-                        if(that.editedItem && !keepEditor) {
-                            that.$.elementSelector.hide();
-                        }
-                    });
-
-                    this.addEventListener('click', function (ev) {
-                        if(ev.ctrlKey || ev.metaKey) { //meta is Mac command button
-                            keepEditor = true;
-                        }
-                    });*/
 
                     this.addEventListener('pj-sortable-tiles-editor-close', function () {
+                      that.editedItem = null;
                       that.$.elementSelector.hide();
-                        keepEditor = false;
                     });
 
                     this.addEventListener('pj-sortable-tiles-refresh', refresh, true);
@@ -204,9 +246,10 @@
                             // debugger;
                             //DRY, performance
                             console.log("something was added")
-                            that.package.reset();
                             that.createItemsList();
-                            that.packItems( that.items, that.priorities );
+                            saveJson(that.id, that.priorities);
+                            that.package.reset();
+                            that.packItems( that.getSortedCollection() );
                         }
                       });
                     });
@@ -222,7 +265,7 @@
             },
             /**
              * Resize given item.
-             * @param  {Object | Number} item   item from list, or item index (note that items list is sorted by priority)
+             * @param  {Object | Number} item   item from list, or item index (the original item index in DOM)
              * @param  {Number} width  number of cells/columns
              * @param  {Number} height number of cells/rows
              * @return {pj-sortable-tiles}        self
@@ -233,15 +276,32 @@
                 }
                 item.rect.width = width * this.cellWidth;
                 item.rect.height = height * this.cellHeight;
-                this.items.sort( this.sorter ) ;
+                saveJson(this.id, this.priorities);
                 this.package.reset();
-                this.packItems( this.items );
+                this.packItems( this.getSortedCollection() );
                 return this;
             },
 
             /**
+             * Returns the collection of DOM elements and their setup sorted on the priority property
+             * @return {Array}
+             */
+            getSortedCollection: function() {
+              var that = this;
+              var collection = this.items.map(function (item, index) {
+                return {
+                  element: item,
+                  index: index,
+                  rect: that.priorities[index]
+                }
+              });
+              collection.sort(that.sorter);
+              return collection;
+            },
+
+            /**
              * Change priority of given item
-             * @param  {Number} itemIndex    item index (note that items list is sorted by priority)
+             * @param  {Number} itemIndex    item index (the original item index in DOM)
              * @param  {Boolean} increase  true - increases priority, false - decreases
              * @param  {Boolean} [end=false] true to move to the end
              * @return {pj-sortable-tiles}        self
@@ -251,17 +311,23 @@
                 var higher, lower, item;
                 // do nothing if there is nothing to rearrange
                 if( this.items.length < 2){
-                    return this;
+                  return this;
                 }
-                //use indexes as input
-                // if(typeof item == 'number'){
-                    item = this.items[itemIndex];
-                // }
+
+                var collection = this.getSortedCollection();
+
+                for(var i= 0, ilen=collection.length; i<ilen;i++) {
+                  if(collection[i].index == itemIndex) {
+                    var sortedIndex = i;
+                    var item = collection[i];
+                  }
+                }
+
                 // move to the end
                 // debugger
                 if( end ||
-                    increase && (itemIndex <= 1) ||
-                    !increase && (itemIndex >= this.items.length - 2 )
+                    increase && (sortedIndex <= 1) ||
+                    !increase && (sortedIndex >= this.items.length - 2 )
                 ){
                     // top
                     if(increase){
@@ -269,7 +335,7 @@
                         if(item.rect.priority == 1){
                             return this;
                         }
-                        higher = this.items[0];
+                        higher = collection[0];
                         // already there, but with different priority
                         if(higher == item){
                             item.rect.priority = 1;
@@ -277,7 +343,7 @@
                             return this;
                         } else {
                             // move to the middle
-                            higher.rect.priority = (this.items[1].rect.priority + 1)/2;
+                            higher.rect.priority = (collection[1].rect.priority + 1)/2;
                             item.rect.priority = 1;
                         }
                     } else { // bottom
@@ -285,14 +351,14 @@
                         if(item.rect.priority == 0){
                             return this;
                         }
-                        lower = this.items[this.items.length -1 ];
+                        lower = collection[collection.length -1 ];
                         // already there, but with different priority.
                         if(lower == item){
                             item.rect.priority = 0;
                             return this;
                         } else {
                             // move to the middle
-                            lower.rect.priority = this.items[this.items.length -2].rect.priority/2;
+                            lower.rect.priority = collection[collection.length -2].rect.priority/2;
                             item.rect.priority = 0;
                         }
 
@@ -300,47 +366,42 @@
                 } else {
                     // top
                     if(increase){
-                        higher = this.items[itemIndex-2];
-                        lower = this.items[itemIndex-1];
+                        higher = collection[sortedIndex-2];
+                        lower = collection[sortedIndex-1];
                     } else {
-                        higher = this.items[itemIndex+1];
-                        lower = this.items[itemIndex+2];
+                        higher = collection[sortedIndex+1];
+                        lower = collection[sortedIndex+2];
                     }
                     item.rect.priority = (higher.rect.priority + lower.rect.priority)/2;
                 }
 
-
-                this.items.sort( this.sorter ) ;
+                saveJson(this.id, this.priorities);
                 this.package.reset();
-                this.packItems( this.items );
+                this.packItems( collection );
                 return this;
             },
 
             /**
              * [packItems description]
-             * @param  {Array<Object>} collection array of elements
-             * @return {Array}            [description]
+             * @param {Array} collection
              */
-            packItems: function( collection ){
+            packItems: function(collection){
                 var self = this;
+
                 //pack rectangles, and calculate container size
                 collection.forEach(function(item, index){
                     // TODO: do it more lightweight
                     var element = item.element;
-                    var rect = item.rect;
+                    var rect = new Rectangle(item.rect);
                     var elStyle = element.style;
                     self.package.add(rect);
 
                     self.stretchContainer(rect);
 
-                    elStyle.top = rect.y + "px";
-                    elStyle.left = rect.x + "px";
-                    elStyle.width = rect.width + "px";
-                    elStyle.height = rect.height + "px";
-                    return {
-                        element: element,
-                        rect: rect
-                    }
+                    elStyle.top = rect.y + item.rect.gap.top + "px";
+                    elStyle.left = rect.x + item.rect.gap.left + "px";
+                    elStyle.width = rect.width - item.rect.gap.left + "px";
+                    elStyle.height = rect.height - item.rect.gap.top + "px";
                 });
 
                 if( self.layersOrientation !== "vertical"){
