@@ -196,5 +196,26 @@ describe('Package', function() {
         });
       });
 
+
+      it('that are bigger than package, should trim them, and place in correct order', function slotsVertical() {
+        // 122
+        // 145
+        // 333
+        // 666|6
+        // 7xx
+        // .xx
+        // ---
+        // 7    
+        var rect6 = new Rectangle({
+          width: 4,
+          height: 1
+        });
+
+        pkg.add(rect6);
+        assert.equal(rect6.x, 0, 'rect6.x bottom left');
+        assert.equal(rect6.y, 3, 'rect6.y bottom left');
+        assert.equal(rect6.width, 3, 'wide as package');
+
+      });
     });
-    });
+});

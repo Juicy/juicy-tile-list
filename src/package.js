@@ -46,6 +46,14 @@ Package.prototype.reset = function() {
  * @returns {Package} package itself
  */
 Package.prototype.add = function( rectangle ) {
+  // trim too big rectangles
+    if(rectangle.width > this.width){
+      rectangle.width = this.width;
+    }
+    if(rectangle.height > this.height){
+      rectangle.height = this.height;
+    }
+
   for ( var si=0, len = this.slots.length; si < len; si++ ) {
     var slot = this.slots[si];
 	//CHANGEME
