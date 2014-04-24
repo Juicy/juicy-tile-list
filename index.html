@@ -25,7 +25,10 @@ pj-sortable-tiles{
     width: 616px;
     margin: 2em;
     padding:1em;
-    border: 1px dotted gray;
+    box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
+}
+pj-sortable-tiles>*{
+    box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
 }
 pj-sortable-tiles>:first-child {
     background:lightgreen;
@@ -49,6 +52,9 @@ pj-sortable-tiles>:nth-child(5) {
     background:orange;
     max-height: 100px;
     overflow:auto;
+}
+section input{
+    width: 4em;
 }
 </style>
 
@@ -147,6 +153,7 @@ pj-sortable-tiles>:nth-child(5) {
             <li><a href="examples/prioritized.html">Prioritized/weighted tiles</a></li>
             <li><a href="examples/verticalLayers.html">Vertical layers</a></li>
             <li><a href="examples/fullWidth.html">Full width package</a></li>
+            <li><a href="examples/nested.html">Nested packages</a></li>
         </ul>
     </footer>
 

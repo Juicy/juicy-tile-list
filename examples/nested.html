@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>&lt;pj-sortable-tiles&gt;</title>
+    <title>&lt;pj-sortable-tiles&gt; nested</title>
 
     <!-- Importing Web Component's Polyfill -->
     
@@ -15,18 +15,14 @@
     <!-- Importing Custom Elements -->
     <link rel="import" href="../src/pj-sortable-tiles.html">
 <style>
-body {
-  padding: 2em;
-}
 * {
   margin:0px;
   padding:0px;
 }
-pj-sortable-tiles{
+body>pj-sortable-tiles{
     /*width: 300px;
     height: 150px;*/
-    width: 600px;
-    margin: 2em 0;
+    width: 616px;
     padding:1em;
     box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
 }
@@ -60,16 +56,22 @@ pj-sortable-tiles>:nth-child(5) {
 
 <body>
     <template bind>
-        <p>Press Ctrl or Command on your keyboard and move your mouse over an item to edit</p>
-        <pj-sortable-tiles priorities="{{priorities}}" cellWidth="200" cellHeight="100">
+        <pj-sortable-tiles priorities="{{priorities}}">
             <div>Item 0 </div>
-            <div>
-                <button>Item 1</button>
-            </div>
+            <pj-sortable-tiles priorities="{{priorities2}}">
+                <div>Item 0 </div>
+                <div>
+                    <button>Item 1</button>
+                </div>
+                <div>
+                    <input value="Input2">
+                </div>
+                <section>Item3</section>
+            </pj-sortable-tiles>
             <div>
                 <input value="Input2">
-            </div>
-            <section>Item3</section>
+            </div>            
+            <section>Item3</section>            
         </pj-sortable-tiles>
     </template>
     <script type="text/javascript">
@@ -95,26 +97,26 @@ pj-sortable-tiles>:nth-child(5) {
                 {
                     index:0,
                     priority:0.9,// 0.6,
-                    height:1,
-                    width:1
+                    height: 100,
+                    width: 200
                 },
                 {
                     index:1,
                     priority:0.8,// 0.9,
-                    height:1,
-                    width:2
+                    height: 100,
+                    width:400
                 },
                 {
                     index:2,
                     priority:0.6,// 0.3,
-                    height:1,
-                    width:2
+                    height: 100,
+                    width: 400
                 },
                 {
                     index:3,
                     priority:0.4,
-                    height:2,
-                    width:1
+                    height: 200,
+                    width: 200
                 }
                 // 
                 // 122
@@ -122,28 +124,74 @@ pj-sortable-tiles>:nth-child(5) {
                 // 333
                 // 
                 // {
-                //   width: 1,
+                //   width: 200,
                 //   height: 2
                 // }, {
-                //   width: 2,
-                //   height: 1
+                //   width: 400,
+                //   height:  100
                 // }, {
-                //   width: 3,
-                //   height: 1
+                //   width: 600,
+                //   height:  100
                 // }, {
-                //   width: 1,
-                //   height: 1
+                //   width: 200,
+                //   height:  100
                 // }, {
-                //   width: 1,
-                //   height: 1
+                //   width: 200,
+                //   height:  100
                 // }
+            ],
+            priorities2: [
+                // 011
+                // 233
+                // 2
+                // prioritized
+                // 
+                // 110
+                // 233
+                // 2
+                {
+                    index:0,
+                    priority:0.9,// 0.6,
+                    height: 20,
+                    width: 100
+                },
+                {
+                    index:1,
+                    priority:0.8,// 0.9,
+                    height: 20,
+                    width: 100
+                },
+                {
+                    index:2,
+                    priority:0.6,// 0.3,
+                    height: 40,
+                    width: 180
+                },
+                {
+                    index:3,
+                    priority:0.4,
+                    height: 20,
+                    width: 150
+                }
             ]
         };
         document.addEventListener("polymer-ready", function(){
             document.querySelector("template").model = model;
             
         })
+
+
+
+
     </script>
+    <footer>
+        <h4>Other examples</h4>
+        <ul>
+            <li><a href="examples/prioritized.html">Prioritized/weighted tiles</a></li>
+            <li><a href="examples/verticalLayers.html">Vertical layers</a></li>
+            <li><a href="examples/fullWidth.html">Full width package</a></li>
+        </ul>
+    </footer>
 
 
 </body>
