@@ -9,12 +9,11 @@
     <template>
     <style>
         :host {
-            display: block; 
+            display: block;
+            padding: 16px;
         }
         #container{
-            display: block;
             position: relative;
-            margin: 24px; /*this is the desired margin - labelled as WS on Jocke's screenshot. In future this margin will be created by the outermost gap*/
         }
         polyfill-next-selector { content: ':host #container> *'; }
         #container ::content>* {
@@ -29,6 +28,36 @@
     </template>
     <script>
     (function( scope ){
+      /**
+       * For a given element, returns the available width excluding margin, border and padding
+       * @param {Element} elem
+       * @return {Number}
+       */
+      function innerWidth(elem) {
+        var outerWidth = elem.offsetWidth;
+        var computedStyle = window.getComputedStyle(elem, null);
+        var borderLeft = parseInt(computedStyle.getPropertyValue('border-left'), 10);
+        var borderRight = parseInt(computedStyle.getPropertyValue('border-right'), 10);
+        var paddingLeft = parseInt(computedStyle.getPropertyValue('padding-left'), 10);
+        var paddingRight = parseInt(computedStyle.getPropertyValue('padding-right'), 10);
+        return outerWidth - borderLeft - borderRight - paddingLeft - paddingRight;
+      }
+
+      /**
+       * For a given element, returns the available height excluding margin, border and padding
+       * @param {Element} elem
+       * @return {Number}
+       */
+      function innerHeight(elem) {
+        var outerHeight = elem.offsetHeight;
+        var computedStyle = window.getComputedStyle(elem, null);
+        var borderTop = parseInt(computedStyle.getPropertyValue('border-top'), 10);
+        var borderBottom = parseInt(computedStyle.getPropertyValue('border-bottom'), 10);
+        var paddingTop = parseInt(computedStyle.getPropertyValue('padding-top'), 10);
+        var paddingBottom = parseInt(computedStyle.getPropertyValue('padding-bottom'), 10);
+        return outerHeight - borderTop - borderBottom - paddingTop - paddingBottom;
+      }
+
       /**
        * Counts index of element within its parent
        * @see http://jsperf.com/sibling-index/10
@@ -159,12 +188,12 @@
                     this.package = new Package(
                             this.layersOrientation !== "vertical" ?
                                 {
-                                    width: this.clientWidth,
+                                    width: innerWidth(this),
                                     height: Number.POSITIVE_INFINITY,
                                     direction: "rightDown"
                                 } : {
                                     width: Number.POSITIVE_INFINITY,
-                                    height: this.clientHeight,
+                                    height: innerHeight(this),
                                     direction: "downRight"
                                 }
                     );
@@ -409,7 +438,6 @@
                     elStyle.left = rect.x + self.gap + "px";
                     elStyle.width = item.rect.width + "px";
                     elStyle.height = item.rect.height + "px";
-                  console.log("item.rect", item.rect);
                 });
 
                 if( self.layersOrientation !== "vertical"){
