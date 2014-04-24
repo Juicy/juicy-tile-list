@@ -147,6 +147,29 @@ section input{
 
 
     </script>
+    <section>
+        <h3>API</h3>
+        <ul>
+            <li><code>pjSortableTiles.resizeItem</code>(<input placeholder="itemIndex">, <input placeholder="width">, <input placeholder="height">) <button id="callResize">call</button></li>
+                
+            <li><code>pjSortableTiles.reprioritizeItem</code>(<input placeholder="itemIndex">, <input placeholder="increase" title="Boolean (0|1)">, <input placeholder="end" title="Boolean (0|1)">) <button id="callReprioritize">call</button></li>
+        </ul>
+        <script type="text/javascript">
+        document.addEventListener("polymer-ready", function(){
+            function callMethod(element, method, event){
+                var args = event.target.parentElement.querySelectorAll("input")
+                            .array().map(function(e){return parseInt(e.value)});
+                element[method].apply(element, args);
+            }
+            document.getElementById("callResize").addEventListener("click", function (event){
+                callMethod( document.querySelector("pj-sortable-tiles"), "resizeItem", event );
+            });
+            document.getElementById("callReprioritize").addEventListener("click", function (event){
+                callMethod( document.querySelector("pj-sortable-tiles"), "reprioritizeItem", event );
+            });
+        });
+        </script>
+    </section>
     <footer>
         <h4>Other examples</h4>
         <ul>

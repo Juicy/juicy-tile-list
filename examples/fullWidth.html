@@ -15,12 +15,13 @@
     <!-- Importing Custom Elements -->
     <link rel="import" href="../src/pj-sortable-tiles.html">
 <style>
+body,html{
+    font-family: Helvetica, Arial, sans-serif;
+    height: 100%;
+}
 * {
   margin:0px;
   padding:0px;
-}
-body,html{
-    height: 100%;
 }
 pj-sortable-tiles{
     /*width: 300px;
@@ -60,14 +61,14 @@ pj-sortable-tiles>:nth-child(5) {
 <body>
     <template bind>
         <pj-sortable-tiles priorities="{{priorities}}">
-            <div>Item 0</div>
+            <div>Try</div>
             <div>
-                <button>Item 1</button>
+                <button>to</button>
             </div>
             <div>
-                <input value="Input2">
+                <input value="resize">
             </div>
-            <section>Item3</section>
+            <section>browser window</section>
         </pj-sortable-tiles>
     </template>
     <script type="text/javascript">
