@@ -14,6 +14,7 @@
         #container{
             display: block;
             position: relative;
+            margin: 24px; /*this is the desired margin - labelled as WS on Jocke's screenshot. In future this margin will be created by the outermost gap*/
         }
         polyfill-next-selector { content: ':host #container> *'; }
         #container ::content>* {
@@ -23,7 +24,7 @@
         }
     </style>
     <div id="container"><content></content></div>
-    <pj-sortable-tiles-editor editedItem="{{editedItem}}" editedItemIndex="{{editedItemIndex}}"></pj-sortable-tiles-editor>
+    <pj-sortable-tiles-editor gap="{{gap}}" editedItem="{{editedItem}}" editedItemIndex="{{editedItemIndex}}"></pj-sortable-tiles-editor>
     <element-selector id="elementSelector"></element-selector>
     </template>
     <script>
@@ -69,10 +70,6 @@
       }
 
         var defaultSetupNode = {
-            gap: {
-                top: 8,
-                left: 8
-            },
             width: 0,
             height: 0,
             priority: 0
@@ -101,8 +98,8 @@
         function createItemsList( elements, setup, cellWidth, cellHeight ){
             for(var i = 0, ilen = elements.length - setup.length; i < ilen; i++) {
               var item = JSON.parse(JSON.stringify(defaultSetupNode));
-              item.width = cellWidth + item.gap.left;
-              item.height = cellHeight + item.gap.top;
+              item.width = cellWidth;
+              item.height = cellHeight;
               if(setup.length == 0) {
                 item.priority = 0.5;
               }
@@ -134,6 +131,7 @@
         Polymer('pj-sortable-tiles', {
             priorities:[],
             items: null,
+            gap: 8,
             cellHeight: 32,
             cellWidth: 128,
             maxX:0,
@@ -160,10 +158,7 @@
                 this.async(function asyncAttached(){
                     var that = this;
 
-                    var loaded = loadJson(this.id);
-                    if(loaded) {
-                      this.priorities = loaded;
-                    }
+                    this.loadFromStorage();
 
                     // debugger;
                     this.createItemsList();
@@ -182,7 +177,7 @@
                                 }
                     );
 
-                    saveJson(this.id, this.priorities);
+                    this.saveToStorage();
                     this.packItems( this.getSortedCollection() );
 
                     var refresh = function() {
@@ -193,7 +188,7 @@
                       } else {
                         that.package.height = that.clientHeight;
                       }
-                      saveJson(that.id, that.priorities);
+                      that.saveToStorage();
                       that.package.reset();
                       that.packItems( that.getSortedCollection() );
                     }
@@ -247,7 +242,7 @@
                             //DRY, performance
                             console.log("something was added")
                             that.createItemsList();
-                            saveJson(that.id, that.priorities);
+                            that.saveToStorage();
                             that.package.reset();
                             that.packItems( that.getSortedCollection() );
                         }
@@ -276,7 +271,7 @@
                 }
                 item.rect.width = width * this.cellWidth;
                 item.rect.height = height * this.cellHeight;
-                saveJson(this.id, this.priorities);
+                this.saveToStorage();
                 this.package.reset();
                 this.packItems( this.getSortedCollection() );
                 return this;
@@ -375,7 +370,7 @@
                     item.rect.priority = (higher.rect.priority + lower.rect.priority)/2;
                 }
 
-                saveJson(this.id, this.priorities);
+                this.saveToStorage();
                 this.package.reset();
                 this.packItems( collection );
                 return this;
@@ -387,6 +382,9 @@
              */
             packItems: function(collection){
                 var self = this;
+                if(!this.originalHeights) {
+                  this.originalHeights = [];
+                }
 
                 //pack rectangles, and calculate container size
                 collection.forEach(function(item, index){
@@ -394,14 +392,27 @@
                     var element = item.element;
                     var rect = new Rectangle(item.rect);
                     var elStyle = element.style;
+                    if(typeof self.originalHeights[index] === 'undefined') {
+                      self.originalHeights.push(element.clientHeight);
+                    }
+                    if(rect.height == "auto") {
+                      rect.height = self.originalHeights[index];
+                      elStyle.overflowY = "visible";
+                    }
+                    else {
+                      elStyle.overflowY = "auto";
+                    }
+                    rect.width += self.gap;
+                    rect.height += self.gap;
                     self.package.add(rect);
 
                     self.stretchContainer(rect);
 
-                    elStyle.top = rect.y + item.rect.gap.top + "px";
-                    elStyle.left = rect.x + item.rect.gap.left + "px";
-                    elStyle.width = rect.width - item.rect.gap.left + "px";
-                    elStyle.height = rect.height - item.rect.gap.top + "px";
+                    elStyle.top = rect.y + self.gap + "px";
+                    elStyle.left = rect.x + self.gap + "px";
+                    elStyle.width = item.rect.width + "px";
+                    elStyle.height = item.rect.height + "px";
+                  console.log("item.rect", item.rect);
                 });
 
                 if( self.layersOrientation !== "vertical"){
@@ -410,6 +421,18 @@
                     self.$.container.style.width = self.maxX + "px";
                 }
 
+            },
+
+            saveToStorage: function() {
+              saveJson(this.id, {gap: this.gap, priorities: this.priorities});
+            },
+
+            loadFromStorage: function() {
+              var loaded = loadJson(this.id);
+              if(loaded && loaded.priorities) {
+                this.gap = loaded.gap;
+                this.priorities = loaded.priorities;
+              }
             }
         });
     }());
