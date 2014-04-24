@@ -54,7 +54,7 @@ pj-sortable-tiles>:nth-child(5) {
 
 <body>
     <template bind>
-        <pj-sortable-tiles priorities="{{priorities}}" cellWidth="200" cellHeight="100">
+        <pj-sortable-tiles priorities="{{priorities}}">
             <div>Item 0, priority 0.4</div>
             <div>
                 <button>Item 1, priority 0.9</button>
@@ -88,26 +88,26 @@ pj-sortable-tiles>:nth-child(5) {
                 {
                     index:0,
                     priority:0.4,
-                    height:1,
-                    width:1
+                    height: 100,
+                    width: 200
                 },
                 {
                     index:1,
                     priority:0.9,
-                    height:1,
-                    width:2
+                    height: 100,
+                    width: 400
                 },
                 {
                     index:2,
                     priority:0.6,
-                    height:1,
-                    width:2
+                    height: 100,
+                    width: 400
                 },
                 {
                     index:3,
                     priority:0.3,
-                    height:2,
-                    width:1
+                    height: 200,
+                    width: 200
                 }
             ]
         };
@@ -116,4 +116,5 @@ pj-sortable-tiles>:nth-child(5) {
             
         })
     </script>
+    <input type="checkbox">check me
 </body>

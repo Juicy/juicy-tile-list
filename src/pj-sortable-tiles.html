@@ -1,15 +1,16 @@
 <!-- Import Polymer -->
 <script src="rectangle.js"></script>
 <script src="package.js"></script>
+<script src="weighted-package.js"></script>
 <link rel="import" href="pj-sortable-tiles-editor.html">
 <link rel="import" href="element-selector.html">
 
 <!-- Define your custom element -->
-<polymer-element name="pj-sortable-tiles" attributes="priorities rowspans colspans cellWidth cellHeight layersOrientation">
+<polymer-element name="pj-sortable-tiles" attributes="priorities rowspans colspans layersOrientation">
     <template>
     <style>
         :host {
-            /*display: table;*/
+            display: table; 
         }
         #container{
             display: block;
@@ -70,8 +71,8 @@
       }
 
         var defaultSetupNode = {
-            width: 0,
-            height: 0,
+            width: 200,
+            height: 100,
             priority: 0
         }
         /**
@@ -92,14 +93,10 @@
          * Modifies setup array with default settings for not mapped elements
          * @param {Array} elements
          * @param {Array} setup
-         * @param {Number} cellWidth
-         * @param {Number} cellHeight
          */
-        function createItemsList( elements, setup, cellWidth, cellHeight ){
+        function createItemsList( elements, setup ){
             for(var i = 0, ilen = elements.length - setup.length; i < ilen; i++) {
               var item = JSON.parse(JSON.stringify(defaultSetupNode));
-              item.width = cellWidth;
-              item.height = cellHeight;
               if(setup.length == 0) {
                 item.priority = 0.5;
               }
@@ -132,8 +129,6 @@
             priorities:[],
             items: null,
             gap: 8,
-            cellHeight: 32,
-            cellWidth: 128,
             maxX:0,
             maxY:0,
             layersOrientation: "horizontal",
@@ -147,9 +142,7 @@
               this.items = filterNodes(this.children);
               createItemsList(
                 this.items,
-                this.priorities,
-                this.cellWidth,
-                this.cellHeight
+                this.priorities
               );
             },
             attached: function gridAttached(){
@@ -198,6 +191,7 @@
                             while (elem.parentNode != that.$.container && elem.parentNode != that) {
                                 elem = elem.parentNode;
                             }
+                            // debugger
                             that.editedItemIndex = elementIndex(elem);
                             if(that.editedItem !== that.priorities[that.editedItemIndex]) {
                               that.editedItem = that.priorities[that.editedItemIndex];
@@ -269,8 +263,8 @@
                 if(typeof item == 'number'){
                     item = this.items[item];
                 }
-                item.rect.width = width * this.cellWidth;
-                item.rect.height = height * this.cellHeight;
+                item.rect.width = width;
+                item.rect.height = height;
                 this.saveToStorage();
                 this.package.reset();
                 this.packItems( this.getSortedCollection() );
@@ -309,6 +303,7 @@
                   return this;
                 }
 
+                // TODO: why do we sort it twice? and call it always before #packItems?
                 var collection = this.getSortedCollection();
 
                 for(var i= 0, ilen=collection.length; i<ilen;i++) {
@@ -372,7 +367,8 @@
 
                 this.saveToStorage();
                 this.package.reset();
-                this.packItems( collection );
+                // TODO: why do we sort it twice? and call it always before #packItems?
+                this.packItems( collection.sort(this.sorter) );
                 return this;
             },
 
@@ -404,6 +400,8 @@
                     }
                     rect.width += self.gap;
                     rect.height += self.gap;
+
+              
                     self.package.add(rect);
 
                     self.stretchContainer(rect);
