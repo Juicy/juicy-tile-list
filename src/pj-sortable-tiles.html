@@ -288,11 +288,14 @@
              * @return {pj-sortable-tiles}        self
              */
             resizeItem: function(item, width, height){
+                var rect;
                 if(typeof item == 'number'){
-                    item = this.items[item];
+                    rect = this.priorities[item];
+                } else{
+                    rect = item.rect;
                 }
-                item.rect.width = width;
-                item.rect.height = height;
+                rect.width = width;
+                rect.height = height;
                 this.saveToStorage();
                 this.package.reset();
                 this.packItems( this.getSortedCollection() );
