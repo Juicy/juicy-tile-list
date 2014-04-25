@@ -48,10 +48,8 @@
 
 
 
-  function calcMask(container,focused) {
-    var cw = container.innerWidth;
-    var ch = container.innerHeight;
-    var mask = "M 0 0 l " + cw + " 0 l 0 " + cw + " l " + -cw +" 0 Z";
+  function calcMask(cw, ch, focused) {
+    var mask = "M 0 0 l " + cw + " 0 l 0 " + ch + " l " + -cw +" 0 Z";
     if (focused) {
       // Clip out the window for the focused item
       mask +=  calcFocusRect(focused);
@@ -85,7 +83,9 @@
 
 
   function drawMask(maskElement, svg1, svg2, focusRect) {
-    var str = calcMask(window,maskElement.focused);
+    var availableWidth = document.documentElement.scrollWidth;
+    var availableHeight = document.documentElement.scrollHeight; //document.documentElement.scrollHeight returns the dimension of the page
+    var str = calcMask(availableWidth, availableHeight, maskElement.focused);
     var mask = svg1.getElementById("mask");
     mask.setAttribute("d",str);
     var mask2 = svg2.getElementById("mask");
@@ -95,6 +95,12 @@
       str = calcFocusRect(maskElement.focused);
       rect.setAttribute("d", str );
     }
+    svg1.style.width = availableWidth + "px"; //need to actually set dimensions of SVG, otherwise will not render in whole
+    svg2.style.width = availableWidth + "px";
+    focusRect.style.width = availableWidth + "px";
+    svg1.style.height = availableHeight + "px";
+    svg2.style.height = availableHeight + "px";
+    focusRect.style.height = availableHeight + "px";
   }
 
 
