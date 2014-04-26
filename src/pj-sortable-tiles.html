@@ -4,7 +4,7 @@
 <link rel="import" href="element-selector.html">
 
 <!-- Define your custom element -->
-<polymer-element name="pj-sortable-tiles" attributes="priorities rowspans colspans layersOrientation">
+<polymer-element name="pj-sortable-tiles" attributes="priorities rowspans colspans layersOrientation editingMode">
     <template>
     <style>
         :host {
@@ -158,6 +158,7 @@
             maxX:0,
             maxY:0,
             layersOrientation: "horizontal",
+            editingMode: false,
             editedItem: null,
             editedItemIndex: 0,
             sorter: function byPriority(itemA, itemB){
@@ -198,37 +199,6 @@
 
                     this.saveToStorage();
                     this.packItems( this.getSortedCollection() );
-
-                    var highlightItem = function (elem) {
-                        if (elem != that && elem != that.$.container) {
-                            while (elem.parentNode != that.$.container && elem.parentNode != that) {
-                                elem = elem.parentNode;
-                            }
-                            // debugger
-                            that.editedItemIndex = elementIndex(elem);
-                            if(that.editedItem !== that.priorities[that.editedItemIndex]) {
-                              that.editedItem = that.priorities[that.editedItemIndex];
-                              that.$.elementSelector.show(elem);
-                              that.fire("pj-sortable-tiles-edited-item-changed");
-                            }
-                        }
-                    }
-
-                    var lastTarget;
-                    window.addEventListener('keydown', function (ev) {
-                      if(lastTarget && (ev.ctrlKey || ev.metaKey)) { //meta is Mac command button
-                        highlightItem(lastTarget);
-                      }
-                    });
-                    this.addEventListener('mouseover', function (ev) {
-                      if(ev.ctrlKey || ev.metaKey) { //meta is Mac command button
-                        highlightItem(ev.target);
-                        lastTarget = null;
-                      }
-                      else {
-                        lastTarget = ev.target;
-                      }
-                    });
 
                     window.addEventListener('resize', this.refresh.bind(this), true);
 
@@ -445,9 +415,41 @@
 
             },
 
+          editingModeChanged: function() {
+            if(this.editingMode) {
+              this.$.elementSelector.show();
+
+              var that = this;
+              var highlightItem = function (elem) {
+                if (elem != that && elem != that.$.container) {
+                  while (elem.parentNode != that.$.container && elem.parentNode != that) {
+                    elem = elem.parentNode;
+                  }
+                  // debugger
+                  that.editedItemIndex = elementIndex(elem);
+                  if(that.editedItem !== that.priorities[that.editedItemIndex]) {
+                    that.editedItem = that.priorities[that.editedItemIndex];
+                    that.$.elementSelector.show(elem);
+                    that.fire("pj-sortable-tiles-edited-item-changed");
+                  }
+                }
+              }
+
+              this.addEventListener('mouseover', function (ev) {
+                if(that.editingMode) {
+                  highlightItem(ev.target);
+                }
+              });
+
+            }
+            else {
+              this.$.elementSelector.hide();
+            }
+          },
+
             editedItemChanged: function() {
               if(this.editedItem == null) {
-                this.$.elementSelector.hide();
+                this.editingMode = false;
               }
               this.fire("pj-sortable-tiles-edited-item-changed");
             },

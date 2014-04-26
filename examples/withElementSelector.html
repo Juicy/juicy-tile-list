@@ -68,10 +68,13 @@ pj-sortable-tiles>:nth-child(5) {
 <body>
     <template bind>
         <p>Press Ctrl or Command on your keyboard and move your mouse over an item to edit</p>
-        <div id="aboveOverlay">
-          <pj-sortable-tiles-editor sortableTilesId="st1"></pj-sortable-tiles-editor>
-        </div>
-        <pj-sortable-tiles id="st1" priorities="{{priorities}}" cellWidth="200" cellHeight="100">
+        <label><input type="checkbox" checked="{{editingMode}}"> Editing Mode ({{editingMode}})</label>
+        <template if="{{editingMode}}">
+          <div id="aboveOverlay">
+            <pj-sortable-tiles-editor sortableTilesId="st1"></pj-sortable-tiles-editor>
+          </div>
+        </template>
+        <pj-sortable-tiles id="st1" editingMode="{{editingMode}}" priorities="{{priorities}}" cellWidth="200" cellHeight="100">
             <div>Item 0 </div>
             <div>
                 <button>Item 1</button>
@@ -93,6 +96,7 @@ pj-sortable-tiles>:nth-child(5) {
         // 233
         // 2
         model = {
+          editingMode: false,
           priorities: [
             {"width": 128, "height": 100, "priority": 0.5},
             {"width": 256, "height": 100, "priority": 0.49},
@@ -101,8 +105,9 @@ pj-sortable-tiles>:nth-child(5) {
           ]
         };
         document.addEventListener("polymer-ready", function(){
+            document.querySelector("template").bindingDelegate = new PolymerExpressions();
             document.querySelector("template").model = model;
-            
+
         })
     </script>
 

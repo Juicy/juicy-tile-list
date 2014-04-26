@@ -14,31 +14,34 @@
       input {
         width: 60px;
       }
+
+      .disabled .editable {
+        opacity: 0.5;
+        pointer-events: none;
+      }
     </style>
-    <template if="{{sortableTilesModel.editedItem}}">
+    <div class="{{ {disabled: !sortableTilesModel.editedItem} | tokenList }}">
       <div><label>Gap ({{sortableTilesModel.gap}})</label>
-        <button on-click="{{gapIncrease}}">Inc</button>
-        <button on-click="{{gapDecrease}}">Dec</button>
+        <button class="editable" on-click="{{gapIncrease}}">Inc</button>
+        <button class="editable" on-click="{{gapDecrease}}">Dec</button>
       </div>
-      <template bind="{{sortableTilesModel.editedItem}}">
-        <div><label>Width ({{width}})</label>
-          <button on-click="{{widthIncrease}}">Inc</button>
-          <button on-click="{{widthDecrease}}">Dec</button>
-        </div>
-        <div><label>Height ({{height}})</label>
-          <button on-click="{{heightIncrease}}">Inc</button>
-          <button on-click="{{heightDecrease}}">Dec</button>
-          <label><input id="heightAutoCheckbox" type="checkbox" on-click="{{heightAuto}}"> auto</label>
-        </div>
-        <div><label>Priority ({{priority}})</label>
-          <button on-click="{{priorityIncrease}}">Inc</button>
-          <button on-click="{{priorityDecrease}}">Dec</button>
-        </div>
-        <div><label></label>
-          <button on-click="{{close}}">Done</button>
-        </div>
-      </template>
-    </template>
+      <div><label>Width ({{sortableTilesModel.editedItem.width}})</label>
+        <button class="editable" on-click="{{widthIncrease}}">Inc</button>
+        <button class="editable" on-click="{{widthDecrease}}">Dec</button>
+      </div>
+      <div><label>Height ({{sortableTilesModel.editedItem.height}})</label>
+        <button class="editable" on-click="{{heightIncrease}}">Inc</button>
+        <button class="editable" on-click="{{heightDecrease}}">Dec</button>
+        <label class="editable"><input id="heightAutoCheckbox" type="checkbox" on-click="{{heightAuto}}"> auto</label>
+      </div>
+      <div><label>Priority ({{sortableTilesModel.editedItem.priority}})</label>
+        <button class="editable" on-click="{{priorityIncrease}}">Inc</button>
+        <button class="editable" on-click="{{priorityDecrease}}">Dec</button>
+      </div>
+      <div><label></label>
+        <button on-click="{{close}}">Done</button>
+      </div>
+    </div>
   </template>
   <script>
     (function () {
@@ -67,6 +70,9 @@
           window.addEventListener("pj-sortable-tiles-edited-item-changed", function(event) {
             that.sortableTilesModel = event.target;
           });
+        },
+        sortableTilesIdChanged: function() {
+          this.sortableTilesModel = document.getElementById(this.sortableTilesId);
         },
         gapIncrease: function () {
           this.sortableTilesModel.gap++;
@@ -118,7 +124,7 @@
           this.sortableTilesModel.reprioritizeItem(this.sortableTilesModel.editedItemIndex, false);
         },
         close: function () {
-          this.sortableTilesModel.editedItem = null;
+          this.sortableTilesModel.editingMode = false;
         }
       });
     })();
