@@ -1,4 +1,4 @@
-<polymer-element name="pj-sortable-tiles-editor" attributes="editedItem editedItemIndex gap">
+<polymer-element name="pj-sortable-tiles-editor" attributes="sortableTilesId">
   <template>
     <style>
       div {
@@ -14,22 +14,13 @@
       input {
         width: 60px;
       }
-
-      :host {
-        position: fixed;
-        top: 10px;
-        left: 10px;
-        z-index: 100;
-        background: #fff;
-        font-family: Helvetica, Arial, sans-serif;
-      }
     </style>
-    <template if="{{editedItem}}">
-      <div><label>Gap ({{gap}})</label>
+    <template if="{{sortableTilesModel.editedItem}}">
+      <div><label>Gap ({{sortableTilesModel.gap}})</label>
         <button on-click="{{gapIncrease}}">Inc</button>
         <button on-click="{{gapDecrease}}">Dec</button>
       </div>
-      <template bind="{{editedItem}}">
+      <template bind="{{sortableTilesModel.editedItem}}">
         <div><label>Width ({{width}})</label>
           <button on-click="{{widthIncrease}}">Inc</button>
           <button on-click="{{widthDecrease}}">Dec</button>
@@ -70,63 +61,64 @@
 
       Polymer('pj-sortable-tiles-editor', {
         sortableTilesModel: null,
-        editedItem: null,
-        editedItemIndex: 0,
+        sortableTilesId: null,
         attached: function () {
-          this.sortableTilesModel = this.parentNode.host;
+          var that = this;
+          window.addEventListener("pj-sortable-tiles-edited-item-changed", function(event) {
+            that.sortableTilesModel = event.target;
+          });
         },
         gapIncrease: function () {
-          this.gap++;
-          this.fire("pj-sortable-tiles-refresh");
+          this.sortableTilesModel.gap++;
+          this.sortableTilesModel.refresh();
         },
         gapDecrease: function () {
-          if(this.gap >= 1) {
-            this.gap--;
+          if(this.sortableTilesModel.gap >= 1) {
+            this.sortableTilesModel.gap--;
           }
-          this.fire("pj-sortable-tiles-refresh");
+          this.sortableTilesModel.refresh();
         },
         widthIncrease: function () {
-          powerIncrease(this.editedItem, "width");
-          this.fire("pj-sortable-tiles-refresh");
+          powerIncrease(this.sortableTilesModel.editedItem, "width");
+          this.sortableTilesModel.refresh();
         },
         widthDecrease: function () {
-          powerDecrease(this.editedItem, "width");
-          this.fire("pj-sortable-tiles-refresh");
+          powerDecrease(this.sortableTilesModel.editedItem, "width");
+          this.sortableTilesModel.refresh();
         },
         heightIncrease: function () {
-          if(this.editedItem.height == 'auto') { //turn off auto
-            this.editedItem.height = 32;
+          if(this.sortableTilesModel.editedItem.height == 'auto') { //turn off auto
+            this.sortableTilesModel.editedItem.height = 32;
             this.shadowRoot.querySelector("#heightAutoCheckbox").checked = false;
           }
-          powerIncrease(this.editedItem, "height");
-          this.fire("pj-sortable-tiles-refresh");
+          powerIncrease(this.sortableTilesModel.editedItem, "height");
+          this.sortableTilesModel.refresh();
         },
         heightDecrease: function () {
-          if(this.editedItem.height == 'auto') { //turn off auto
-            this.editedItem.height = 32;
+          if(this.sortableTilesModel.editedItem.height == 'auto') { //turn off auto
+            this.sortableTilesModel.editedItem.height = 32;
             this.shadowRoot.querySelector("#heightAutoCheckbox").checked = false;
           }
-          powerDecrease(this.editedItem, "height");
-          this.fire("pj-sortable-tiles-refresh");
+          powerDecrease(this.sortableTilesModel.editedItem, "height");
+          this.sortableTilesModel.refresh();
         },
         heightAuto: function () {
-          if(this.editedItem.height == 'auto') { //turn off auto
-            this.editedItem.height = 32;
+          if(this.sortableTilesModel.editedItem.height == 'auto') { //turn off auto
+            this.sortableTilesModel.editedItem.height = 32;
           }
           else { //turn on auto
-            this.editedItem.height = "auto";
+            this.sortableTilesModel.editedItem.height = "auto";
           }
-          this.fire("pj-sortable-tiles-refresh");
+          this.sortableTilesModel.refresh();
         },
         priorityIncrease: function () {
-          this.sortableTilesModel.reprioritizeItem(this.editedItemIndex, true);
+          this.sortableTilesModel.reprioritizeItem(this.sortableTilesModel.editedItemIndex, true);
         },
         priorityDecrease: function () {
-          this.sortableTilesModel.reprioritizeItem(this.editedItemIndex, false);
+          this.sortableTilesModel.reprioritizeItem(this.sortableTilesModel.editedItemIndex, false);
         },
         close: function () {
-          this.editedItem = null;
-          this.fire("pj-sortable-tiles-editor-close");
+          this.sortableTilesModel.editedItem = null;
         }
       });
     })();
