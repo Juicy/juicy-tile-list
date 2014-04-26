@@ -1,18 +1,17 @@
 <polymer-element name="pj-sortable-tiles-editor" attributes="sortableTilesId">
   <template>
     <style>
-      div {
-        padding: 10px;
+      .editablesContainer {
+        display: flex;
+      }
 
+      .editableGroup {
+        flex: 1 1 auto;
       }
 
       label {
         display: inline-block;
-        width: 90px;
-      }
-
-      input {
-        width: 60px;
+        white-space: nowrap;
       }
 
       .disabled .editable {
@@ -20,26 +19,23 @@
         pointer-events: none;
       }
     </style>
-    <div class="{{ {disabled: !sortableTilesModel.editedItem} | tokenList }}">
-      <div><label>Gap ({{sortableTilesModel.gap}})</label>
+    <div class="{{ {editablesContainer: true, disabled: !sortableTilesModel.editedItem} | tokenList }}">
+      <div class="editableGroup"><label>Gap ({{sortableTilesModel.gap}})</label>
         <button class="editable" on-click="{{gapIncrease}}">Inc</button>
         <button class="editable" on-click="{{gapDecrease}}">Dec</button>
       </div>
-      <div><label>Width ({{sortableTilesModel.editedItem.width}})</label>
+      <div class="editableGroup"><label>Width ({{sortableTilesModel.editedItem.width}})</label>
         <button class="editable" on-click="{{widthIncrease}}">Inc</button>
         <button class="editable" on-click="{{widthDecrease}}">Dec</button>
       </div>
-      <div><label>Height ({{sortableTilesModel.editedItem.height}})</label>
+      <div class="editableGroup"><label>Height ({{sortableTilesModel.editedItem.height}})</label>
         <button class="editable" on-click="{{heightIncrease}}">Inc</button>
         <button class="editable" on-click="{{heightDecrease}}">Dec</button>
         <label class="editable"><input id="heightAutoCheckbox" type="checkbox" on-click="{{heightAuto}}"> auto</label>
       </div>
-      <div><label>Priority ({{sortableTilesModel.editedItem.priority}})</label>
+      <div class="editableGroup"><label>Priority ({{sortableTilesModel.editedItem.priority}})</label>
         <button class="editable" on-click="{{priorityIncrease}}">Inc</button>
         <button class="editable" on-click="{{priorityDecrease}}">Dec</button>
-      </div>
-      <div><label></label>
-        <button on-click="{{close}}">Done</button>
       </div>
     </div>
   </template>
@@ -122,9 +118,6 @@
         },
         priorityDecrease: function () {
           this.sortableTilesModel.reprioritizeItem(this.sortableTilesModel.editedItemIndex, false);
-        },
-        close: function () {
-          this.sortableTilesModel.editingMode = false;
         }
       });
     })();
