@@ -1,4 +1,4 @@
-<polymer-element name="pj-sortable-tiles-editor" attributes="sortableTilesId">
+<polymer-element name="pj-sortable-tiles-editor" attributes="sortableTilesSelector">
   <template>
     <style>
       .editablesContainer {
@@ -60,15 +60,15 @@
 
       Polymer('pj-sortable-tiles-editor', {
         sortableTilesModel: null,
-        sortableTilesId: null,
+        sortableTilesSelector: null,
         attached: function () {
           var that = this;
           window.addEventListener("pj-sortable-tiles-edited-item-changed", function(event) {
             that.sortableTilesModel = event.target;
           });
         },
-        sortableTilesIdChanged: function() {
-          this.sortableTilesModel = document.getElementById(this.sortableTilesId);
+        sortableTilesSelectorChanged: function() {
+          this.sortableTilesModel = document.querySelector(this.sortableTilesSelector);
         },
         gapIncrease: function () {
           this.sortableTilesModel.gap++;
