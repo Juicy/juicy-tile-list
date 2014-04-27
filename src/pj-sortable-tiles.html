@@ -57,19 +57,18 @@
       }
 
       /**
-       * Counts index of element within its parent
-       * @see http://jsperf.com/sibling-index/10
+       * Finds index of given Element
        * @param {Element} elem
        * @return {Number}
        */
-      function elementIndex (elem) {
-        var i = 0;
-        while (elem = elem.previousElementSibling) {
-          if(!(elem instanceof HTMLTemplateElement)) {
-            ++i
+      function indexOfElement (collection, elem) {
+        var len = collection.length;
+        while (len--) {
+          if(elem == collection[len].element) {
+            return len;
           }
         }
-        return i;
+        return -1;
       };
 
       /**
@@ -120,17 +119,51 @@
          * @param {Array} elements
          * @param {Array} setup
          */
-        function extendSetup( elements, setup ){
-            for(var i = 0, ilen = elements.length - setup.length; i < ilen; i++) {
-              var item = JSON.parse(JSON.stringify(defaultSetupNode));
-              if(setup.length == 0) {
-                item.priority = 0.5;
+        function defaultSetup( elements, setup, items ){
+            for(var elNo = 0, eLen = elements.length; elNo < eLen; elNo++) {
+              var element = elements[elNo];
+              if( !items[elNo] || !items[elNo].setup){
+                var itemSetup = JSON.parse(JSON.stringify(defaultSetupNode));
+                if(setup.length == 0) {
+                  itemSetup.priority = 0.5;
+                }
+                else {
+                  itemSetup.priority = getMinimumPriority(setup) * (1-1/eLen);
+                }
+                itemSetup.index = elNo;
+                setup.push(itemSetup);
+                items[elNo] = {
+                  element: element,
+                  setup: itemSetup
+                };
               }
-              else {
-                item.priority = getMinimumPriority(setup)*(1-1/ilen);
-              }
-              setup.push(item);
             }
+        }
+        /**
+         * Modifies setup array with default settings for not mapped elements
+         * @param {Array} elements
+         * @param {Array} setup
+         * @param {Array} [items=[]] array of items to update
+         * @param {Item} [parent] parent item
+         * @returns {Array} array of updated/created items
+         */
+        function createItemsList( elements, setup, items, parent ){
+            items = items || [];
+            for(var sNo = 0, sLen = setup.length; sNo < sLen; sNo++) {
+              var itemSetup = setup[sNo];
+
+              // walk the tree recursively
+              if(itemSetup.items){
+                createItemsList( elements, itemSetup.items, items, items[ itemSetup.index ] );
+              } else {
+                items[ itemSetup.index ] = {
+                  element: elements[ itemSetup.index ],
+                  setup: itemSetup,
+                  parentPackage: parent || null //null <=> root node
+                };
+              }
+            }
+            return items;
         }
 
         /**
@@ -157,19 +190,23 @@
             gap: 8,
             maxX:0,
             maxY:0,
+            items: [], //[index_in_DOM: {element: DOMElement, setup: setupObject}]
+
             layersOrientation: "horizontal",
             editingMode: false,
             editedItem: null,
             editedItemIndex: 0,
             sorter: function byPriority(itemA, itemB){
-                return itemB.rect.priority - itemA.rect.priority;
+                return itemB.priority - itemA.priority;
             },
             package: null,
             createItemsList: function(){
               this.filteredChildren = filterNodes(this.children);
-              extendSetup(
+              this.items = createItemsList( this.filteredChildren, this.priorities );
+              defaultSetup(
                 this.filteredChildren,
-                this.priorities
+                this.priorities,
+                this.items
               );
             },
             attached: function gridAttached(){
@@ -198,9 +235,9 @@
                     );
 
                     this.saveToStorage();
-                    this.packItems( this.getSortedCollection() );
+                    this.packItems();
 
-                    window.addEventListener('resize', this.refresh.bind(this), true);
+                    window.addEventListener('resize', this.refresh.bind(this, null, null), true);
 
                     var that = this;
 
@@ -217,7 +254,7 @@
                             that.createItemsList();
                             that.saveToStorage();
                             that.package.reset();
-                            that.packItems( that.getSortedCollection() );
+                            that.packItems();
                         }
                       });
                     });
@@ -226,8 +263,10 @@
                     // end of: Observe changes
                 });
             },
-
-           refresh: function() {
+            /**
+             * Refresh everything
+             */
+           refresh: function( ) {
             // console.log(that.package.width, that.clientWidth)
             // debugger
             if( this.layersOrientation !== "vertical"){
@@ -237,7 +276,7 @@
             }
              this.saveToStorage();
              this.package.reset();
-             this.packItems( this.getSortedCollection() );
+             this.packItems( );
           },
 
             stretchContainer: function( rectangle ) {
@@ -252,35 +291,18 @@
              * @return {pj-sortable-tiles}        self
              */
             resizeItem: function(item, width, height){
-                var rect;
+                var itemSetup;
                 if(typeof item == 'number'){
-                    rect = this.priorities[item];
+                    itemSetup = this.items[item].setup;
                 } else{
-                    rect = item.rect;
+                    itemSetup = item.setup;
                 }
-                rect.width = width;
-                rect.height = height;
+                itemSetup.width = width;
+                itemSetup.height = height;
                 this.saveToStorage();
                 this.package.reset();
-                this.packItems( this.getSortedCollection() );
+                this.packItems( );
                 return this;
-            },
-
-            /**
-             * Returns the collection of DOM elements and their setup sorted on the priority property
-             * @return {Array}
-             */
-            getSortedCollection: function() {
-              var that = this;
-              var collection = this.filteredChildren.map(function (item, index) {
-                return {
-                  element: item,
-                  index: index,
-                  rect: that.priorities[index]
-                }
-              });
-              collection.sort(that.sorter);
-              return collection;
             },
 
             /**
@@ -298,53 +320,49 @@
                   return this;
                 }
 
-                // TODO: why do we sort it twice? and call it always before #packItems?
-                var collection = this.getSortedCollection();
-
-                for(var i= 0, ilen=collection.length; i<ilen;i++) {
-                  if(collection[i].index == itemIndex) {
-                    var sortedIndex = i;
-                    var item = collection[i];
-                  }
-                }
+                var item = this.items[ itemIndex ],
+                    itemSetup = item.setup;
+                // use nested  or root package
+                var collection = item.parentPackage && item.parentPackage.setup.items || this.priorities;
+                var sortedIndex = collection.indexOf( itemSetup );
 
                 // move to the end
                 // debugger
                 if( end ||
                     increase && (sortedIndex <= 1) ||
-                    !increase && (sortedIndex >= this.filteredChildren.length - 2 )
+                    !increase && (sortedIndex >= collection.length - 2 )
                 ){
                     // top
                     if(increase){
                         // already on top
-                        if(item.rect.priority == 1){
+                        if(itemSetup.priority == 1){
                             return this;
                         }
                         higher = collection[0];
                         // already there, but with different priority
                         if(higher == item){
-                            item.rect.priority = 1;
+                            itemSetup.priority = 1;
                             // do not rearrange
                             return this;
                         } else {
                             // move to the middle
-                            higher.rect.priority = (collection[1].rect.priority + 1)/2;
-                            item.rect.priority = 1;
+                            higher.priority = (collection[1].priority + 1)/2;
+                            itemSetup.priority = 1;
                         }
                     } else { // bottom
                         // already at the bottom
-                        if(item.rect.priority == 0){
+                        if(itemSetup.priority == 0){
                             return this;
                         }
                         lower = collection[collection.length -1 ];
                         // already there, but with different priority.
                         if(lower == item){
-                            item.rect.priority = 0;
+                            itemSetup.priority = 0;
                             return this;
                         } else {
                             // move to the middle
-                            lower.rect.priority = collection[collection.length -2].rect.priority/2;
-                            item.rect.priority = 0;
+                            lower.priority = collection[collection.length -2].priority/2;
+                            itemSetup.priority = 0;
                         }
 
                     }
@@ -357,60 +375,84 @@
                         higher = collection[sortedIndex+1];
                         lower = collection[sortedIndex+2];
                     }
-                    item.rect.priority = (higher.rect.priority + lower.rect.priority)/2;
+                    itemSetup.priority = (higher.priority + lower.priority)/2;
                 }
 
                 this.saveToStorage();
                 this.package.reset();
-                // TODO: why do we sort it twice? and call it always before #packItems?
-                this.packItems( collection.sort(this.sorter) );
+                // TODO only this scope
+                this.packItems( );
                 return this;
             },
 
             /**
              * [packItems description]
-             * @param {Array} collection
+             * @param {Array} setup setup of items fo pack, if not give `#priorities` will be used
+             * @param {Package} currentPackage to be used, if notgive #package will be used.
              */
-            packItems: function(collection){
-                var self = this;
+            packItems: function packItems(setup, currentPackage, offSetX, offSetY){
+                setup = setup || this.priorities;
+                currentPackage = currentPackage || this.package;
+                offSetX = offSetX || 0;
+                offSetY = offSetY || 0;
+                var that = this,
+                    gap = currentPackage && currentPackage.gap || this.gap;
                 if(!this.originalHeights) {
                   this.originalHeights = [];
                 }
 
                 //pack rectangles, and calculate container size
-                collection.forEach(function(item, index){
+                setup
+                  .sort(this.sorter) // sort- if neded
+                  .forEach(function(itemSetup, index){
                     // TODO: do it more lightweight
-                    var element = item.element;
-                    var rect = new Rectangle(item.rect);
-                    var elStyle = element.style;
-                    if(typeof self.originalHeights[index] === 'undefined') {
-                      self.originalHeights.push(element.clientHeight);
-                    }
-                    if(rect.height == "auto") {
-                      rect.height = self.originalHeights[index];
-                      elStyle.overflowY = "visible";
-                    }
-                    else {
-                      elStyle.overflowY = "auto";
-                    }
-                    rect.width += self.gap;
-                    rect.height += self.gap;
+                    var rect = new Rectangle(itemSetup);
 
-              
-                    self.package.add(rect);
+                    var element = that.filteredChildren[ itemSetup.index ];
+                    if( element ){ // itemSetup.index - if it is real element not a virtual group
+                      var elStyle = element.style;
+                      if(typeof that.originalHeights[index] === 'undefined') {
+                        that.originalHeights.push(element.clientHeight);
+                      }
+                      if(rect.height == "auto") {
+                        rect.height = that.originalHeights[index];
+                        elStyle.overflowY = "visible";
+                      }
+                      else {
+                        elStyle.overflowY = "auto";
+                      }
+                    }
 
-                    self.stretchContainer(rect);
+                    // Add gaps
+                    rect.width += gap;
+                    rect.height += gap;
+                    // Pack item
+                    currentPackage.add(rect);
 
-                    elStyle.top = rect.y + self.gap + "px";
-                    elStyle.left = rect.x + self.gap + "px";
-                    elStyle.width = item.rect.width + "px";
-                    elStyle.height = item.rect.height + "px";
+                    that.stretchContainer(rect);
+
+                    if( element ){ // itemSetup.index - if it is real element not a virtual group
+                      // update oryginal element
+                      elStyle.top = rect.y + offSetY + gap + "px";
+                      elStyle.left = rect.x + offSetX + gap + "px";
+                      elStyle.width = itemSetup.width + "px";
+                      elStyle.height = itemSetup.height + "px";
+                    } else if ( itemSetup.items ){
+                      // TODO save it somewhere
+                      var nestedPackage = new Package( itemSetup );
+                      return that.packItems( 
+                        itemSetup.items, 
+                        nestedPackage, 
+                        rect.x + offSetX + gap, 
+                        rect.y + offSetY + gap 
+                      );
+                    }
                 });
 
-                if( self.layersOrientation !== "vertical"){
-                    self.$.container.style.height = self.maxY + "px";
+                if( that.layersOrientation !== "vertical"){
+                    that.$.container.style.height = that.maxY + "px";
                 } else {
-                    self.$.container.style.width = self.maxX + "px";
+                    that.$.container.style.width = that.maxX + "px";
                 }
 
             },
@@ -426,9 +468,10 @@
                     elem = elem.parentNode;
                   }
                   // debugger
-                  that.editedItemIndex = elementIndex(elem);
-                  if(that.editedItem !== that.priorities[that.editedItemIndex]) {
-                    that.editedItem = that.priorities[that.editedItemIndex];
+                  // ??? Do we realy need index? wouldn't it be better to get itemOfElement, so we will get setup, parent package, index and everything.. (tomalec) ?
+                  that.editedItemIndex = indexOfElement(that.items, elem);
+                  if(that.editedItem !== that.items[that.editedItemIndex].setup) {
+                    that.editedItem = that.items[that.editedItemIndex].setup;
                     that.$.elementSelector.show(elem);
                     that.fire("pj-sortable-tiles-edited-item-changed");
                   }

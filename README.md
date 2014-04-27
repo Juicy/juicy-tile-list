@@ -49,6 +49,7 @@ Attribute                    | Options             | Default      | Description
 
 Name                 | Options        | Description
 ---                  | ---            | ---
+`filteredChildren`   | *Array*        | Array of children which are going to be arranged.
 `items`              | *Array*        | Tiles setup. Array of following elements, sorted by priority.
 `items[.].element`   | *Element*      | DOM element 
 `items[.].rect`      | *Rectangle*    | Rectanlge that represents `element` position in Package
