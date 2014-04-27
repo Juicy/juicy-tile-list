@@ -104,7 +104,7 @@
         /**
          * Disregard `<style>`, `<template>` and Text nodes.
          * @param  {NodesList} nodesList nodes list to filter
-         * @return {Array}           array of sortable items.
+         * @return {Array}           array of sortable children.
          */
         function filterNodes( nodesList ){
             return nodesList.array()
@@ -120,7 +120,7 @@
          * @param {Array} elements
          * @param {Array} setup
          */
-        function createItemsList( elements, setup ){
+        function extendSetup( elements, setup ){
             for(var i = 0, ilen = elements.length - setup.length; i < ilen; i++) {
               var item = JSON.parse(JSON.stringify(defaultSetupNode));
               if(setup.length == 0) {
@@ -153,7 +153,7 @@
 
         Polymer('pj-sortable-tiles', {
             priorities:[],
-            items: null,
+            filteredChildren: null,
             gap: 8,
             maxX:0,
             maxY:0,
@@ -166,9 +166,9 @@
             },
             package: null,
             createItemsList: function(){
-              this.items = filterNodes(this.children);
-              createItemsList(
-                this.items,
+              this.filteredChildren = filterNodes(this.children);
+              extendSetup(
+                this.filteredChildren,
                 this.priorities
               );
             },
@@ -272,7 +272,7 @@
              */
             getSortedCollection: function() {
               var that = this;
-              var collection = this.items.map(function (item, index) {
+              var collection = this.filteredChildren.map(function (item, index) {
                 return {
                   element: item,
                   index: index,
@@ -294,7 +294,7 @@
             reprioritizeItem: function(itemIndex, increase, end){
                 var higher, lower, item;
                 // do nothing if there is nothing to rearrange
-                if( this.items.length < 2){
+                if( this.filteredChildren.length < 2){
                   return this;
                 }
 
@@ -312,7 +312,7 @@
                 // debugger
                 if( end ||
                     increase && (sortedIndex <= 1) ||
-                    !increase && (sortedIndex >= this.items.length - 2 )
+                    !increase && (sortedIndex >= this.filteredChildren.length - 2 )
                 ){
                     // top
                     if(increase){
