@@ -57,21 +57,6 @@
       }
 
       /**
-       * Finds index of given Element
-       * @param {Element} elem
-       * @return {Number}
-       */
-      function indexOfElement (collection, elem) {
-        var len = collection.length;
-        while (len--) {
-          if(elem == collection[len].element) {
-            return len;
-          }
-        }
-        return -1;
-      };
-
-      /**
        * Save JSON tree to the local storage using the provided key
        * @param {String} key
        * @param {Object} value
@@ -469,7 +454,7 @@
                   }
                   // debugger
                   // ??? Do we realy need index? wouldn't it be better to get itemOfElement, so we will get setup, parent package, index and everything.. (tomalec) ?
-                  that.editedItemIndex = indexOfElement(that.items, elem);
+                  that.editedItemIndex = that.filteredChildren.indexOf(elem);
                   if(that.editedItem !== that.items[that.editedItemIndex].setup) {
                     that.editedItem = that.items[that.editedItemIndex].setup;
                     that.$.elementSelector.show(elem);
