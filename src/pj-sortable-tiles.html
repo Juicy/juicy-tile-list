@@ -127,7 +127,7 @@
                 item.priority = 0.5;
               }
               else {
-                item.priority = getMinimumPriority(setup) - 0.01
+                item.priority = getMinimumPriority(setup)*(1-1/ilen);
               }
               setup.push(item);
             }
