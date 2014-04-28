@@ -126,13 +126,12 @@
           this.sortableTilesModel.refresh();
         },
         priorityIncrease: function () {
-          this.sortableTilesModel.reprioritizeItem(this.sortableTilesModel.editedItemIndex, true);
+          this.sortableTilesModel.reprioritizeItem(this.sortableTilesModel.editedItem, true);
         },
         priorityDecrease: function () {
-          this.sortableTilesModel.reprioritizeItem(this.sortableTilesModel.editedItemIndex, false);
+          this.sortableTilesModel.reprioritizeItem(this.sortableTilesModel.editedItem, false);
         },
         editContainer: function() {
-          debugger
           this.sortableTilesModel.editedItem = this.sortableTilesModel.editedItem.container;
         }
       });

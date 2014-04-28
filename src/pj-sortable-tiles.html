@@ -317,28 +317,29 @@
 
             /**
              * Change priority of given item
-             * @param  {Number} itemIndex    item index (the original item index in DOM)
+             * @param  {Number | Item} itemIndex    item index (the original item index in DOM), container name, or item itself
              * @param  {Boolean} increase  true - increases priority, false - decreases
              * @param  {Boolean} [end=false] true to move to the end
              * @return {pj-sortable-tiles}        self
              * @TODO write tests
              */
-            reprioritizeItem: function(itemIndex, increase, end){
+            reprioritizeItem: function( item, increase, end ){
                 var higher, lower, item;
                 // do nothing if there is nothing to rearrange
                 if( this.filteredChildren.length < 2){
                   return this;
                 }
-
-                var item = this.items[ itemIndex ],
-                    itemSetup = item.setup;
+                if( typeof item !== 'object'){
+                  item = this.items[item];
+                }
+                var itemSetup = item.setup;
                 // do nothing for root
-                if( !itemIndex.container ){
+                if( !item.container ){
                   throw new RangeError( "Cannot reprioritize root container");
                   return false;
                 }
                 // use parent items
-                var collection = item.container.items;
+                var collection = item.container.setup.items;
                 var sortedIndex = collection.indexOf( itemSetup );
 
                 // move to the end
