@@ -401,7 +401,7 @@
                 to = this.items[where];
                 // create new one
                 if(!to){
-                  to = where = {
+                  where = {
                     name: where,
                     setup: {
                       gap: 0,
@@ -416,8 +416,10 @@
                   };
                   this.items[ where.name ] = where;
                   from.push(where.setup);
+                } else {
+                  where = to;  
                 }
-                to = to.setup.items;
+                to = where.setup.items;
               } else {
                 to = where.setup.items;
               }
