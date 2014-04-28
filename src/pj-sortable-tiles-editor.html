@@ -29,6 +29,9 @@
       }
     </style>
     <div class="{{ {editablesContainer: true, disabled: !sortableTilesModel.editedItem} | tokenList }}">
+      <div class="editableGroup"><label>Groups</label>
+        <button class="editable" on-click="{{editParent}}" disabled?="{{parent == null}}">Edit parent</button>
+      </div>
       <div class="editableGroup"><label>Gap <span class="val">({{sortableTilesModel.gap}})</span></label>
         <button class="editable" on-click="{{gapIncrease}}">Inc</button>
         <button class="editable" on-click="{{gapDecrease}}">Dec</button>
@@ -74,6 +77,18 @@
           var that = this;
           window.addEventListener("pj-sortable-tiles-edited-item-changed", function(event) {
             that.sortableTilesModel = event.target;
+
+            that.parent = null;
+            var findParent = function(hay, needle) {
+              for(var i in hay) {
+                if(hay[i].setup == needle) {
+                  if(hay[i].container) {
+                    that.parent = hay[i].container; //parent found
+                  }
+                }
+              }
+            }
+            findParent(that.sortableTilesModel.items, that.sortableTilesModel.editedItem);
           });
         },
         sortableTilesSelectorChanged: function() {
@@ -127,6 +142,9 @@
         },
         priorityDecrease: function () {
           this.sortableTilesModel.reprioritizeItem(this.sortableTilesModel.editedItemIndex, false);
+        },
+        editParent: function() {
+          this.sortableTilesModel.editedItem = this.parent.setup;
         }
       });
     })();
