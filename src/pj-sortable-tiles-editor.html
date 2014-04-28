@@ -32,7 +32,7 @@
       <div class="editableGroup"><label>Groups</label>
         <button class="editable" on-click="{{editParent}}" disabled?="{{parent == null}}">Edit parent</button>
       </div>
-      <div class="editableGroup"><label>Gap <span class="val">({{sortableTilesModel.gap}})</span></label>
+      <div hidden?="{{!sortableTilesModel.editedItem.items}}" class="editableGroup"><label>Gap <span class="val">({{sortableTilesModel.editedItem.gap}})</span></label>
         <button class="editable" on-click="{{gapIncrease}}">Inc</button>
         <button class="editable" on-click="{{gapDecrease}}">Dec</button>
       </div>
@@ -95,12 +95,12 @@
           this.sortableTilesModel = document.querySelector(this.sortableTilesSelector);
         },
         gapIncrease: function () {
-          this.sortableTilesModel.gap++;
+          this.sortableTilesModel.editedItem.gap++;
           this.sortableTilesModel.refresh();
         },
         gapDecrease: function () {
-          if(this.sortableTilesModel.gap >= 1) {
-            this.sortableTilesModel.gap--;
+          if(this.sortableTilesModel.editedItem.gap >= 1) {
+            this.sortableTilesModel.editedItem.gap--;
           }
           this.sortableTilesModel.refresh();
         },

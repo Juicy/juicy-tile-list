@@ -56,9 +56,9 @@ pj-sortable-tiles>:nth-child(5) {
 
 <body>
     <template bind>
-        <pj-sortable-tiles priorities="{{priorities}}">
+        <pj-sortable-tiles setup="{{setup}}">
             <div>Item 0 </div>
-            <pj-sortable-tiles priorities="{{priorities2}}">
+            <pj-sortable-tiles setup="{{setup2}}">
                 <div>Item 0 </div>
                 <div>
                     <button>Item 1</button>
@@ -85,95 +85,101 @@ pj-sortable-tiles>:nth-child(5) {
         // 233
         // 2
         model = {
-            priorities: [
-                // 011
-                // 233
-                // 2
-                // prioritized
-                // 
-                // 110
-                // 233
-                // 2
-                {
-                    index:0,
-                    priority:0.9,// 0.6,
-                    height: 100,
-                    width: 200
-                },
-                {
-                    index:1,
-                    priority:0.8,// 0.9,
-                    height: 100,
-                    width:400
-                },
-                {
-                    index:2,
-                    priority:0.6,// 0.3,
-                    height: 100,
-                    width: 400
-                },
-                {
-                    index:3,
-                    priority:0.4,
-                    height: 200,
-                    width: 200
-                }
-                // 
-                // 122
-                // 145
-                // 333
-                // 
-                // {
-                //   width: 200,
-                //   height: 2
-                // }, {
-                //   width: 400,
-                //   height:  100
-                // }, {
-                //   width: 600,
-                //   height:  100
-                // }, {
-                //   width: 200,
-                //   height:  100
-                // }, {
-                //   width: 200,
-                //   height:  100
-                // }
-            ],
-            priorities2: [
-                // 011
-                // 233
-                // 2
-                // prioritized
-                // 
-                // 110
-                // 233
-                // 2
-                {
-                    index:0,
-                    priority:0.9,// 0.6,
-                    height: 20,
-                    width: 100
-                },
-                {
-                    index:1,
-                    priority:0.8,// 0.9,
-                    height: 20,
-                    width: 100
-                },
-                {
-                    index:2,
-                    priority:0.6,// 0.3,
-                    height: 40,
-                    width: 180
-                },
-                {
-                    index:3,
-                    priority:0.4,
-                    height: 20,
-                    width: 150
-                }
-            ]
+            setup: {
+                gap: 8,
+                items:[
+                    // 011
+                    // 233
+                    // 2
+                    // prioritized
+                    // 
+                    // 110
+                    // 233
+                    // 2
+                    {
+                        index:0,
+                        priority:0.9,// 0.6,
+                        height: 100,
+                        width: 200
+                    },
+                    {
+                        index:1,
+                        priority:0.8,// 0.9,
+                        height: 100,
+                        width:400
+                    },
+                    {
+                        index:2,
+                        priority:0.6,// 0.3,
+                        height: 100,
+                        width: 400
+                    },
+                    {
+                        index:3,
+                        priority:0.4,
+                        height: 200,
+                        width: 200
+                    }
+                    // 
+                    // 122
+                    // 145
+                    // 333
+                    // 
+                    // {
+                    //   width: 200,
+                    //   height: 2
+                    // }, {
+                    //   width: 400,
+                    //   height:  100
+                    // }, {
+                    //   width: 600,
+                    //   height:  100
+                    // }, {
+                    //   width: 200,
+                    //   height:  100
+                    // }, {
+                    //   width: 200,
+                    //   height:  100
+                    // }
+                ]
+            },
+            setup2: {
+                gap: 4,
+                items: [
+                    // 011
+                    // 233
+                    // 2
+                    // prioritized
+                    // 
+                    // 110
+                    // 233
+                    // 2
+                    {
+                        index:0,
+                        priority:0.9,// 0.6,
+                        height: 20,
+                        width: 100
+                    },
+                    {
+                        index:1,
+                        priority:0.8,// 0.9,
+                        height: 20,
+                        width: 100
+                    },
+                    {
+                        index:2,
+                        priority:0.6,// 0.3,
+                        height: 40,
+                        width: 180
+                    },
+                    {
+                        index:3,
+                        priority:0.4,
+                        height: 20,
+                        width: 150
+                    }
+                ]
+            }
         };
         document.addEventListener("polymer-ready", function(){
             document.querySelector("template").model = model;

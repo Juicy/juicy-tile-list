@@ -57,7 +57,7 @@ pj-sortable-tiles>:nth-child(5) {
 
 <body>
     <template bind>
-        <pj-sortable-tiles priorities="{{priorities}}">
+        <pj-sortable-tiles setup="{{setup}}">
             <div>Item 0, priority 0.4</div>
             <div>
                 <button>Item 1, priority 0.9</button>
@@ -79,40 +79,43 @@ pj-sortable-tiles>:nth-child(5) {
         // 233
         // 2
         model = {
-            priorities: [
-                // 011
-                // 233
-                // 2
-                // prioritized
-                // 
-                // 110
-                // 233
-                // 2
-                {
-                    index:0,
-                    priority:0.4,
-                    height: 100,
-                    width: 200
-                },
-                {
-                    index:1,
-                    priority:0.9,
-                    height: 100,
-                    width: 400
-                },
-                {
-                    index:2,
-                    priority:0.6,
-                    height: 100,
-                    width: 400
-                },
-                {
-                    index:3,
-                    priority:0.3,
-                    height: 200,
-                    width: 200
-                }
-            ]
+            setup: {
+                gap: 8,
+                items: [
+                    // 011
+                    // 233
+                    // 2
+                    // prioritized
+                    // 
+                    // 110
+                    // 233
+                    // 2
+                    {
+                        index:0,
+                        priority:0.4,
+                        height: 100,
+                        width: 200
+                    },
+                    {
+                        index:1,
+                        priority:0.9,
+                        height: 100,
+                        width: 400
+                    },
+                    {
+                        index:2,
+                        priority:0.6,
+                        height: 100,
+                        width: 400
+                    },
+                    {
+                        index:3,
+                        priority:0.3,
+                        height: 200,
+                        width: 200
+                    }
+                ]
+            }
         };
         document.addEventListener("polymer-ready", function(){
             document.querySelector("template").model = model;

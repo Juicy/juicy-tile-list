@@ -75,7 +75,7 @@ pj-sortable-tiles>:nth-child(5) {
             <pj-sortable-tiles-editor sortableTilesSelector="st1"></pj-sortable-tiles-editor>
           </div>
         </template>
-        <pj-sortable-tiles id="st1" editingMode="{{editingMode}}" priorities="{{priorities}}">
+        <pj-sortable-tiles id="st1" editingMode="{{editingMode}}" setup="{{setup}}">
             <div>Item 0 </div>
             <div>
                 <button>Item 1</button>
@@ -97,15 +97,18 @@ pj-sortable-tiles>:nth-child(5) {
         // 233
         // 2
         model = {
-          editingMode: false,
-          priorities: [
-            {"width": 128, "height": 100, "priority": 0.5, "index": 0},
-            {"width": 512, "height": 200, "priority": 0.48, "items":[
-                {"width": 256, "height": 100, "priority": 0.7, "index": 1},
-                {"width": 128, "height": 100, "priority": 0.0, "index": 2}
-            ]},
-            {"width": 128, "height": 100, "priority": 0.47, "index": 3}
-          ]
+            editingMode: false,
+            setup:{
+                gap: 8,
+                items: [
+                    {"width": 128, "height": 100, "priority": 0.5, "index": 0},
+                    {"width": 512, "height": 200, "priority": 0.48, "gap": 0, "items":[
+                        {"width": 256, "height": 100, "priority": 0.7, "index": 1},
+                        {"width": 128, "height": 100, "priority": 0.0, "index": 2}
+                    ]},
+                    {"width": 128, "height": 100, "priority": 0.47, "index": 3}
+                ]
+            }
         };
         document.addEventListener("polymer-ready", function(){
             document.querySelector("template").bindingDelegate = new PolymerExpressions();

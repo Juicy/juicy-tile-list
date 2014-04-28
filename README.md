@@ -37,12 +37,16 @@
 
 Attribute                    | Options             | Default      | Description
 ---                          | ---                 | ---          | ---
-`priorities`                 | *Array*             | `[]`         | Tiles setup
-`priorities[?].priority`     | *Number* (0-1)      | `0`          | Importance of tile, used for sorting elements.
-`priorities[?].width`        | *Number*            | `1`          | Tile width (number of colums)
-`priorities[?].heigh`        | *Number*            | `1`          | Tile height (number of rows)
-`cellWidth`                  | *Number*            | `100`        | Width of every column (in px)
-`cellHeight`                 | *Number*            | `50`         | Height of every row (in px)
+`setup`                      | *Object*            |              | Tiles setup
+`setup.gap`                  | *Number*            | `0`          | Gap/cellspacing size in px
+`setup.items`                | *Array*             | `[]`         | Tiles setup
+`setup.items[?].priority`    | *Number* (0-1)      | `0`          | Importance of tile, used for sorting elements.
+`setup.items[?].width`       | *Number*            | `1`          | Tile width (number of colums)
+`setup.items[?].heigh`       | *Number*            | `1`          | Tile height (number of rows)
+`setup.items[?].index`       | *Number*            |              | DOM ChildElement index (not needed for virtual containers)
+`setup.items[?].items`       | *Array(Items)*      |              | Recursive setup (for virtual contianers)
+`setup.items[?].gap`         | *Number*            | `0`          | Recursive setup (for virtual contianers)
+`setup.items[?].name`        | *String*            |              | Recursive setup (for virtual contianers)
 `layersOrientation`          | *String*            | `horizontal` | How to align our package (`horizontal` or `vertical`)
 
 ## Properties
@@ -52,21 +56,22 @@ Name                 | Options        | Description
 `filteredChildren`   | *Array*        | Array of children which are going to be arranged.
 `items`              | *Array*        | Tiles setup. Array of following elements, sorted by priority.
 `items[.].element`   | *Element*      | DOM element 
-`items[.].rect`      | *Rectangle*    | Rectanlge that represents `element` position in Package
+`items[.].setup`     | *Rectangle*    | Rectanlge that represents `element` position in Package
 `package`            | *Package*      | Package abstract object
 
 ## Methods
 
 Name               | Param name | Type               | Default | Description
 ---                | ---        | ---                | ---     | ---
-`resizeItem`       |            |                    |         | Resize element
+`resizeItem`       |            |                    |         | Resize (real or virtual container) element
                    | item       | *Number* or *Item* |         | Item or item index.
                    | width      | *Number*           | `0`     | new width
                    | height     | *Number*           | `0`     | new height
-`reprioritizeItem` |            |                    |         | Change priority/weight of item
+`reprioritizeItem` |            |                    |         | Change priority/weight of item (real or virtual container)
                    | itemIndex  | *Number*           |         | Item or item index. Please note, that items array is sorted by priority.
                    | increase   | *Boolean*          | `false` | `true` - increases, `false` decreases priority
                    | end        | *Boolean*          | `false` | `true` to move to the end of list
+`moveToContainer`  |            |                    |         | Move any item to given container, wrap it with new one
 
 
 ## Contributing

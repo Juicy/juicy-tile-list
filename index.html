@@ -60,7 +60,7 @@ section input{
 
 <body>
     <template bind>
-        <pj-sortable-tiles priorities="{{priorities}}">
+        <pj-sortable-tiles setup="{{setup}}">
             <div>Item 0 </div>
             <div>
                 <button>Item 1</button>
@@ -82,61 +82,64 @@ section input{
         // 233
         // 2
         model = {
-            priorities: [
-                // 011
-                // 233
-                // 2
-                // prioritized
-                // 
-                // 110
-                // 233
-                // 2
-                {
-                    index:0,
-                    priority:0.9,// 0.6,
-                    height: 100,
-                    width: 200
-                },
-                {
-                    index:1,
-                    priority:0.8,// 0.9,
-                    height: 100,
-                    width:400
-                },
-                {
-                    index:2,
-                    priority:0.6,// 0.3,
-                    height: 100,
-                    width: 400
-                },
-                {
-                    index:3,
-                    priority:0.4,
-                    height: 200,
-                    width: 200
-                }
-                // 
-                // 122
-                // 145
-                // 333
-                // 
-                // {
-                //   width: 200,
-                //   height: 2
-                // }, {
-                //   width: 400,
-                //   height:  100
-                // }, {
-                //   width: 600,
-                //   height:  100
-                // }, {
-                //   width: 200,
-                //   height:  100
-                // }, {
-                //   width: 200,
-                //   height:  100
-                // }
-            ]
+            setup: {
+                gap: 8,
+                items:[
+                    // 011
+                    // 233
+                    // 2
+                    // prioritized
+                    // 
+                    // 110
+                    // 233
+                    // 2
+                    {
+                        index:0,
+                        priority:0.9,// 0.6,
+                        height: 100,
+                        width: 200
+                    },
+                    {
+                        index:1,
+                        priority:0.8,// 0.9,
+                        height: 100,
+                        width:400
+                    },
+                    {
+                        index:2,
+                        priority:0.6,// 0.3,
+                        height: 100,
+                        width: 400
+                    },
+                    {
+                        index:3,
+                        priority:0.4,
+                        height: 200,
+                        width: 200
+                    }
+                    // 
+                    // 122
+                    // 145
+                    // 333
+                    // 
+                    // {
+                    //   width: 200,
+                    //   height: 2
+                    // }, {
+                    //   width: 400,
+                    //   height:  100
+                    // }, {
+                    //   width: 600,
+                    //   height:  100
+                    // }, {
+                    //   width: 200,
+                    //   height:  100
+                    // }, {
+                    //   width: 200,
+                    //   height:  100
+                    // }
+                ]
+            }
         };
         document.addEventListener("polymer-ready", function(){
             document.querySelector("template").model = model;
