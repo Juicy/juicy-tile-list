@@ -30,22 +30,22 @@
     </style>
     <div class="{{ {editablesContainer: true, disabled: !sortableTilesModel.editedItem} | tokenList }}">
       <div class="editableGroup"><label>Groups</label>
-        <button class="editable" on-click="{{editParent}}" disabled?="{{parent == null}}">Edit parent</button>
+        <button class="editable" on-click="{{editContainer}}" disabled?="{{!sortableTilesModel.editedItem.container}}">Edit container</button>
       </div>
-      <div hidden?="{{!sortableTilesModel.editedItem.items}}" class="editableGroup"><label>Gap <span class="val">({{sortableTilesModel.editedItem.gap}})</span></label>
+      <div hidden?="{{!sortableTilesModel.editedItem.setup.items}}" class="editableGroup"><label>Gap <span class="val">({{sortableTilesModel.editedItem.setup.gap}})</span></label>
         <button class="editable" on-click="{{gapIncrease}}">Inc</button>
         <button class="editable" on-click="{{gapDecrease}}">Dec</button>
       </div>
-      <div class="editableGroup"><label>Width <span class="val">({{sortableTilesModel.editedItem.width}})</span></label>
+      <div class="editableGroup"><label>Width <span class="val">({{sortableTilesModel.editedItem.setup.width}})</span></label>
         <button class="editable" on-click="{{widthIncrease}}">Inc</button>
         <button class="editable" on-click="{{widthDecrease}}">Dec</button>
       </div>
-      <div class="editableGroup"><label>Height <span class="val">({{sortableTilesModel.editedItem.height}})</span></label>
+      <div class="editableGroup"><label>Height <span class="val">({{sortableTilesModel.editedItem.setup.height}})</span></label>
         <button class="editable" on-click="{{heightIncrease}}">Inc</button>
         <button class="editable" on-click="{{heightDecrease}}">Dec</button>
         <label class="editable"><input id="heightAutoCheckbox" type="checkbox" on-click="{{heightAuto}}"> auto</label>
       </div>
-      <div class="editableGroup"><label>Priority <span class="val">({{sortableTilesModel.editedItem.priority}})</span></label>
+      <div class="editableGroup"><label>Priority <span class="val">({{sortableTilesModel.editedItem.setup.priority}})</span></label>
         <button class="editable" on-click="{{priorityIncrease}}">Inc</button>
         <button class="editable" on-click="{{priorityDecrease}}">Dec</button>
       </div>
@@ -77,63 +77,51 @@
           var that = this;
           window.addEventListener("pj-sortable-tiles-edited-item-changed", function(event) {
             that.sortableTilesModel = event.target;
-
-            that.parent = null;
-            var findParent = function(hay, needle) {
-              for(var i in hay) {
-                if(hay[i].setup == needle) {
-                  if(hay[i].container) {
-                    that.parent = hay[i].container; //parent found
-                  }
-                }
-              }
-            }
-            findParent(that.sortableTilesModel.items, that.sortableTilesModel.editedItem);
           });
         },
         sortableTilesSelectorChanged: function() {
           this.sortableTilesModel = document.querySelector(this.sortableTilesSelector);
         },
         gapIncrease: function () {
-          this.sortableTilesModel.editedItem.gap++;
+          this.sortableTilesModel.editedItem.setup.gap++;
           this.sortableTilesModel.refresh();
         },
         gapDecrease: function () {
-          if(this.sortableTilesModel.editedItem.gap >= 1) {
-            this.sortableTilesModel.editedItem.gap--;
+          if(this.sortableTilesModel.editedItem.setup.gap >= 1) {
+            this.sortableTilesModel.editedItem.setup.gap--;
           }
           this.sortableTilesModel.refresh();
         },
         widthIncrease: function () {
-          powerIncrease(this.sortableTilesModel.editedItem, "width");
+          powerIncrease(this.sortableTilesModel.editedItem.setup, "width");
           this.sortableTilesModel.refresh();
         },
         widthDecrease: function () {
-          powerDecrease(this.sortableTilesModel.editedItem, "width");
+          powerDecrease(this.sortableTilesModel.editedItem.setup, "width");
           this.sortableTilesModel.refresh();
         },
         heightIncrease: function () {
-          if(this.sortableTilesModel.editedItem.height == 'auto') { //turn off auto
-            this.sortableTilesModel.editedItem.height = 32;
+          if(this.sortableTilesModel.editedItem.setup.height == 'auto') { //turn off auto
+            this.sortableTilesModel.editedItem.setup.height = 32;
             this.shadowRoot.querySelector("#heightAutoCheckbox").checked = false;
           }
-          powerIncrease(this.sortableTilesModel.editedItem, "height");
+          powerIncrease(this.sortableTilesModel.editedItem.setup, "height");
           this.sortableTilesModel.refresh();
         },
         heightDecrease: function () {
-          if(this.sortableTilesModel.editedItem.height == 'auto') { //turn off auto
-            this.sortableTilesModel.editedItem.height = 32;
+          if(this.sortableTilesModel.editedItem.setup.height == 'auto') { //turn off auto
+            this.sortableTilesModel.editedItem.setup.height = 32;
             this.shadowRoot.querySelector("#heightAutoCheckbox").checked = false;
           }
-          powerDecrease(this.sortableTilesModel.editedItem, "height");
+          powerDecrease(this.sortableTilesModel.editedItem.setup, "height");
           this.sortableTilesModel.refresh();
         },
         heightAuto: function () {
-          if(this.sortableTilesModel.editedItem.height == 'auto') { //turn off auto
-            this.sortableTilesModel.editedItem.height = 32;
+          if(this.sortableTilesModel.editedItem.setup.height == 'auto') { //turn off auto
+            this.sortableTilesModel.editedItem.setup.height = 32;
           }
           else { //turn on auto
-            this.sortableTilesModel.editedItem.height = "auto";
+            this.sortableTilesModel.editedItem.setup.height = "auto";
           }
           this.sortableTilesModel.refresh();
         },
@@ -143,8 +131,9 @@
         priorityDecrease: function () {
           this.sortableTilesModel.reprioritizeItem(this.sortableTilesModel.editedItemIndex, false);
         },
-        editParent: function() {
-          this.sortableTilesModel.editedItem = this.parent.setup;
+        editContainer: function() {
+          debugger
+          this.sortableTilesModel.editedItem = this.sortableTilesModel.editedItem.container;
         }
       });
     })();

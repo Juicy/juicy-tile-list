@@ -205,7 +205,6 @@
             layersOrientation: "horizontal",
             editingMode: false,
             editedItem: null,
-            editedItemIndex: 0,
             sorter: function byPriority(itemA, itemB){
                 return itemB.priority - itemA.priority;
             },
@@ -548,9 +547,9 @@
                   }
                   // debugger
                   // ??? Do we realy need index? wouldn't it be better to get itemOfElement, so we will get setup, parent package, index and everything.. (tomalec) ?
-                  that.editedItemIndex = that.filteredChildren.indexOf(elem);
-                  if(that.editedItem !== that.items[that.editedItemIndex].setup) {
-                    that.editedItem = that.items[that.editedItemIndex].setup;
+                  var highlightedItem = that.items[ that.filteredChildren.indexOf(elem) ];
+                  if(that.editedItem !== highlightedItem) {
+                    that.editedItem = highlightedItem;
                     that.$.elementSelector.show(elem);
                     that.fire("pj-sortable-tiles-edited-item-changed");
                   }
