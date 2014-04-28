@@ -445,12 +445,14 @@
              * @param {Package} currentPackage to be used, if notgive #package will be used.
              */
             packItems: function packItems(setup, currentPackage, offSetX, offSetY){
+                var that = this,
+                    gap = currentPackage ? currentPackage.gap || 0 : this.gap;
+
                 setup = setup || this.priorities;
                 currentPackage = currentPackage || this.package;
                 offSetX = offSetX || 0;
                 offSetY = offSetY || 0;
-                var that = this,
-                    gap = currentPackage && currentPackage.gap || this.gap;
+
                 if(!this.originalHeights) {
                   this.originalHeights = [];
                 }
