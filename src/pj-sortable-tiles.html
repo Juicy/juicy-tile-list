@@ -128,23 +128,32 @@
          * Modifies setup array with default settings for not mapped elements
          * @param {Array} elements
          * @param {Array} setup
-         * @param {Array} [items=[]] array of items to update
+         * @param {Object} [items={}] map of items to update
          * @param {Item} [parent] parent item
          * @returns {Array} array of updated/created items
          */
-        function createItemsList( elements, setup, items, parent ){
-            items = items || [];
+        function createItemsList( elements, setup, items, container ){
+            items = items || {};
             for(var sNo = 0, sLen = setup.length; sNo < sLen; sNo++) {
               var itemSetup = setup[sNo];
 
               // walk the tree recursively
               if(itemSetup.items){
-                createItemsList( elements, itemSetup.items, items, items[ itemSetup.index ] );
+                // This is a bit ugly, and this is main reason why items is not an array (tomalec)
+                var name = itemSetup.name || ( (container && container.name || "_group") + "_" + sNo );
+                itemSetup.name = name;
+                items[ name ] = {
+                  name: name,
+                  setup: itemSetup,
+                  package: null,
+                  container: container || null //null <=> root node
+                };
+                createItemsList( elements, itemSetup.items, items, items[ name ] );
               } else {
                 items[ itemSetup.index ] = {
                   element: elements[ itemSetup.index ],
                   setup: itemSetup,
-                  parentPackage: parent || null //null <=> root node
+                  container: container || null //null <=> root node
                 };
               }
             }
@@ -175,7 +184,10 @@
             gap: 8,
             maxX:0,
             maxY:0,
-            items: [], //[index_in_DOM: {element: DOMElement, setup: setupObject}]
+            // {
+            //  index_in_DOM: {element: DOMElement, setup: setupObject, container},..
+            //  containerName: {setup: setupObject, items: , package: package}        
+            items: {}, 
 
             layersOrientation: "horizontal",
             editingMode: false,
@@ -276,17 +288,18 @@
              * @return {pj-sortable-tiles}        self
              */
             resizeItem: function(item, width, height){
-                var itemSetup;
-                if(typeof item == 'number'){
-                    itemSetup = this.items[item].setup;
-                } else{
-                    itemSetup = item.setup;
+                if(typeof item !== 'object'){
+                    item = this.items[item];
                 }
-                itemSetup.width = width;
-                itemSetup.height = height;
+                item.setup.width = width;
+                item.setup.height = height;
                 this.saveToStorage();
                 this.package.reset();
-                this.packItems( );
+                if( item.container ){
+                  this.packItems( item.container.setup, item.container.package );
+                } else {
+                  this.packItems();
+                }
                 return this;
             },
 
@@ -369,6 +382,60 @@
                 this.packItems( );
                 return this;
             },
+            /**
+             * 
+             * @param  {Number | String | ObjectRef} what item referrence or element index or container name
+             * @param  {Objec0|nullt} [where]    container name or reference to container iitself. If not given will wrap element with new one, null indicates root level
+             * @param {Boolean} [noPacking=false]
+             * @return {[type]}              [description]
+             */
+            moveToContainer: function( what, where, noPacking ){
+              if( typeof what !== "object" ){
+                what = this.items[what];
+              }
+              var from = what.container && what.container.setup.items || this.priorities;
+              var to;
+              if( where === null ) {
+                to = this.priorities;
+              } else if( typeof where === "string" ){
+                to = this.items[where];
+                // create new one
+                if(!to){
+                  to = where = {
+                    name: where,
+                    setup: {
+                      gap: 0,
+                      items: [],
+                      name: where,
+                      priority: what.setup.priority,
+                      width: what.setup.width,
+                      height: what.setup.height
+                    },
+                    package: null,
+                    container: what.container || null //null <=> root node
+                  };
+                  this.items[ where.name ] = where;
+                  from.push(where.setup);
+                }
+                to = to.setup.items;
+              } else {
+                to = where.setup.items;
+              }
+              if( from == to ){
+                return false;
+              }
+              var setup = from.splice( from.indexOf(what.setup), 1);
+              what.container = where;
+              to.push(what.setup);
+
+              if(!noPacking){
+                //TODO: repack only applicable ones
+                this.saveToStorage();
+                this.package.reset();
+                this.packItems();
+              }
+
+            },
 
             /**
              * [packItems description]
@@ -389,15 +456,15 @@
                 //pack rectangles, and calculate container size
                 setup
                   .sort(this.sorter) // sort- if neded
-                  .forEach(function(itemSetup, index){
+                  .forEach(function(itemSetup){
                     // TODO: do it more lightweight
                     var rect = new Rectangle(itemSetup);
 
                     var element = that.filteredChildren[ itemSetup.index ];
                     if( element ){ // itemSetup.index - if it is real element not a virtual group
                       var elStyle = element.style;
-                      if(typeof that.originalHeights[index] === 'undefined') {
-                        that.originalHeights.push(element.clientHeight);
+                      if(typeof that.originalHeights[itemSetup.index] === 'undefined') {
+                        that.originalHeights[itemSetup.index] = (element.clientHeight);
                       }
                       if(rect.height == "auto") {
                         rect.height = that.originalHeights[index];
@@ -424,10 +491,12 @@
                       elStyle.height = itemSetup.height + "px";
                     } else if ( itemSetup.items ){
                       // TODO save it somewhere
-                      var nestedPackage = new Package( itemSetup );
+                      // //FIXME i'm ugly
+                        var containerItem = that.items[ itemSetup.name ];
+                      containerItem.package = new Package( itemSetup );
                       return that.packItems( 
                         itemSetup.items, 
-                        nestedPackage, 
+                        containerItem.package, 
                         rect.x + offSetX + gap, 
                         rect.y + offSetY + gap 
                       );
