@@ -44,9 +44,9 @@ Attribute                    | Options             | Default      | Description
 `setup.items[?].width`       | *Number*            | `1`          | Tile width (number of colums)
 `setup.items[?].heigh`       | *Number*            | `1`          | Tile height (number of rows)
 `setup.items[?].index`       | *Number*            |              | DOM ChildElement index (not needed for virtual containers)
-`setup.items[?].items`       | *Array(Items)*      |              | Recursive setup (for virtual contianers)
-`setup.items[?].gap`         | *Number*            | `0`          | Recursive setup (for virtual contianers)
-`setup.items[?].name`        | *String*            |              | Recursive setup (for virtual contianers)
+`setup.items[?].items`       | *Array(Items)*      |              | Recursive setup (for virtual containers)
+`setup.items[?].gap`         | *Number*            | `0`          | Recursive setup (for virtual containers)
+`setup.items[?].name`        | *String*            |              | Recursive setup (for virtual containers)
 `layersOrientation`          | *String*            | `horizontal` | How to align our package (`horizontal` or `vertical`)
 
 ## Properties
@@ -54,24 +54,30 @@ Attribute                    | Options             | Default      | Description
 Name                 | Options        | Description
 ---                  | ---            | ---
 `filteredChildren`   | *Array*        | Array of children which are going to be arranged.
-`items`              | *Array*        | Tiles setup. Array of following elements, sorted by priority.
-`items[.].element`   | *Element*      | DOM element 
-`items[.].setup`     | *Rectangle*    | Rectanlge that represents `element` position in Package
+`setup`              | *Object*       | Up to date tiles setup. Structure as in attributes.
+`items`              | *Object*       | Map of sortable abstract items. Ones reflecting real DOM elements are indexed with `0-n` as in HTML, virtual containers are mapped with names. Root container is available under `items['root']`.
+`items[.].element`   | *Element*      | DOM element (for real elements)
+`items[.].name`      | *String*       | Container name (for virtual containers)
+`items[.].setup`     | *Object*       | Tile setup that represents `element` position in Package. Structure described above.
+`items[.].container` | *Item*         | Reference to container item.
 `package`            | *Package*      | Package abstract object
 
 ## Methods
 
 Name               | Param name | Type               | Default | Description
 ---                | ---        | ---                | ---     | ---
-`resizeItem`       |            |                    |         | Resize (real or virtual container) element
-                   | item       | *Number* or *Item* |         | Item or item index.
+`resizeItem`       |            |                    |         | Resize any item (real element or virtual container)
+                   | item       | *Item*, *Number* or *String* |         | Item, item index or item name.
                    | width      | *Number*           | `0`     | new width
                    | height     | *Number*           | `0`     | new height
-`reprioritizeItem` |            |                    |         | Change priority/weight of item (real or virtual container)
-                   | itemIndex  | *Number*           |         | Item or item index. Please note, that items array is sorted by priority.
+`reprioritizeItem` |            |                    |         | Change priority/weight of any item
+                   | item       | *Item*, *Number* or *String* |         | Item, item index or item name.
                    | increase   | *Boolean*          | `false` | `true` - increases, `false` decreases priority
                    | end        | *Boolean*          | `false` | `true` to move to the end of list
-`moveToContainer`  |            |                    |         | Move any item to given container, wrap it with new one
+`moveToContainer`  |            |                    |         | Move any item to given container, or wrap it with new one
+                   | what       | *Item*, *Number* or *String* |         | Item, item index or item name.
+                   | where      | *String* or *Item* |         | Reference to, or name of destination container.    If name given in *string* is not found in existing containers list, new one will be created and wrapped around given item.
+                   | noPacking  | *Boolean*          | `false` | `true` to prevent  re-packing after setup change.
 
 
 ## Contributing
