@@ -99,26 +99,28 @@
     focusRect.style.height = availableHeight + "px";
   }
 
-
+    var svg1, svg2, focusRect;
 
     Polymer('element-selector', {
         focused: null,
         attached: function(){
-            var that = this;
-            this.svg1 = CreateMask("#FFFFFF", 0.5);
-            this.svg2 = CreateMask("#000000", 0.5);
-            this.focusRect = CreateFocusRect();
+          var that = this;
+          if(!svg1) {
+            svg1 = CreateMask("#FFFFFF", 0.5);
+            svg2 = CreateMask("#000000", 0.5);
+            focusRect = CreateFocusRect();
+          }
         },
         drawMask: function () {
-          drawMask(this, this.svg1, this.svg2, this.focusRect);
+          drawMask(this,svg1, svg2, focusRect);
         },
         show: function(element) {
           this.oldFocused = this.focused;
           this.focused = element;
-          if(!this.svg1.parentNode) {
-            document.body.appendChild(this.svg1);
-            document.body.appendChild(this.svg2);
-            document.body.appendChild(this.focusRect);
+          if(!svg1.parentNode) {
+            document.body.appendChild(svg1);
+            document.body.appendChild(svg2);
+            document.body.appendChild(focusRect);
           }
           var repeat = function () {
             this.drawMask();
@@ -127,9 +129,9 @@
           repeat.call(this);
         },
         hide: function() {
-          document.body.removeChild(this.svg1);
-          document.body.removeChild(this.svg2);
-          document.body.removeChild(this.focusRect);
+          document.body.removeChild(svg1);
+          document.body.removeChild(svg2);
+          document.body.removeChild(focusRect);
           window.cancelAnimationFrame(this.req);
         }
     });
