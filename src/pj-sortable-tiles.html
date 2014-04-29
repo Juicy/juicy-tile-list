@@ -118,6 +118,7 @@
                 itemSetup.index = elNo;
                 setupItems.push(itemSetup);
                 items[elNo] = {
+                  container: items["root"],
                   element: element,
                   setup: itemSetup
                 };
@@ -192,9 +193,11 @@
         }
 
         Polymer('pj-sortable-tiles', {
-            setup:[],
+            setup: {
+              gap: 8,
+              items: []
+            },
             filteredChildren: null,
-            gap: 8,
             maxX:0,
             maxY:0,
             // {
