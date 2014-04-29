@@ -94,6 +94,8 @@
             return nodesList.array()
                         .filter(function filterOutText(child){
                             return !(child instanceof Text) &&
+                                    !(child instanceof HTMLLinkElement) &&
+                                    !(child instanceof HTMLStyleElement) &&
                                     !(child instanceof HTMLTemplateElement) &&
                                     !(child instanceof HTMLScriptElement);
                         });
