@@ -226,10 +226,8 @@
 
                     this.loadFromStorage();
 
-                    // debugger;
                     this.createItemsList();
                     // TODO: support LTR
-                        // debugger
                     this.package = new Package(
                             this.layersOrientation !== "vertical" ?
                                 {
@@ -257,7 +255,6 @@
                       mutations.forEach(function(mutation) {
                         console.log("observation", mutation.type, arguments, mutations);
                         if(mutation.addedNodes){
-                            // debugger;
                             //DRY, performance
                             console.log("something was added")
                             that.createItemsList();
@@ -277,7 +274,6 @@
              */
            refresh: function( ) {
             // console.log(that.package.width, that.clientWidth)
-            // debugger
             if( this.layersOrientation !== "vertical"){
               this.package.width = this.clientWidth;
             } else {
@@ -343,7 +339,6 @@
                 var sortedIndex = collection.indexOf( itemSetup );
 
                 // move to the end
-                // debugger
                 if( end ||
                     increase && (sortedIndex <= 1) ||
                     !increase && (sortedIndex >= collection.length - 2 )
@@ -546,7 +541,6 @@
                   while (elem.parentNode != that.$.container && elem.parentNode != that) {
                     elem = elem.parentNode;
                   }
-                  // debugger
                   // ??? Do we realy need index? wouldn't it be better to get itemOfElement, so we will get setup, parent package, index and everything.. (tomalec) ?
                   var highlightedItem = that.items[ that.filteredChildren.indexOf(elem) ];
                   if(that.editedItem !== highlightedItem) {
