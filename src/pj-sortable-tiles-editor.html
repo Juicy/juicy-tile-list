@@ -74,13 +74,16 @@
         sortableTilesModel: null,
         sortableTilesSelector: null,
         attached: function () {
-          var that = this;
-          window.addEventListener("pj-sortable-tiles-edited-item-changed", function(event) {
-            that.sortableTilesModel = event.target;
-          });
         },
         sortableTilesSelectorChanged: function() {
-          this.sortableTilesModel = document.querySelector(this.sortableTilesSelector);
+          this.sortableTilesModel = null;
+          var elems = document.querySelectorAll(this.sortableTilesSelector); //in Launcher there is few pj-sortable-tiles but only one visible at a time
+          for (var i = 0, ilen = elems.length; i < ilen; i++) {
+            if (elems[i].offsetParent) { //is rendered
+              this.sortableTilesModel = elems[i];
+              break;
+            }
+          }
         },
         gapIncrease: function () {
           this.sortableTilesModel.editedItem.setup.gap++;
