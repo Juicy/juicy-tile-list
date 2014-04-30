@@ -78,6 +78,14 @@ Name               | Param name | Type               | Default | Description
                    | what       | *Item*, *Number* or *String* |         | Item, item index or item name.
                    | where      | *String* or *Item* |         | Reference to, or name of destination container.    If name given in *string* is not found in existing containers list, new one will be created and wrapped around given item.
                    | noPacking  | *Boolean*          | `false` | `true` to prevent  re-packing after setup change.
+`createNewContainer`|           |                    |         | Create new empty virtual container.
+                   | name       | *String*           |         | Name for the container
+                   | where      | *String* or *Item* | `"root"`| Container name or item
+                   | rectangle  | *Rectangle*        |         | Rectangle setup (width, height, priority)
+                   | noPacking  | *Boolean*          | `false` | `true` to prevent  re-packing after setup change.
+`deleteContainer`  |            |                    |         | Delete virtual container, move items (if any) to one above.
+                   | what       | *Item* or *String* |         | Reference to, or name of the container to delete.
+                   | noPacking  | *Boolean*          | `false` | `true` to prevent  re-packing after setup change.
 
 
 ## Contributing
@@ -89,6 +97,11 @@ Name               | Param name | Type               | Default | Description
 5. Submit a pull request :D
 
 ## History
+
+#### v0.0.2
+ - Virtaul grouping,
+ - advenced editor features,
+ - gaps
 
 #### v0.0.1
 

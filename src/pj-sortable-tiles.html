@@ -152,7 +152,7 @@
             }
             // create item for current container
             items[ name ] = currentContainer = {
-              name: name,
+              name: name, // default name is added before call
               setup: setup,
               package: null,
               container: container || null //null <=> root node
@@ -165,6 +165,11 @@
 
               // walk the tree recursively
               if(itemSetup.items){
+                // FIXME I'm ugly
+                // create default name
+                if(!itemSetup.name){
+                  itemSetup.name = ( currentContainer.name + "_" + sNo );
+                }
                 itmizeContainer( elements, itemSetup, currentContainer, items );
               } else {
                 items[ itemSetup.index ] = {
@@ -404,11 +409,12 @@
             /**
              * 
              * @param  {Number | String | ObjectRef} what item referrence or element index or container name
-             * @param  {Object| String} [where]    container name or reference to container iitself. If not given will wrap element with new one, "root" indicates root level
+             * @param  {Object| String} [where]    Reference to, or name of destination container.    If name given in *string* is not found in existing containers list, new one will be created and wrapped around given item.
              * @param {Boolean} [noPacking=false]
              * @return {[type]}              [description]
              */
             moveToContainer: function( what, where, noPacking ){
+              debugger
               if( typeof what !== "object" ){
                 what = this.items[what];
               }
@@ -420,34 +426,18 @@
               var from = what.container.setup.items;
               var to;
               if( typeof where === "string" ){
-                to = this.items[where];
-                // create new one
-                if(!to){
-                  where = {
-                    name: where,
-                    setup: {
-                      gap: 0,
-                      items: [],
-                      name: where,
-                      priority: what.setup.priority,
-                      width: what.setup.width,
-                      height: what.setup.height
-                    },
-                    package: null,
-                    container: what.container || null //null <=> root node
-                  };
-                  this.items[ where.name ] = where;
-                  from.push(where.setup);
-                } else {
-                  where = to;  
-                }
+                // container given by key
+                where = this.items[where] || 
+                // or new one
+                        this.createNewContainer(where, what.container, what.setup, true);
               }
               to = where.setup.items;
               // origin == destination
               if( from == to ){
                 return false;
               }
-              var setup = from.splice( from.indexOf(what.setup), 1);
+
+              from.splice( from.indexOf(what.setup), 1);
               what.container = where;
               to.push(what.setup);
 
@@ -459,7 +449,86 @@
               }
 
             },
+            /**
+             * Delete virtual container, move items (if any) to one above.
+             * @param  {Item | String} what        Reference to, or name of the container to delete.
+             * @param  {Boolean} [noRepacking=false]  `true` to prevent  re-packing after setup change.
+             * @return {pj-sortable-tiles}             self
+             */
+            deleteContainer: function( what, noRepacking ){
+              if( typeof what === "string" ){
+                what = this.items[what];
+              }
+              if( what.element ){
+                throw new RangeError( "Cannot delete real element");
+              }
+              if( what.name == "root" || !what.container ){
+                throw new RangeError( "Cannot delete root container");
+              }
+              // cache some stuff
+              var whatSetup = what.setup;
+              var siblingsList = what.container.setup.items;
+              // move all items to container above
+              var itemNo = what.setup.items.length;
+              while( itemNo-- ){
+                // XXX do batch move (tomalec)
+                // XXX keep items list in item object
+                this.moveToContainer( whatSetup.items[itemNo].index, what.container, true);
+              }
+              // remove setup
+              siblingsList.splice( siblingsList.indexOf(whatSetup), 1);
+              // remove item
+              delete this.items[what.name];
 
+              if(!noRepacking){
+                //TODO: repack only applicable ones
+                this.saveToStorage();
+                this.package.reset();
+                this.packItems();
+              }
+              return this;
+            },
+            /**
+             * Create new empty virtual container.
+             * @param  {String} name        Name for the container
+             * @param  {Item | String} [inContainer="root"] Container name or item
+             * @param  {Rectangle} [rectangle]   rectangle setup (width, height, priority)
+             * @param  {Boolean} [noRepacking=false] `true` block re-packing items after setup change
+             * @return {item}             created container
+             */
+            createNewContainer: function( name, inContainer, rectangle, noRepacking ){
+              if( typeof inContainer === "string" ){
+                inContainer = this.items[inContainer];
+              } else {
+                inContainer = inContainer || this.items["root"];
+              }
+              // cache smth
+              var siblings = inContainer.setup.items;
+
+              var containerItem = {
+                name: name,
+                setup: {
+                  gap: 0,
+                  items: [],
+                  name: name,
+                  priority: rectangle ? rectangle.priority : getMinimumPriority(siblings)/2,
+                  width: (rectangle || defaultSetupNode).width,
+                  height: (rectangle || defaultSetupNode).height
+                },
+                package: null,
+                container: inContainer
+              };
+              this.items[ name ] = containerItem;
+              siblings.push(containerItem.setup);
+
+              if(!noRepacking){
+                //TODO: repack only applicable ones
+                this.saveToStorage();
+                this.package.reset();
+                this.packItems();
+              }
+              return containerItem;
+            },
             /**
              * [packItems description]
              * @param {Array} setup setup of items fo pack, if not give `#setup` will be used
