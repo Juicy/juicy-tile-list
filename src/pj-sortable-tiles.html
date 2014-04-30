@@ -475,10 +475,19 @@
                 // XXX keep items list in item object
                 this.moveToContainer( whatSetup.items[itemNo].index, what.container, true);
               }
+
+
+              //FIXME: remove tiles-editor code from here (tomalec)
+              if(this.editingMode && this.editedItem == what) {
+                this.editedItem = what.container;
+              }
+
+
               // remove setup
               siblingsList.splice( siblingsList.indexOf(whatSetup), 1);
               // remove item
               delete this.items[what.name];
+
 
               if(!noRepacking){
                 //TODO: repack only applicable ones
@@ -605,7 +614,7 @@
                 }
 
             },
-
+            //FIXME: remove tiles-editor code from here (tomalec)
           editingModeChanged: function() {
             if(this.editingMode) {
               this.$.elementSelector.show();
@@ -637,7 +646,7 @@
               this.$.elementSelector.hide();
             }
           },
-
+          //FIXME: remove tiles-editor code from here (tomalec)
             editedItemChanged: function() {
               if(this.editedItem == null) {
                 this.editingMode = false;

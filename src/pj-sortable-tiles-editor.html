@@ -27,15 +27,23 @@
         opacity: 0.5;
         pointer-events: none;
       }
+      h4{margin:0;}
     </style>
     <div class="{{ {editablesContainer: true, disabled: !sortableTilesModel.editedItem} | tokenList }}">
-      <div class="editableGroup"><label>Groups</label>
-        <button class="editable" on-click="{{editContainer}}" disabled?="{{!sortableTilesModel.editedItem.container}}">Edit container</button>
+      <div class="editableGroup">
+        <button class="editable" on-click="{{editContainer}}" disabled?="{{!sortableTilesModel.editedItem.container}}">↰ Select container</button>
+
       </div>
-      <div hidden?="{{!sortableTilesModel.editedItem.setup.items}}" class="editableGroup"><label>Gap <span class="val">({{sortableTilesModel.editedItem.setup.gap}})</span></label>
-        <button class="editable" on-click="{{gapIncrease}}">Inc</button>
-        <button class="editable" on-click="{{gapDecrease}}">Dec</button>
-      </div>
+      <template if="{{sortableTilesModel.editedItem.setup.items}}">
+        <h4 class="editableGroup">Container <code>{{sortableTilesModel.editedItem.name}}</code></h4>
+        <div class="editableGroup">
+          <button class="editable" on-click="{{deleteContainer}}" disabled?="{{!sortableTilesModel.editedItem.container}}">Delete</button>
+
+          <label>Gap <span class="val">({{sortableTilesModel.editedItem.setup.gap}})</span></label>
+          <button class="editable" on-click="{{gapIncrease}}">Inc</button>
+          <button class="editable" on-click="{{gapDecrease}}">Dec</button>
+        </div>
+      </template>
       <div class="editableGroup"><label>Width <span class="val">({{sortableTilesModel.editedItem.setup.width}})</span></label>
         <button class="editable" on-click="{{widthIncrease}}">Inc</button>
         <button class="editable" on-click="{{widthDecrease}}">Dec</button>
@@ -136,6 +144,9 @@
         },
         editContainer: function() {
           this.sortableTilesModel.editedItem = this.sortableTilesModel.editedItem.container;
+        },
+        deleteContainer: function() {
+          this.sortableTilesModel.deleteContainer( this.sortableTilesModel.editedItem );
         }
       });
     })();
