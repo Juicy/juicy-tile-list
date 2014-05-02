@@ -30,11 +30,19 @@
         pointer-events: none;
       }
 
+      button.active {
+        box-shadow: inset 0 0 10px #000000;
+      }
+
       h4 {
         margin: 0;
       }
     </style>
     <div class="{{ {editablesContainer: true, disabled: !editedItem} | tokenList }}">
+      <div class="editableGroup">
+        <button class="{{ {active: selectionMode} | tokenList }}" on-click="{{toggleSelectionMode}}">✎</button>
+      </div>
+
       <div class="editableGroup">
         <button class="editable" on-click="{{editContainer}}" disabled?="{{!editedItem.container}}">↰ Select container</button>
 
@@ -87,16 +95,18 @@
       Polymer('pj-sortable-tiles-editor', {
         selectionMode: false,
         sortableTilesModel: null,
-        listener: null,
+        mouseOverListener: null,
+        clickListener: null,
         attached: function () {
-          this.listen();
         },
         detached: function () {
           this.$.elementSelector.hide();
+          this.selectionMode = false;
           this.unlisten();
         },
         listen: function () {
-          this.listener = function (ev) {
+          this.mouseOverListener = function (ev) {
+            this.highlightedElement = null;
             var elem = ev.target;
             var highlightedElement;
             while (elem.parentNode) {
@@ -108,22 +118,37 @@
             }
 
             if (highlightedElement) {
-              var pjSortableTiles = highlightedElement.parentNode;
-              var highlightedItem = pjSortableTiles.items[ pjSortableTiles.filteredChildren.indexOf(highlightedElement) ];
-              if (this.editedItem !== highlightedItem) {
-                this.sortableTilesModel = pjSortableTiles;
-                this.editedItem = highlightedItem;
-                this.$.elementSelector.show(highlightedElement);
+              if (this.highlightedElement !== highlightedElement) {
+                this.highlightedElement = highlightedElement;
+                this.$.elementSelector.show(this.highlightedElement);
               }
             }
           }.bind(this);
-          window.addEventListener('mouseover', this.listener);
+          this.clickListener = function () {
+            if (this.highlightedElement) {
+              this.sortableTilesModel = this.highlightedElement.parentNode;
+              var highlightedItem = this.sortableTilesModel.items[ this.sortableTilesModel.filteredChildren.indexOf(this.highlightedElement) ];
+              if (this.editedItem !== highlightedItem) {
+                this.editedItem = highlightedItem;
+                this.toggleSelectionMode();
+              }
+            }
+          }.bind(this);
+          window.addEventListener('mouseover', this.mouseOverListener);
+          window.addEventListener('click', this.clickListener);
         },
         unlisten: function () {
-          window.removeEventListener('mouseover', this.listener);
+          window.removeEventListener('mouseover', this.mouseOverListener);
+          window.removeEventListener('click', this.clickListener);
         },
         toggleSelectionMode: function () {
           this.selectionMode = !this.selectionMode;
+          if (this.selectionMode) {
+            this.listen();
+          }
+          else {
+            this.unlisten();
+          }
         },
         gapIncrease: function () {
           this.editedItem.setup.gap++;

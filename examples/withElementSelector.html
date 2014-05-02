@@ -69,7 +69,7 @@ pj-sortable-tiles>:nth-child(5) {
 <body>
     <template bind>
         <p>Press Ctrl or Command on your keyboard and move your mouse over an item to edit</p>
-        <label><input type="checkbox" checked="{{editingMode}}"> Editing Mode ({{editingMode}})</label>
+        <label><input type="checkbox" checked="{{editingMode}}"> Show editor ({{editingMode}})</label>
         <template if="{{editingMode}}">
           <div id="aboveOverlay">
             <pj-sortable-tiles-editor></pj-sortable-tiles-editor>
