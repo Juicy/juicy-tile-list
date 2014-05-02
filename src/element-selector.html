@@ -129,9 +129,11 @@
           repeat.call(this);
         },
         hide: function() {
-          document.body.removeChild(svg1);
-          document.body.removeChild(svg2);
-          document.body.removeChild(focusRect);
+          if(svg1.parentNode) {
+            document.body.removeChild(svg1);
+            document.body.removeChild(svg2);
+            document.body.removeChild(focusRect);
+          }
           window.cancelAnimationFrame(this.req);
         }
     });

@@ -1,4 +1,6 @@
-<polymer-element name="pj-sortable-tiles-editor" attributes="sortableTilesSelector">
+<link rel="import" href="element-selector.html">
+
+<polymer-element name="pj-sortable-tiles-editor">
   <template>
     <style>
       .editablesContainer {
@@ -27,47 +29,51 @@
         opacity: 0.5;
         pointer-events: none;
       }
-      h4{margin:0;}
+
+      h4 {
+        margin: 0;
+      }
     </style>
-    <div class="{{ {editablesContainer: true, disabled: !sortableTilesModel.editedItem} | tokenList }}">
+    <div class="{{ {editablesContainer: true, disabled: !editedItem} | tokenList }}">
       <div class="editableGroup">
-        <button class="editable" on-click="{{editContainer}}" disabled?="{{!sortableTilesModel.editedItem.container}}">↰ Select container</button>
+        <button class="editable" on-click="{{editContainer}}" disabled?="{{!editedItem.container}}">↰ Select container</button>
 
       </div>
-      <template if="{{sortableTilesModel.editedItem.setup.items}}">
-        <h4 class="editableGroup">Container <code>{{sortableTilesModel.editedItem.name}}</code></h4>
+      <template if="{{editedItem.setup.items}}">
+        <h4 class="editableGroup">Container <code>{{editedItem.name}}</code></h4>
         <div class="editableGroup">
-          <button class="editable" on-click="{{deleteContainer}}" disabled?="{{!sortableTilesModel.editedItem.container}}">Delete</button>
+          <button class="editable" on-click="{{deleteContainer}}" disabled?="{{!editedItem.container}}">Delete</button>
 
-          <label>Gap <span class="val">({{sortableTilesModel.editedItem.setup.gap}})</span></label>
+          <label>Gap <span class="val">({{editedItem.setup.gap}})</span></label>
           <button class="editable" on-click="{{gapIncrease}}">Inc</button>
           <button class="editable" on-click="{{gapDecrease}}">Dec</button>
         </div>
       </template>
-      <div class="editableGroup"><label>Width <span class="val">({{sortableTilesModel.editedItem.setup.width}})</span></label>
+      <div class="editableGroup"><label>Width <span class="val">({{editedItem.setup.width}})</span></label>
         <button class="editable" on-click="{{widthIncrease}}">Inc</button>
         <button class="editable" on-click="{{widthDecrease}}">Dec</button>
       </div>
-      <div class="editableGroup"><label>Height <span class="val">({{sortableTilesModel.editedItem.setup.height}})</span></label>
+      <div class="editableGroup"><label>Height <span class="val">({{editedItem.setup.height}})</span></label>
         <button class="editable" on-click="{{heightIncrease}}">Inc</button>
         <button class="editable" on-click="{{heightDecrease}}">Dec</button>
         <label class="editable"><input id="heightAutoCheckbox" type="checkbox" on-click="{{heightAuto}}"> auto</label>
       </div>
-      <div class="editableGroup"><label>Priority <span class="val">({{sortableTilesModel.editedItem.setup.priority}})</span></label>
+      <div class="editableGroup"><label>Priority <span class="val">({{editedItem.setup.priority}})</span></label>
         <button class="editable" on-click="{{priorityIncrease}}">Inc</button>
         <button class="editable" on-click="{{priorityDecrease}}">Dec</button>
       </div>
     </div>
+    <element-selector id="elementSelector"></element-selector>
   </template>
   <script>
     (function () {
       function powerIncrease(obj, property) {
         var power = 1;
         while (power <= obj[property])
-            power *= 2;
+          power *= 2;
         obj[property] = power;
       }
-      
+
       function powerDecrease(obj, property, minimum) {
         var power = 1;
         while (power * 2 < obj[property])
@@ -79,74 +85,102 @@
       }
 
       Polymer('pj-sortable-tiles-editor', {
+        selectionMode: false,
         sortableTilesModel: null,
-        sortableTilesSelector: null,
+        listener: null,
         attached: function () {
+          this.listen();
         },
-        sortableTilesSelectorChanged: function() {
-          this.sortableTilesModel = null;
-          var elems = document.querySelectorAll(this.sortableTilesSelector); //in Launcher there is few pj-sortable-tiles but only one visible at a time
-          for (var i = 0, ilen = elems.length; i < ilen; i++) {
-            if (elems[i].offsetParent) { //is rendered
-              this.sortableTilesModel = elems[i];
-              break;
+        detached: function () {
+          this.$.elementSelector.hide();
+          this.unlisten();
+        },
+        listen: function () {
+          this.listener = function (ev) {
+            var elem = ev.target;
+            var highlightedElement;
+            while (elem.parentNode) {
+              if (elem.parentNode.nodeName == 'PJ-SORTABLE-TILES') {
+                highlightedElement = elem;
+                break;
+              }
+              elem = elem.parentNode;
             }
-          }
+
+            if (highlightedElement) {
+              var pjSortableTiles = highlightedElement.parentNode;
+              var highlightedItem = pjSortableTiles.items[ pjSortableTiles.filteredChildren.indexOf(highlightedElement) ];
+              if (this.editedItem !== highlightedItem) {
+                this.sortableTilesModel = pjSortableTiles;
+                this.editedItem = highlightedItem;
+                this.$.elementSelector.show(highlightedElement);
+              }
+            }
+          }.bind(this);
+          window.addEventListener('mouseover', this.listener);
+        },
+        unlisten: function () {
+          window.removeEventListener('mouseover', this.listener);
+        },
+        toggleSelectionMode: function () {
+          this.selectionMode = !this.selectionMode;
         },
         gapIncrease: function () {
-          this.sortableTilesModel.editedItem.setup.gap++;
+          this.editedItem.setup.gap++;
           this.sortableTilesModel.refresh();
         },
         gapDecrease: function () {
-          if(this.sortableTilesModel.editedItem.setup.gap >= 1) {
-            this.sortableTilesModel.editedItem.setup.gap--;
+          if (this.editedItem.setup.gap >= 1) {
+            this.editedItem.setup.gap--;
           }
           this.sortableTilesModel.refresh();
         },
         widthIncrease: function () {
-          powerIncrease(this.sortableTilesModel.editedItem.setup, "width");
+          powerIncrease(this.editedItem.setup, "width");
           this.sortableTilesModel.refresh();
         },
         widthDecrease: function () {
-          powerDecrease(this.sortableTilesModel.editedItem.setup, "width");
+          powerDecrease(this.editedItem.setup, "width");
           this.sortableTilesModel.refresh();
         },
         heightIncrease: function () {
-          if(this.sortableTilesModel.editedItem.setup.height == 'auto') { //turn off auto
-            this.sortableTilesModel.editedItem.setup.height = 32;
+          if (this.editedItem.setup.height == 'auto') { //turn off auto
+            this.editedItem.setup.height = 32;
             this.shadowRoot.querySelector("#heightAutoCheckbox").checked = false;
           }
-          powerIncrease(this.sortableTilesModel.editedItem.setup, "height");
+          powerIncrease(this.editedItem.setup, "height");
           this.sortableTilesModel.refresh();
         },
         heightDecrease: function () {
-          if(this.sortableTilesModel.editedItem.setup.height == 'auto') { //turn off auto
-            this.sortableTilesModel.editedItem.setup.height = 32;
+          if (this.editedItem.setup.height == 'auto') { //turn off auto
+            this.editedItem.setup.height = 32;
             this.shadowRoot.querySelector("#heightAutoCheckbox").checked = false;
           }
-          powerDecrease(this.sortableTilesModel.editedItem.setup, "height");
+          powerDecrease(this.editedItem.setup, "height");
           this.sortableTilesModel.refresh();
         },
         heightAuto: function () {
-          if(this.sortableTilesModel.editedItem.setup.height == 'auto') { //turn off auto
-            this.sortableTilesModel.editedItem.setup.height = 32;
+          if (this.editedItem.setup.height == 'auto') { //turn off auto
+            this.editedItem.setup.height = 32;
           }
           else { //turn on auto
-            this.sortableTilesModel.editedItem.setup.height = "auto";
+            this.editedItem.setup.height = "auto";
           }
           this.sortableTilesModel.refresh();
         },
         priorityIncrease: function () {
-          this.sortableTilesModel.reprioritizeItem(this.sortableTilesModel.editedItem, true);
+          this.sortableTilesModel.reprioritizeItem(this.editedItem, true);
         },
         priorityDecrease: function () {
-          this.sortableTilesModel.reprioritizeItem(this.sortableTilesModel.editedItem, false);
+          this.sortableTilesModel.reprioritizeItem(this.editedItem, false);
         },
-        editContainer: function() {
-          this.sortableTilesModel.editedItem = this.sortableTilesModel.editedItem.container;
+        editContainer: function () {
+          this.editedItem = this.editedItem.container;
         },
-        deleteContainer: function() {
-          this.sortableTilesModel.deleteContainer( this.sortableTilesModel.editedItem );
+        deleteContainer: function () {
+          var container = this.editedItem.container;
+          this.sortableTilesModel.deleteContainer(this.editedItem);
+          this.editedItem = container;
         }
       });
     })();
