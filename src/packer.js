@@ -1,31 +1,31 @@
 /**
- * Package of rectangles
+ * Packer
  * bin-packing algorithm
  */
 (function( scope ){
 "use strict";
 
 /**
- * [Package description]
- * @param {Object} [props] package properties
- * @param {Number} [props.width=0] package width (in px)
- * @param {Number} [props.height=0] package height (in px)
+ * [Packer description]
+ * @param {Object} [props] packer properties
+ * @param {Number} [props.width=0] packer width (in px)
+ * @param {Number} [props.height=0] packer height (in px)
  * @param {String} [props.direction="rightDown"] packing direction `"rightDown"|"downRight"`
  */
-function Package( props /*width, height, direction*/ ){
+function Packer( props /*width, height, direction*/ ){
   for ( var prop in props ) {
     this[ prop ] = props[ prop ];
   }
   this.reset();
 }
-Package.prototype.width = 0;
-Package.prototype.height = 0;
-Package.prototype.direction = "rightDown";
+Packer.prototype.width = 0;
+Packer.prototype.height = 0;
+Packer.prototype.direction = "rightDown";
 
 /**
- * Reset all free slots in package.
+ * Reset all free slots in packer.
  */
-Package.prototype.reset = function() {
+Packer.prototype.reset = function() {
   this.slots = [];
   var initialSlot = new Rectangle({
     x: 0,
@@ -43,9 +43,9 @@ Package.prototype.reset = function() {
 /**
  * Find a slot and place rectanle there
  * @param {Rectanlge} rectangle  to add
- * @returns {Package} package itself
+ * @returns {Packer} packer itself
  */
-Package.prototype.add = function( rectangle ) {
+Packer.prototype.add = function( rectangle ) {
   // trim too big rectangles
     if(rectangle.width > this.width){
       rectangle.width = this.width;
@@ -73,7 +73,7 @@ Package.prototype.add = function( rectangle ) {
  * @return {Rectangle}       placed rectangle
  * @IDEA implement version for placing at given slot (not point), to prevent iterating in #placed
  */
-Package.prototype.placeAt = function( rectangle, slot ) {
+Packer.prototype.placeAt = function( rectangle, slot ) {
   // place rectangle in slot
   rectangle.x = slot.x;
   rectangle.y = slot.y;
@@ -87,7 +87,7 @@ Package.prototype.placeAt = function( rectangle, slot ) {
  * Update all free slots, for given new `rectangle`.
  * @param  {Rectangle} rectangle being added
  */
-Package.prototype.placed = function( rectangle ) {
+Packer.prototype.placed = function( rectangle ) {
   // update slots
   var revisedSlots = [];
   for ( var i=0, len = this.slots.length; i < len; i++ ) {
@@ -104,7 +104,7 @@ Package.prototype.placed = function( rectangle ) {
 
   this.slots = revisedSlots;
 
-  Package.cleanRedundant( this.slots );
+  Packer.cleanRedundant( this.slots );
 
   this.slots.sort( this.sorter );
 };
@@ -114,7 +114,7 @@ Package.prototype.placed = function( rectangle ) {
  * @param {Array<Rectangle>} rectangles array to clean
  * @returns {Array<Rectangle>} cleaned array
 **/
-Package.cleanRedundant = function( rectangles ) {
+Packer.cleanRedundant = function( rectangles ) {
   for ( var rectNo=0, len = rectangles.length; rectNo < len; rectNo++ ) {
     var currentRect = rectangles[rectNo];
     // skip over this rectangle if it was already removed
@@ -156,6 +156,6 @@ var sorters = {
 
 
 // TODO: export
-scope.Package = Package;
+scope.Packer = Packer;
 
 }(window));

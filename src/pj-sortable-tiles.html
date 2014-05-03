@@ -1,6 +1,6 @@
 <!-- Import Polymer -->
 <script src="rectangle.js"></script>
-<script src="package.js"></script>
+<script src="packer.js"></script>
 
 <!-- Define your custom element -->
 <polymer-element name="pj-sortable-tiles" attributes="setup rowspans colspans layersOrientation">
@@ -131,7 +131,7 @@
          * DOM elements and virtual containers, 
          * to match those with Rectangles and tree configutation
          * @param {Array} elements
-         * @param {Object} setup package setup
+         * @param {Object} setup packer setup
          * @param {Item} [container] parent item
          * @param {Object} [items={}] map of items to update
          * @returns {Array} array of updated/created items
@@ -152,7 +152,7 @@
             items[ name ] = currentContainer = {
               name: name, // default name is added before call
               setup: setup,
-              package: null,
+              packer: null,
               container: container || null //null <=> root node
             };
 
@@ -208,14 +208,14 @@
             maxY:0,
             // {
             //  index_in_DOM: {element: DOMElement, setup: setupObject, container},..
-            //  containerName: {setup: setupObject, items: , package: package}        
+            //  containerName: {setup: setupObject, items: , packer: packer}        
             items: {}, 
 
             layersOrientation: "horizontal",
             sorter: function byPriority(itemA, itemB){
                 return itemB.priority - itemA.priority;
             },
-            package: null,
+            packer: null,
             createItemsList: function(){
               this.filteredChildren = filterNodes(this.children);
               this.items = itmizeContainer( this.filteredChildren, this.setup );
@@ -235,7 +235,7 @@
 
                     this.createItemsList();
                     // TODO: support LTR
-                    this.package = new Package(
+                    this.packer = new Packer(
                             this.layersOrientation !== "vertical" ?
                                 {
                                     width: innerWidth(this),
@@ -266,7 +266,7 @@
                             console.log("something was added")
                             that.createItemsList();
                             that.saveToStorage();
-                            that.package.reset();
+                            that.packer.reset();
                             that.packItems();
                         }
                       });
@@ -280,14 +280,14 @@
              * Refresh everything
              */
            refresh: function( ) {
-            // console.log(that.package.width, that.clientWidth)
+            // console.log(that.packer.width, that.clientWidth)
             if( this.layersOrientation !== "vertical"){
-              this.package.width = this.clientWidth;
+              this.packer.width = this.clientWidth;
             } else {
-              this.package.height = this.clientHeight;
+              this.packer.height = this.clientHeight;
             }
              this.saveToStorage();
-             this.package.reset();
+             this.packer.reset();
              this.packItems( );
           },
 
@@ -309,9 +309,9 @@
                 item.setup.width = width;
                 item.setup.height = height;
                 this.saveToStorage();
-                this.package.reset();
+                this.packer.reset();
                 // re-pack only applicable branch
-                // this.packItems( item.container.setup, item.container.package );
+                // this.packItems( item.container.setup, item.container.packer );
                 // re-pack everthing
                 this.packItems();
 
@@ -397,7 +397,7 @@
                 }
 
                 this.saveToStorage();
-                this.package.reset();
+                this.packer.reset();
                 // TODO only this scope
                 this.packItems( );
                 return this;
@@ -439,7 +439,7 @@
               if(!noPacking){
                 //TODO: repack only applicable ones
                 this.saveToStorage();
-                this.package.reset();
+                this.packer.reset();
                 this.packItems();
               }
 
@@ -480,7 +480,7 @@
               if(!noRepacking){
                 //TODO: repack only applicable ones
                 this.saveToStorage();
-                this.package.reset();
+                this.packer.reset();
                 this.packItems();
               }
               return this;
@@ -512,7 +512,7 @@
                   width: (rectangle || defaultSetupNode).width,
                   height: (rectangle || defaultSetupNode).height
                 },
-                package: null,
+                packer: null,
                 container: inContainer
               };
               this.items[ name ] = containerItem;
@@ -521,7 +521,7 @@
               if(!noRepacking){
                 //TODO: repack only applicable ones
                 this.saveToStorage();
-                this.package.reset();
+                this.packer.reset();
                 this.packItems();
               }
               return containerItem;
@@ -529,12 +529,14 @@
             /**
              * [packItems description]
              * @param {Array} setup setup of items fo pack, if not give `#setup` will be used
-             * @param {Package} currentContainer to be used, if notgive #package will be used.
+             * @param {Packer} currentContainer to be used, if notgive #packer will be used.
+             * @param {Number} [offsetX=0] offset all elements on X axis
+             * @param {Number} [offsetY=0] offset all elements on Y axis
              */
-            packItems: function packItems(containerSetup, currentPackage, offSetX, offSetY){
+            packItems: function packItems(containerSetup, currentPacker, offSetX, offSetY){
                 // XXX using bot this,items and setup here is kind of overhead (tomalec)
                 containerSetup = containerSetup || this.setup;
-                currentPackage = currentPackage || this.package;
+                currentPacker = currentPacker || this.packer;
                 offSetX = offSetX || 0;
                 offSetY = offSetY || 0;
 
@@ -571,7 +573,7 @@
                     rect.width += gap;
                     rect.height += gap;
                     // Pack item
-                    currentPackage.add(rect);
+                    currentPacker.add(rect);
 
                     that.stretchContainer(rect);
 
@@ -585,10 +587,10 @@
                       // TODO save it somewhere
                       // //FIXME i'm ugly
                         var containerItem = that.items[ itemSetup.name ];
-                      containerItem.package = new Package( itemSetup );
+                      containerItem.packer = new Packer( itemSetup );
                       return that.packItems( 
                         itemSetup, 
-                        containerItem.package, 
+                        containerItem.packer, 
                         rect.x + offSetX + gap, 
                         rect.y + offSetY + gap 
                       );

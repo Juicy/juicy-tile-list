@@ -1,12 +1,12 @@
 /**
- * Package tests
+ * Packer tests
  */
-describe('Package', function() {
+describe('Packer', function() {
     'use strict';
     debugger
     var assert = chai.assert;
     describe("`.add`ing Rectangles", function() {
-      var pkg = new Package({
+      var pkr = new Packer({
         width: 3,
         height: 10
       });
@@ -37,11 +37,11 @@ describe('Package', function() {
         height: 1
       });
 
-      pkg.add(rect1);
-      pkg.add(rect2);
-      pkg.add(rect3);
-      pkg.add(rect4);
-      pkg.add(rect5);
+      pkr.add(rect1);
+      pkr.add(rect2);
+      pkr.add(rect3);
+      pkr.add(rect4);
+      pkr.add(rect5);
 
       it("packs them with as few 'holes' as possible, while trying to preserve given order", function() {
         assert.equal(rect1.x, 0, 'rect1.x top left');
@@ -59,8 +59,8 @@ describe('Package', function() {
       it("leaves free space at the bottom", function() {
 
         // bottom slot is open
-        assert.equal(pkg.slots.length, 1, 'one slot open');
-        var slot = pkg.slots[0];
+        assert.equal(pkr.slots.length, 1, 'one slot open');
+        var slot = pkr.slots[0];
         assert.equal(slot.width, 3, 'slot.width');
         assert.equal(slot.height, 7, 'slot.height');
         assert.equal(slot.x, 0, 'slot.x');
@@ -69,7 +69,7 @@ describe('Package', function() {
 
       describe("when there is already `.placed` one", function() {
         it('pack items around, still without holes and in given order', function() {
-          var pkg = new Package({
+          var pkr = new Packer({
             width: 3,
             height: 10
           });
@@ -104,11 +104,11 @@ describe('Package', function() {
             height: 1
           });
 
-          pkg.placed(rect1);
-          pkg.add(rect2);
-          pkg.add(rect3);
-          pkg.add(rect4);
-          pkg.add(rect5);
+          pkr.placed(rect1);
+          pkr.add(rect2);
+          pkr.add(rect3);
+          pkr.add(rect4);
+          pkr.add(rect5);
 
           // 235
           // 211
@@ -125,12 +125,12 @@ describe('Package', function() {
           assert.equal(rect5.x, 2, 'rect5.x top right');
           assert.equal(rect5.y, 0, 'rect5.y top right');
 
-          assert.equal(pkg.slots.length, 3, '3 slots left');
+          assert.equal(pkr.slots.length, 3, '3 slots left');
 
         });
       });
       describe("with `direction: 'downRight'`", function() {
-        var pkg = new Package({
+        var pkr = new Packer({
           width: 10,
           height: 3,
           direction: 'downRight'
@@ -161,11 +161,11 @@ describe('Package', function() {
           height: 1
         });
 
-        pkg.add(rect1);
-        pkg.add(rect2);
-        pkg.add(rect3);
-        pkg.add(rect4);
-        pkg.add(rect5);
+        pkr.add(rect1);
+        pkr.add(rect2);
+        pkr.add(rect3);
+        pkr.add(rect4);
+        pkr.add(rect5);
 
         it('packs them in vertical layers', function addVertical() {
           assert.equal(rect1.x, 0, 'rect1.x top left');
@@ -186,8 +186,8 @@ describe('Package', function() {
           // bottom slot is open
         });
         it('leaves slot on right', function slotsVertical() {
-          assert.equal(pkg.slots.length, 1, 'one slot open');
-          var slot = pkg.slots[0];
+          assert.equal(pkr.slots.length, 1, 'one slot open');
+          var slot = pkr.slots[0];
           assert.equal(slot.width, 7, 'slot.width');
           assert.equal(slot.height, 3, 'slot.height');
           assert.equal(slot.x, 3, 'slot.x top right');
@@ -211,7 +211,7 @@ describe('Package', function() {
           height: 1
         });
 
-        pkg.add(rect6);
+        pkr.add(rect6);
         assert.equal(rect6.x, 0, 'rect6.x bottom left');
         assert.equal(rect6.y, 3, 'rect6.y bottom left');
         assert.equal(rect6.width, 3, 'wide as package');
