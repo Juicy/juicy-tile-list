@@ -11,6 +11,8 @@
  * @param {Number} [props.width=0] packer width (in px)
  * @param {Number} [props.height=0] packer height (in px)
  * @param {String} [props.direction="rightDown"] packing direction `"rightDown"|"downRight"`
+ * @param {Number} [props.x=0] x offset for all items (or position of package itself)
+ * @param {Number} [props.y=0] y offset for all items (or position of package itself)
  */
 function Packer( props /*width, height, direction*/ ){
   for ( var prop in props ) {
@@ -28,8 +30,8 @@ Packer.prototype.direction = "rightDown";
 Packer.prototype.reset = function() {
   this.slots = [];
   var initialSlot = new Rectangle({
-    x: 0,
-    y: 0,
+    x: this.x || 0,
+    y: this.y || 0,
     width: this.width,
     height: this.height
   });

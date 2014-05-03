@@ -530,15 +530,11 @@
              * [packItems description]
              * @param {Array} setup setup of items fo pack, if not give `#setup` will be used
              * @param {Packer} currentContainer to be used, if notgive #packer will be used.
-             * @param {Number} [offsetX=0] offset all elements on X axis
-             * @param {Number} [offsetY=0] offset all elements on Y axis
              */
-            packItems: function packItems(containerSetup, currentPacker, offSetX, offSetY){
+            packItems: function packItems(containerSetup, currentPacker){
                 // XXX using bot this,items and setup here is kind of overhead (tomalec)
                 containerSetup = containerSetup || this.setup;
                 currentPacker = currentPacker || this.packer;
-                offSetX = offSetX || 0;
-                offSetY = offSetY || 0;
 
                 var that = this,
                     gap = containerSetup.gap || 0;
@@ -579,8 +575,8 @@
 
                     if( element ){ // itemSetup.index - if it is real element not a virtual group
                       // update oryginal element
-                      elStyle.top = rect.y + offSetY + gap + "px";
-                      elStyle.left = rect.x + offSetX + gap + "px";
+                      elStyle.top = rect.y + gap + "px";
+                      elStyle.left = rect.x + gap + "px";
                       elStyle.width = itemSetup.width + "px";
                       elStyle.height = itemSetup.height + "px";
                     } else if ( itemSetup.items ){
@@ -591,8 +587,8 @@
                       return that.packItems( 
                         itemSetup, 
                         containerItem.packer, 
-                        rect.x + offSetX + gap, 
-                        rect.y + offSetY + gap 
+                        rect.x + gap, 
+                        rect.y + gap 
                       );
                     }
                 });
