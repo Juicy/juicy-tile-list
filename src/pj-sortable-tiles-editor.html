@@ -1,6 +1,6 @@
 <link rel="import" href="element-selector.html">
 
-<polymer-element name="pj-sortable-tiles-editor">
+<polymer-element name="pj-sortable-tiles-editor" attributes="selectionMode">
   <template>
     <style>
       .editablesContainer {
@@ -71,7 +71,8 @@
         <button class="editable" on-click="{{priorityDecrease}}">Dec</button>
       </div>
     </div>
-    <element-selector id="elementSelector"></element-selector>
+    <element-selector id="elementEdited" overlay strokeWidth="5" strokeColor="#000000"></element-selector>
+    <element-selector id="elementRollover" strokeWidth="1" strokeColor="#000000"></element-selector>
   </template>
   <script>
     (function () {
@@ -96,13 +97,24 @@
         selectionMode: false,
         sortableTilesModel: null,
         mouseOverListener: null,
+        mouseOutListener: null,
         clickListener: null,
         attached: function () {
+          this.$.elementEdited.show(this.editedItem ? this.editedItem.element : null);
         },
         detached: function () {
-          this.$.elementSelector.hide();
+          this.$.elementEdited.hide();
+          this.$.elementRollover.hide();
           this.selectionMode = false;
-          this.unlisten();
+          this.unlisten(); //changing property in "detached" callback does not execute "selectionModeChanged" (Polymer 0.2.3)
+        },
+        selectionModeChanged: function() {
+          if (this.selectionMode) {
+            this.listen();
+          }
+          else {
+            this.unlisten();
+          }
         },
         listen: function () {
           this.mouseOverListener = function (ev) {
@@ -120,35 +132,38 @@
             if (highlightedElement) {
               if (this.highlightedElement !== highlightedElement) {
                 this.highlightedElement = highlightedElement;
-                this.$.elementSelector.show(this.highlightedElement);
+                this.$.elementRollover.show(this.highlightedElement);
               }
             }
           }.bind(this);
-          this.clickListener = function () {
+
+          this.mouseOutListener = function (ev) {
+            this.$.elementRollover.hide();
+          }.bind(this);
+
+          this.clickListener = function (ev) {
             if (this.highlightedElement) {
               this.sortableTilesModel = this.highlightedElement.parentNode;
               var highlightedItem = this.sortableTilesModel.items[ this.sortableTilesModel.filteredChildren.indexOf(this.highlightedElement) ];
               if (this.editedItem !== highlightedItem) {
                 this.editedItem = highlightedItem;
                 this.toggleSelectionMode();
+                this.$.elementEdited.show(this.highlightedElement);
+                this.highlightedElement = null;
               }
             }
           }.bind(this);
           window.addEventListener('mouseover', this.mouseOverListener);
+          window.addEventListener('mouseout', this.mouseOutListener);
           window.addEventListener('click', this.clickListener);
         },
         unlisten: function () {
           window.removeEventListener('mouseover', this.mouseOverListener);
+          window.removeEventListener('mouseout', this.mouseOutListener);
           window.removeEventListener('click', this.clickListener);
         },
         toggleSelectionMode: function () {
           this.selectionMode = !this.selectionMode;
-          if (this.selectionMode) {
-            this.listen();
-          }
-          else {
-            this.unlisten();
-          }
         },
         gapIncrease: function () {
           this.editedItem.setup.gap++;

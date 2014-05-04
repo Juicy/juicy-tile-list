@@ -72,7 +72,7 @@ pj-sortable-tiles>:nth-child(5) {
         <label><input type="checkbox" checked="{{editingMode}}"> Show editor ({{editingMode}})</label>
         <template if="{{editingMode}}">
           <div id="aboveOverlay">
-            <pj-sortable-tiles-editor></pj-sortable-tiles-editor>
+            <pj-sortable-tiles-editor selectionMode></pj-sortable-tiles-editor>
           </div>
         </template>
         <pj-sortable-tiles id="st1" setup="{{setup}}">

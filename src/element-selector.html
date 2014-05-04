@@ -1,5 +1,5 @@
 <!-- Define your custom element -->
-<polymer-element name="element-selector">
+<polymer-element name="element-selector" attributes="overlay strokeWidth strokeColor">
     <script>
     (function() {
 
@@ -26,7 +26,7 @@
     return svg;
   }
 
-  function CreateFocusRect() {
+  function CreateFocusRect(strokeWidth, strokeColor) {
     var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     var ns = null;
     svg.style.pointerEvents = "none";
@@ -36,8 +36,8 @@
     svg.style.top = 0;
     document.body.appendChild(svg);
     var p = document.createElementNS("http://www.w3.org/2000/svg", 'path');
-    p.setAttribute("stroke","black");
-    p.setAttribute("stroke-width","5px");
+    p.setAttribute("stroke",strokeColor);
+    p.setAttribute("stroke-width",strokeWidth + 'px');
     svg.appendChild(p);
     return svg;
   }
@@ -78,14 +78,16 @@
   }
 
 
-  function drawMask(maskElement, svg1, svg2, focusRect) {
+  function drawMask(maskElement, svg1, svg2, focusRect, overlay) {
     var availableWidth = document.documentElement.scrollWidth;
     var availableHeight = document.documentElement.scrollHeight; //document.documentElement.scrollHeight returns the dimension of the page
     var str = calcMask(availableWidth, availableHeight, maskElement.focused);
-    var mask = svg1.firstChild;
-    mask.setAttribute("d",str);
-    var mask2 = svg2.firstChild;
-    mask2.setAttribute("d",str);
+    if(overlay) {
+      var mask = svg1.firstChild;
+      mask.setAttribute("d",str);
+      var mask2 = svg2.firstChild;
+      mask2.setAttribute("d",str);
+    }
     if (maskElement.focused) {
       var rect = focusRect.firstChild;
       str = calcFocusRect(maskElement.focused);
@@ -99,28 +101,33 @@
     focusRect.style.height = availableHeight + "px";
   }
 
-    var svg1, svg2, focusRect;
+    var svg1, svg2;
 
     Polymer('element-selector', {
+        overlay: false,
+        strokeWidth: 1,
+        strokeColor: "#000000",
         focused: null,
         attached: function(){
-          var that = this;
           if(!svg1) {
             svg1 = CreateMask("#FFFFFF", 0.5);
             svg2 = CreateMask("#000000", 0.5);
-            focusRect = CreateFocusRect();
+          }
+          if(!this.focusRect) {
+            this.focusRect = CreateFocusRect(this.strokeWidth, this.strokeColor);
           }
         },
         drawMask: function () {
-          drawMask(this,svg1, svg2, focusRect);
+          drawMask(this,svg1, svg2, this.focusRect, this.overlay);
         },
         show: function(element) {
-          this.oldFocused = this.focused;
           this.focused = element;
-          if(!svg1.parentNode) {
+          if(this.overlay && !svg1.parentNode) {
             document.body.appendChild(svg1);
             document.body.appendChild(svg2);
-            document.body.appendChild(focusRect);
+          }
+          if(!this.focusRect.parentNode) {
+            document.body.appendChild(this.focusRect);
           }
           var repeat = function () {
             this.drawMask();
@@ -129,10 +136,12 @@
           repeat.call(this);
         },
         hide: function() {
-          if(svg1.parentNode) {
+          if(this.overlay && svg1.parentNode) {
             document.body.removeChild(svg1);
             document.body.removeChild(svg2);
-            document.body.removeChild(focusRect);
+          }
+          if(this.focusRect.parentNode) {
+            document.body.removeChild(this.focusRect);
           }
           window.cancelAnimationFrame(this.req);
         }
