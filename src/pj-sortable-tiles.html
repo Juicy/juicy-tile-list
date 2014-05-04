@@ -582,6 +582,8 @@
                     } else if ( itemSetup.items ){
                       // TODO save it somewhere
                       // //FIXME i'm ugly
+                        itemSetup.x = rect.x;
+                        itemSetup.y = rect.y;
                         var containerItem = that.items[ itemSetup.name ];
                       containerItem.packer = new Packer( itemSetup );
                       return that.packItems( 
