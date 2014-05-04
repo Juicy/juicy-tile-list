@@ -47,26 +47,26 @@
         <button class="editable" on-click="{{editContainer}}" disabled?="{{!editedItem.container}}">↰ Select container</button>
 
       </div>
-      <template if="{{editedItem.setup.items}}">
+      <template if="{{editedItem.items}}">
         <h4 class="editableGroup">Container <code>{{editedItem.name}}</code></h4>
         <div class="editableGroup">
           <button class="editable" on-click="{{deleteContainer}}" disabled?="{{!editedItem.container}}">Delete</button>
 
-          <label>Gap <span class="val">({{editedItem.setup.gap}})</span></label>
+          <label>Gap <span class="val">({{editedItem.gap}})</span></label>
           <button class="editable" on-click="{{gapIncrease}}">Inc</button>
           <button class="editable" on-click="{{gapDecrease}}">Dec</button>
         </div>
       </template>
-      <div class="editableGroup"><label>Width <span class="val">({{editedItem.setup.width}})</span></label>
+      <div class="editableGroup"><label>Width <span class="val">({{editedItem.width}})</span></label>
         <button class="editable" on-click="{{widthIncrease}}">Inc</button>
         <button class="editable" on-click="{{widthDecrease}}">Dec</button>
       </div>
-      <div class="editableGroup"><label>Height <span class="val">({{editedItem.setup.height}})</span></label>
+      <div class="editableGroup"><label>Height <span class="val">({{editedItem.height}})</span></label>
         <button class="editable" on-click="{{heightIncrease}}">Inc</button>
         <button class="editable" on-click="{{heightDecrease}}">Dec</button>
         <label class="editable"><input id="heightAutoCheckbox" type="checkbox" on-click="{{heightAuto}}"> auto</label>
       </div>
-      <div class="editableGroup"><label>Priority <span class="val">({{editedItem.setup.priority}})</span></label>
+      <div class="editableGroup"><label>Priority <span class="val">({{editedItem.priority}})</span></label>
         <button class="editable" on-click="{{priorityIncrease}}">Inc</button>
         <button class="editable" on-click="{{priorityDecrease}}">Dec</button>
       </div>
@@ -144,7 +144,7 @@
           this.clickListener = function (ev) {
             if (this.highlightedElement) {
               this.sortableTilesModel = this.highlightedElement.parentNode;
-              var highlightedItem = this.sortableTilesModel.items[ this.sortableTilesModel.filteredChildren.indexOf(this.highlightedElement) ];
+              var highlightedItem = this.sortableTilesModel.items[ this.sortableTilesModel.elements.indexOf(this.highlightedElement) ];
               if (this.editedItem !== highlightedItem) {
                 this.editedItem = highlightedItem;
                 this.toggleSelectionMode();
@@ -166,45 +166,45 @@
           this.selectionMode = !this.selectionMode;
         },
         gapIncrease: function () {
-          this.editedItem.setup.gap++;
+          this.editedItem.gap++;
           this.sortableTilesModel.refresh();
         },
         gapDecrease: function () {
-          if (this.editedItem.setup.gap >= 1) {
-            this.editedItem.setup.gap--;
+          if (this.editedItem.gap >= 1) {
+            this.editedItem.gap--;
           }
           this.sortableTilesModel.refresh();
         },
         widthIncrease: function () {
-          powerIncrease(this.editedItem.setup, "width");
+          powerIncrease(this.editedItem, "width");
           this.sortableTilesModel.refresh();
         },
         widthDecrease: function () {
-          powerDecrease(this.editedItem.setup, "width");
+          powerDecrease(this.editedItem, "width");
           this.sortableTilesModel.refresh();
         },
         heightIncrease: function () {
-          if (this.editedItem.setup.height == 'auto') { //turn off auto
-            this.editedItem.setup.height = 32;
+          if (this.editedItem.height == 'auto') { //turn off auto
+            this.editedItem.height = 32;
             this.shadowRoot.querySelector("#heightAutoCheckbox").checked = false;
           }
-          powerIncrease(this.editedItem.setup, "height");
+          powerIncrease(this.editedItem, "height");
           this.sortableTilesModel.refresh();
         },
         heightDecrease: function () {
-          if (this.editedItem.setup.height == 'auto') { //turn off auto
-            this.editedItem.setup.height = 32;
+          if (this.editedItem.height == 'auto') { //turn off auto
+            this.editedItem.height = 32;
             this.shadowRoot.querySelector("#heightAutoCheckbox").checked = false;
           }
-          powerDecrease(this.editedItem.setup, "height");
+          powerDecrease(this.editedItem, "height");
           this.sortableTilesModel.refresh();
         },
         heightAuto: function () {
-          if (this.editedItem.setup.height == 'auto') { //turn off auto
-            this.editedItem.setup.height = 32;
+          if (this.editedItem.height == 'auto') { //turn off auto
+            this.editedItem.height = 32;
           }
           else { //turn on auto
-            this.editedItem.setup.height = "auto";
+            this.editedItem.height = "auto";
           }
           this.sortableTilesModel.refresh();
         },

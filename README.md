@@ -53,14 +53,10 @@ Attribute                    | Options             | Default      | Description
 
 Name                 | Options        | Description
 ---                  | ---            | ---
-`filteredChildren`   | *Array*        | Array of children which are going to be arranged.
+`elements`   | *Array*        | Array of children which are going to be arranged.
 `setup`              | *Object*       | Up to date tiles setup. Structure as in attributes.
-`items`              | *Object*       | Map of sortable abstract items. Ones reflecting real DOM elements are indexed with `0-n` as in HTML, virtual containers are mapped with names. Root container is available under `items['root']`.
-`items[.].element`   | *Element*      | DOM element (for real elements)
-`items[.].name`      | *String*       | Container name (for virtual containers)
-`items[.].setup`     | *Object*       | Tile setup that represents `element` position in Package. Structure described above.
-`items[.].container` | *Item*         | Reference to container item.
-`package`            | *Package*      | Package abstract object
+`items`              | *Object*       | Map of setup nodes. Ones reflecting real DOM elements are indexed with `0-n` as in HTML, virtual containers are mapped with names. Root container is available under `items['root']`.
+`items[.].container` | *Object*       | Reference to container item. (non-enumerable property)
 
 ## Methods
 
