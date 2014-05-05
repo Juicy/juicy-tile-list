@@ -3,7 +3,7 @@
  */
 describe('Packer', function() {
     'use strict';
-    debugger
+
     var assert = chai.assert;
     describe("`.add`ing Rectangles", function() {
       var pkr = new Packer({
