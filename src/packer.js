@@ -10,9 +10,11 @@
  * @param {Object} [props] packer properties
  * @param {Number} [props.width=0] packer width (in px)
  * @param {Number} [props.height=0] packer height (in px)
+ * @param {Number} [props.gap=0] gap between items (in px)
  * @param {String} [props.direction="rightDown"] packing direction `"rightDown"|"downRight"`
  * @param {Number} [props.x=0] x offset for all items (or position of package itself)
  * @param {Number} [props.y=0] y offset for all items (or position of package itself)
+ * @TODO write tests for `#gap` (tomalec)
  */
 function Packer( props /*width, height, direction*/ ){
   for ( var prop in props ) {
@@ -22,6 +24,7 @@ function Packer( props /*width, height, direction*/ ){
 }
 Packer.prototype.width = 0;
 Packer.prototype.height = 0;
+Packer.prototype.gap = 0;
 Packer.prototype.direction = "rightDown";
 
 /**
@@ -32,8 +35,8 @@ Packer.prototype.reset = function() {
   var initialSlot = new Rectangle({
     x: this.x || 0,
     y: this.y || 0,
-    width: this.width,
-    height: this.height
+    width: this.width - this.gap,
+    height: this.height - this.gap
   });
 
   this.slots.push( initialSlot );
@@ -59,7 +62,7 @@ Packer.prototype.add = function( rectangle ) {
   for ( var si=0, len = this.slots.length; si < len; si++ ) {
     var slot = this.slots[si];
 	//CHANGEME
-    if ( slot.canFit( rectangle ) ) {
+    if ( slot.canFit( rectangle, this.gap ) ) {
       this.placeAt( rectangle, slot );
       break;
     }
@@ -77,8 +80,8 @@ Packer.prototype.add = function( rectangle ) {
  */
 Packer.prototype.placeAt = function( rectangle, slot ) {
   // place rectangle in slot
-  rectangle.x = slot.x;
-  rectangle.y = slot.y;
+  rectangle.x = slot.x + this.gap;
+  rectangle.y = slot.y + this.gap;
 
   this.placed( rectangle );
   return rectangle;
@@ -90,6 +93,12 @@ Packer.prototype.placeAt = function( rectangle, slot ) {
  * @param  {Rectangle} rectangle being added
  */
 Packer.prototype.placed = function( rectangle ) {
+  if(this.gap){
+    rectangle.x -= this.gap;
+    rectangle.y -= this.gap;
+    rectangle.width += this.gap;
+    rectangle.height += this.gap;
+  }
   // update slots
   var revisedSlots = [];
   for ( var i=0, len = this.slots.length; i < len; i++ ) {
@@ -102,6 +111,12 @@ Packer.prototype.placed = function( rectangle ) {
       // this slot does not intersect with one to add
       revisedSlots.push( slot );
     }
+  }
+  if(this.gap){
+    rectangle.x += this.gap;
+    rectangle.y += this.gap;
+    rectangle.width -= this.gap;
+    rectangle.height -= this.gap;
   }
 
   this.slots = revisedSlots;
@@ -144,13 +159,12 @@ Packer.cleanRedundant = function( rectangles ) {
   return rectangles;
 };
 
-
 var sorters = {
-  // align in horizontal layers
+  // align in horizontal layers RTL
   rightDown: function( a, b ) {
     return a.y - b.y || a.x - b.x;
   },
-  // align in vertical layers
+  // align in vertical layers UTB
   downRight: function( a, b ) {
     return a.x - b.x || a.y - b.y;
   }

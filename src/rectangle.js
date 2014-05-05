@@ -112,9 +112,16 @@ Rectangle.prototype.getSlotsAround = function( what ) {
 
   return slots;
 };
-
-Rectangle.prototype.canFit = function( what ) {
-  return this.width >= what.width && this.height >= what.height;
+/**
+ * Can `what` rectangle fit inside ours, with optional `buffer`space left (in both directions)?
+ * @param  {Rectangle} what   ractangle to fit
+ * @param  {Number} [buffer=0] amount of additional space required
+ * @return {Boolean}
+ * @TODO write tests for `buffer` (tomalec)
+ */
+Rectangle.prototype.canFit = function( what, buffer ) {
+  buffer || (buffer = 0);
+  return this.width >= what.width + buffer && this.height >= what.height + buffer;
 };
 
 

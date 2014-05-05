@@ -99,7 +99,6 @@ Package.prototype.packItems = function packItems( setup, elements ) {
   setup || (setup = this.setup);
   elements || (elements = this.elements);
   var that = this,
-      gap = setup.gap || 0,
       packer = new Packer(setup);
 
   if(!this.originalHeights) {
@@ -128,9 +127,6 @@ Package.prototype.packItems = function packItems( setup, elements ) {
         }
       }
 
-      // Add gaps
-      rect.width += gap;
-      rect.height += gap;
       // Pack item
       packer.add(rect);
 
@@ -138,10 +134,10 @@ Package.prototype.packItems = function packItems( setup, elements ) {
 
       if( element ){ // itemSetup.index - if it is real element not a virtual group
         // update oryginal element
-        elStyle.top = rect.y + gap + "px";
-        elStyle.left = rect.x + gap + "px";
-        elStyle.width = itemSetup.width + "px";
-        elStyle.height = itemSetup.height + "px";
+        elStyle.top = rect.y + "px";
+        elStyle.left = rect.x + "px";
+        elStyle.width = rect.width + "px";
+        elStyle.height = rect.height + "px"
       } else if ( itemSetup.items ){
         return that.packItems( 
           rect,// use packed (offset) rectangle as setup
