@@ -126,6 +126,13 @@ Package.prototype.packItems = function packItems( setup, elements ) {
           elStyle.overflowY = "auto";
         }
       }
+      // caluclate relative size
+      if( typeof rect.height == "string" && rect.height.indexOf("%") > 0 ){
+        rect.height = (setup.height - setup.gap) * parseFloat(rect.height) /100 - setup.gap -1;
+      }
+      if( typeof rect.width == "string" && rect.width.indexOf("%") > 0 ){
+        rect.width = (setup.width - setup.gap) * parseFloat(rect.width) /100 - setup.gap -1;
+      }
 
       // Pack item
       packer.add(rect);

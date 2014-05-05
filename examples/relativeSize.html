@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>&lt;pj-sortable-tiles&gt; with groups</title>
+
+    <!-- Importing Web Component's Polyfill -->
+    
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.2.2/platform.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.2.2/polymer.js"></script>
+    <!--
+    <script src="bower_components/platform/platform.js"></script>
+    <script src="bower_components/polymer/polymer.js"></script>
+    -->
+    <!-- Importing Custom Elements -->
+    <link rel="import" href="../src/pj-sortable-tiles.html">
+    <link rel="import" href="../src/pj-sortable-tiles-editor.html">
+<style>
+* {
+  margin:0px;
+  padding:0px;
+}
+body,html{
+    font-family: Helvetica, Arial, sans-serif;
+}
+pj-sortable-tiles{
+    /*width: 300px;
+    height: 150px;*/
+    height: 100%;
+    width: 100%;
+    box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
+}
+pj-sortable-tiles>*{
+    box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
+}
+pj-sortable-tiles>:first-child {
+    background:lightgreen;
+}
+
+pj-sortable-tiles>:nth-child(2) {
+    background:lightblue;
+}
+
+pj-sortable-tiles>:nth-child(3) {
+    background:yellow;
+    overflow:auto;
+}
+
+pj-sortable-tiles>:nth-child(4) {
+    background:gray;
+    overflow:auto;
+}
+
+pj-sortable-tiles>:nth-child(5) {
+    background:orange;
+    max-height: 100px;
+    overflow:auto;
+}
+</style>
+
+<body>
+    <template bind>
+        <p>Press Ctrl or Command on your keyboard and move your mouse over an item to edit</p>
+        <label><input type="checkbox" checked="{{editingMode}}"> Show editor ({{editingMode}})</label>
+        <template if="{{editingMode}}">
+          <div id="aboveOverlay">
+            <pj-sortable-tiles-editor selectionMode></pj-sortable-tiles-editor>
+          </div>
+        </template>
+        <pj-sortable-tiles setup="{{setup}}">
+            <div>Item 0, 100% x 100px, priority 1, nested</div>
+            <div>
+                <button>Item 1, 100% x 75%, nested twice</button>
+            </div>
+            <div>
+                <input value="Input2, 25% (of 50%) x 100px, priority 0.9, nested">
+            </div>
+            <section>Item3, 400px x 100px , priority 0.6</section>
+            <div>Item 4, 100% x 25% , priority 0, nested twice</div>
+        </pj-sortable-tiles>
+    </template>
+    <script type="text/javascript">
+        // 011
+        // 233
+        // 2
+        // 
+        // prioritized
+        // 
+        // 110
+        // 233
+        // 2
+        model = {
+            setup:{
+                gap: 24,
+                items: [
+                    {
+                        index:0, //index of correcsponding DOM element (child)
+                        priority: 0.9, //priority of element in current scope/group/container
+                        height: 100,
+                        width: "100%"
+                    },
+                    {
+                        priority: 0.8,
+                        height: 216,
+                        width: "50%",
+                        // group properties
+                        name: "group", //group name (optional?)
+                        gap: 4,
+                        direction: "rightDown",
+                        //items property indicates it is a group
+                        items: [
+                            {
+                                index:2,
+                                priority:1,
+                                height: 100,
+                                width: "25%"
+                            },
+                            {
+                                priority: 0.8,
+                                height: 100,
+                                width: "75%",
+                                // group properties
+                                name: "deeperGroup", //group name (optional?)
+                                gap: 0,
+                                direction: "downRight",
+                                //items property indicates it is a group
+                                items: [
+                                    {
+                                        index:1,
+                                        priority:1,
+                                        height: "75%",
+                                        width: "100%"
+                                    },
+                                    {
+                                        index:4,
+                                        priority:0,
+                                        height: "25%",
+                                        width: "100%"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        index:3,
+                        priority:0.6,
+                        height: 100,
+                        width: 400
+                    }
+                ]
+            }
+        };
+        document.addEventListener("polymer-ready", function(){
+            document.querySelector("template").model = model;
+            
+        })
+    </script>
+</body>
