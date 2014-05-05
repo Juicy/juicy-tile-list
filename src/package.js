@@ -119,7 +119,7 @@ Package.prototype.packItems = function packItems( setup, elements ) {
           if (!element) {
             element = document.createElement('DIV');
             element.style.zIndex = -1;
-            that.appendChild(element);
+            that.$.container.appendChild(element);
             elements[ itemSetup.name ] = element;
           }
         }
