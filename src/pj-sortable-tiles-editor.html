@@ -36,6 +36,7 @@
 
       h4 {
         margin: 0;
+        display: inline;
       }
     </style>
     <div class="{{ {editablesContainer: true, disabled: !editedItem} | tokenList }}">
@@ -45,18 +46,24 @@
 
       <div class="editableGroup">
         <button class="editable" on-click="{{editContainer}}" disabled?="{{!editedItem.container}}">↰ Select container</button>
-
       </div>
-      <template if="{{editedItem.items}}">
-        <h4 class="editableGroup">Container <code>{{editedItem.name}}</code></h4>
-        <div class="editableGroup">
-          <button class="editable" on-click="{{deleteContainer}}" disabled?="{{!editedItem.container}}">Delete</button>
 
+      <template if="{{editedItem.items}}">
+        <div class="editableGroup">
+          <button class="editable" on-click="{{deleteContainer}}" disabled?="{{!editedItem.container}}">⧉ Ungroup</button>
+        </div>
+
+        <div class="editableGroup">
+          <h4>Container <code>{{editedItem.name}}</code></h4>
+        </div>
+
+        <div class="editableGroup">
           <label>Gap <span class="val">({{editedItem.gap}})</span></label>
           <button class="editable" on-click="{{gapIncrease}}">Inc</button>
           <button class="editable" on-click="{{gapDecrease}}">Dec</button>
         </div>
       </template>
+
       <div class="editableGroup"><label>Width <span class="val">({{editedItem.width}})</span></label>
         <button class="editable" on-click="{{widthIncrease}}">Inc</button>
         <button class="editable" on-click="{{widthDecrease}}">Dec</button>
@@ -171,7 +178,6 @@
               }
               else if (this.editedItem !== highlightedItem) {
                 this.editedItem = highlightedItem;
-                this.$.elementEdited.show(this.highlightedElement);
                 this.highlightedElement = null;
               }
             }
@@ -248,13 +254,26 @@
         },
         editContainer: function () {
           this.editedItem = this.editedItem.container;
-          var element = this.editedItem.name === "root" ? this.sortableTilesModel.shadowRoot.firstElementChild : this.sortableTilesModel.elements[this.editedItem.name]
-          this.$.elementEdited.show(element);
         },
         deleteContainer: function () {
           var container = this.editedItem.container;
           this.sortableTilesModel.deleteContainer(this.editedItem);
           this.editedItem = container;
+        },
+        editedItemChanged: function() {
+          var element;
+          if (this.editedItem.name) {
+            if (this.editedItem.name === "root") {
+              element = this.sortableTilesModel.shadowRoot.firstElementChild;
+            }
+            else {
+              element = this.sortableTilesModel.elements[this.editedItem.name];
+            }
+          }
+          else {
+            element = this.sortableTilesModel.elements[this.editedItem.index];
+          }
+          this.$.elementEdited.show(element);
         }
       });
     })();
