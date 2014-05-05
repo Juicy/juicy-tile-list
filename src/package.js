@@ -347,8 +347,20 @@ Package.prototype.deleteContainer = function( what, noRepacking ){
   return this;
 };
 /**
+ * Create a unique name for a container
+ * @param {Object} parent container
+ * @return {String}
+ */
+Package.prototype.generatePackageName = function (container) {
+  var i = 0;
+  while (this.items[container.name + '_' + i]) {
+    i++;
+  }
+  return container.name + '_' + i;
+};
+/**
  * Create new empty virtual container.
- * @param  {String} name        Name for the container
+ * @param  {String} name        Name for the container. If empty, a unique name will be generated
  * @param  {Item | String} [inContainer="root"] Container name or item
  * @param  {Rectangle} [rectangle]   rectangle setup (width, height, priority)
  * @param  {Boolean} [noRepacking=false] `true` block re-packing items after setup change
@@ -361,6 +373,11 @@ Package.prototype.createNewContainer = function( name, inContainer, rectangle, n
     inContainer = inContainer || this.setup;
   // }
   // cache smth
+
+  if (!name) {
+    name = this.generatePackageName(inContainer);
+  }
+
   // TODO check if name exists
   var siblings = inContainer.items;
 
