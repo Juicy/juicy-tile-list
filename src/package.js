@@ -112,7 +112,19 @@ Package.prototype.packItems = function packItems( setup, elements ) {
       // TODO: do it more lightweight
       var rect = new Rectangle(itemSetup);
 
-      var element = elements &&  elements[ itemSetup.index ];
+      if (elements) {
+        var element = elements[ itemSetup.index ];
+        if (!element) {
+          element = elements[ itemSetup.name ];
+          if (!element) {
+            element = document.createElement('DIV');
+            element.style.zIndex = -1;
+            that.appendChild(element);
+            elements[ itemSetup.name ] = element;
+          }
+        }
+      }
+
       if( element ){ // itemSetup.index - if it is real element not a virtual group
         var elStyle = element.style;
         if(typeof that.originalHeights[itemSetup.index] === 'undefined') {
@@ -145,8 +157,9 @@ Package.prototype.packItems = function packItems( setup, elements ) {
         elStyle.left = rect.x + "px";
         elStyle.width = rect.width + "px";
         elStyle.height = rect.height + "px"
-      } else if ( itemSetup.items ){
-        return that.packItems( 
+      }
+      if ( itemSetup.items ){
+        return that.packItems(
           rect,// use packed (offset) rectangle as setup
           elements
         );

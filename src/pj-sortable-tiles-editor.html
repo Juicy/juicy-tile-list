@@ -248,6 +248,8 @@
         },
         editContainer: function () {
           this.editedItem = this.editedItem.container;
+          var element = this.editedItem.name === "root" ? this.sortableTilesModel.shadowRoot.firstElementChild : this.sortableTilesModel.elements[this.editedItem.name]
+          this.$.elementEdited.show(element);
         },
         deleteContainer: function () {
           var container = this.editedItem.container;
