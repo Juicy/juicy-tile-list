@@ -145,4 +145,37 @@ describe('Rectangle', function() {
     });
   });
 
+  describe('can check if other rectangle `.canFit` within', function() {
+
+    var rect = new Rectangle({
+      width: 200,
+      height: 100
+    });
+    var rectSmall = new Rectangle({
+      width: 180,
+      height: 80
+    });
+    var rectEqual = new Rectangle({
+      width: 200,
+      height: 100
+    });
+    var rectBig = new Rectangle({
+      width: 220,
+      height: 100
+    });
+    it("other rectangle can fit within", function(){
+      assert.strictEqual( rect.canFit( rectSmall ), true, "smaller fits");
+      assert.strictEqual( rect.canFit( rectEqual ), true, "equal fits");
+      assert.strictEqual( rect.canFit( rectBig ), false, "bigger don't");
+    });
+    it("smaller rectangle can fit within additional buffer space", function(){
+      assert.strictEqual( rect.canFit( rectSmall, 10 ), true, "smaller fits with 10 buffer");
+      assert.strictEqual( rect.canFit( rectEqual, 20 ), false, "smaller don't fit with 20 buffer");
+      assert.strictEqual( rect.canFit( rectEqual, 10 ), false, "equal don't");
+      assert.strictEqual( rect.canFit( rectBig, 10 ), false, "bigger don't");
+    });
+
+
+  });
+
 });
