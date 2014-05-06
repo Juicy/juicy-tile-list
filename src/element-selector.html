@@ -46,9 +46,9 @@
 
   function calcMask(cw, ch, focused) {
     var mask = "M 0 0 l " + cw + " 0 l 0 " + ch + " l " + -cw +" 0 Z";
-    if (focused) {
-      // Clip out the window for the focused item
-      mask +=  calcFocusRect(focused);
+    for (var i = 0, ilen = focused.length; i < ilen; i++) {
+      // Clip out the window for the focused items
+      mask += calcFocusRect(focused[i]);
     }
     return mask;
   }
@@ -88,10 +88,16 @@
       var mask2 = svg2.firstChild;
       mask2.setAttribute("d",str);
     }
-    if (maskElement.focused) {
-      var rect = focusRect.firstChild;
-      str = calcFocusRect(maskElement.focused);
-      rect.setAttribute("d", str );
+    var rect = focusRect.firstChild;
+    if (maskElement.focused.length) {
+      var str = '';
+      for (var i = 0, ilen = maskElement.focused.length; i < ilen; i++) {
+        str += calcFocusRect(maskElement.focused[i]);
+      }
+      rect.setAttribute("d", str);
+    }
+    else {
+      rect.setAttribute("d", "M 0 0");
     }
     svg1.style.width = availableWidth + "px"; //need to actually set dimensions of SVG, otherwise will not render in whole
     svg2.style.width = availableWidth + "px";
@@ -120,13 +126,21 @@
         drawMask: function () {
           drawMask(this,svg1, svg2, this.focusRect, this.overlay);
         },
-        show: function(element) {
-          this.focused = element;
-          if(this.overlay && !svg1.parentNode) {
+        show: function(elements) {
+          if (Array.isArray(elements)) {
+            this.focused = elements;
+          }
+          else if(elements) {
+            this.focused = [elements];
+          }
+          else {
+            this.focused = [];
+          }
+          if (this.overlay && !svg1.parentNode) {
             document.body.appendChild(svg1);
             document.body.appendChild(svg2);
           }
-          if(!this.focusRect.parentNode) {
+          if(this.focusRect && !this.focusRect.parentNode) {
             document.body.appendChild(this.focusRect);
           }
           var repeat = function () {
