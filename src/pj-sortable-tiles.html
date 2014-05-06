@@ -63,7 +63,7 @@
       function saveJson(key, value) {
         if (key) {
           var str = JSON.stringify(value);
-          // localStorage.setItem(key, str);
+          localStorage.setItem(key, str);
         }
       }
 
@@ -227,7 +227,7 @@
             } else {
               this.setup.height = this.clientHeight;
             }
-             // this.saveToStorage();
+             this.saveToStorage();
              this.packItems( );
           },
           saveToStorage: function() {
