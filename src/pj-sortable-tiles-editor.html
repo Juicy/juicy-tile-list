@@ -78,8 +78,9 @@
         <button class="editable" on-click="{{priorityDecrease}}">Dec</button>
       </div>
     </div>
-    <element-selector id="elementEdited" overlay strokeWidth="5" strokeColor="#000000"></element-selector>
-    <element-selector id="elementRollover" strokeWidth="1" strokeColor="#000000"></element-selector>
+    <element-selector id="elementEdited" overlay strokeWidth="3" strokeColor="#33579F"></element-selector>
+    <element-selector id="elementRollover" strokeWidth="1" strokeColor="#222222"></element-selector>
+    <element-selector id="elementSelected" strokeWidth="1" strokeColor="#33579F"></element-selector>
   </template>
   <script>
     (function () {
@@ -102,11 +103,16 @@
 
       Polymer('pj-sortable-tiles-editor', {
         selectionMode: false,
+        editedElement: null,
+        highlightedElement: null,
+        selectedItems: [],
+        selectedElements: [],
         sortableTilesModel: null,
         mouseOverListener: null,
         mouseOutListener: null,
         mouseupListener: null,
         contextMenuListener: null,
+        keyUpListener: null,
         attached: function () {
           this.$.elementEdited.show(this.editedItem ? this.editedItem.element : null);
         },
@@ -155,28 +161,14 @@
               var highlightedItem = this.sortableTilesModel.items[ this.sortableTilesModel.elements.indexOf(this.highlightedElement) ];
               if (ev.ctrlKey) {
                 //expand group
-                if (highlightedItem != this.editedItem) {
-                  if (this.editedItem.container == highlightedItem.container) {
-                    //Scenario A - create a new container for 2 items currently in the same parent
-                    var gap = this.editedItem.container.gap;
-                    var setup = {
-                      priority: Math.max(this.editedItem.priority, highlightedItem.priority),
-                      gap: gap,
-                      index: Math.max(this.editedItem.index, highlightedItem.index)
-                    }
-                    var newContainer = this.sortableTilesModel.createNewContainer(null, this.editedItem.container, setup, true);
-                    this.sortableTilesModel.moveToContainer(this.editedItem, newContainer, true);
-                    this.sortableTilesModel.moveToContainer(highlightedItem, newContainer, true);
-                    this.sortableTilesModel.packItems(); //rerender
-                  }
-                  else {
-                    //Scenario B - move item if they are already in different parents
-                    this.sortableTilesModel.moveToContainer(highlightedItem, this.editedItem.container, true);
-                    this.sortableTilesModel.packItems(); //rerender
-                  }
-                }
+                this.selectedItems.push(highlightedItem);
+                this.selectedElements.push(this.highlightedElement);
+                this.$.elementSelected.show(this.selectedElements);
               }
               else if (this.editedItem !== highlightedItem) {
+                this.selectedItems.length = 0;
+                this.selectedElements.length = 0;
+                this.$.elementSelected.hide();
                 this.editedItem = highlightedItem;
                 this.highlightedElement = null;
               }
@@ -189,19 +181,85 @@
             }
           }.bind(this);
 
+          this.keyUpListener = function (ev) {
+            if (ev.ctrlKey) {
+              if (ev.keyCode == 78) { //CTRL+N
+                this.newGroupFromSelection();
+              }
+              else if (ev.keyCode == 71) { //CTRL+G
+                this.moveSelectionToEditedItemContainer();
+              }
+              else if (ev.keyCode == 85) { //CTRL+U
+                //TODO ungroup selection
+              }
+            }
+          }.bind(this);
+
           window.addEventListener('mouseover', this.mouseOverListener);
           window.addEventListener('mouseout', this.mouseOutListener);
           window.addEventListener('mouseup', this.mouseupListener);
           window.addEventListener('contextmenu', this.contextMenuListener);
+          window.addEventListener('keyup', this.keyUpListener);
         },
         unlisten: function () {
           window.removeEventListener('mouseover', this.mouseOverListener);
           window.removeEventListener('mouseout', this.mouseOutListener);
           window.removeEventListener('mouseup', this.mouseupListener);
           window.removeEventListener('contextmenu', this.contextMenuListener);
+          window.removeEventListener('keyup', this.keyUpListener);
         },
         toggleSelectionMode: function () {
           this.selectionMode = !this.selectionMode;
+        },
+        newGroupFromSelection: function () {
+          if (!this.editedItem) {
+            return;
+          }
+
+          var setup = {
+            priority: this.editedItem.priority,
+            gap: 0,
+            index: this.editedItem.index
+          }
+
+          var newContainer = this.sortableTilesModel.createNewContainer(null, this.editedItem.container, setup, true);
+          this.sortableTilesModel.moveToContainer(this.editedItem, newContainer, true);
+          for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
+            this.sortableTilesModel.moveToContainer(this.selectedItems[i], newContainer, true);
+          }
+
+          var dimensions = this.sortableTilesModel.getMinimumDimensions(this.getContainerChildElements(newContainer));
+          this.editedItem.container.width = dimensions.width;
+          this.editedItem.container.height = dimensions.height;
+
+          this.sortableTilesModel.packItems(); //rerender
+        },
+        moveSelectionToEditedItemContainer: function () {
+          if (!this.editedItem) {
+            return;
+          }
+
+          for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
+            this.sortableTilesModel.moveToContainer(this.selectedItems[i], this.editedItem.container, true);
+          }
+
+          var dimensions = this.sortableTilesModel.getMinimumDimensions(this.getContainerChildElements(this.editedItem.container));
+          this.editedItem.container.width = dimensions.width;
+          this.editedItem.container.height = dimensions.height;
+
+          this.sortableTilesModel.packItems(); //rerender
+        },
+        getContainerChildElements: function (container) {
+          var elements = [];
+          for (var i = 0, ilen = container.items.length; i < ilen; i++) {
+            if (container.items[i].index != void 0) {
+              elements.push(this.sortableTilesModel.elements[container.items[i].index])
+            }
+            else if (container.items[i].name != void 0) {
+              elements.push(this.sortableTilesModel.elements[container.items[i].name])
+            }
+          }
+          return elements;
         },
         gapIncrease: function () {
           this.editedItem.gap++;
