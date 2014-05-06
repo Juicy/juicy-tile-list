@@ -64,11 +64,11 @@
         </div>
       </template>
 
-      <div class="editableGroup"><label>Width <span class="val">({{editedItem.width}})</span></label>
+      <div class="editableGroup"><label>Width <input class="val" on-blur="{{refresh}}" value="{{editedItem.width}}"></label>
         <button class="editable" on-click="{{widthIncrease}}">Inc</button>
         <button class="editable" on-click="{{widthDecrease}}">Dec</button>
       </div>
-      <div class="editableGroup"><label>Height <span class="val">({{editedItem.height}})</span></label>
+      <div class="editableGroup"><label>Height <input class="val" on-blur="{{refresh}}" value="{{editedItem.height}}"></label>
         <button class="editable" on-click="{{heightIncrease}}">Inc</button>
         <button class="editable" on-click="{{heightDecrease}}">Dec</button>
         <label class="editable"><input id="heightAutoCheckbox" type="checkbox" on-click="{{heightAuto}}"> auto</label>
@@ -269,6 +269,9 @@
           if (this.editedItem.gap >= 1) {
             this.editedItem.gap--;
           }
+          this.sortableTilesModel.refresh();
+        },
+        refresh: function () {
           this.sortableTilesModel.refresh();
         },
         widthIncrease: function () {
