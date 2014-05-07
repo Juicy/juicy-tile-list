@@ -119,6 +119,7 @@
         detached: function () {
           this.$.elementEdited.hide();
           this.$.elementRollover.hide();
+          this.$.elementSelected.hide();
           this.selectionMode = false;
           this.unlisten(); //changing property in "detached" callback does not execute "selectionModeChanged" (Polymer 0.2.3)
         },
