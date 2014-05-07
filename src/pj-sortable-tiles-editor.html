@@ -30,6 +30,11 @@
         pointer-events: none;
       }
 
+      button {
+        min-height: 1.45em;
+        min-width: 1.45em;
+      }
+
       button.active {
         box-shadow: inset 0 0 10px #000000;
       }
@@ -76,6 +81,14 @@
       <div class="editableGroup"><label>Priority <span class="val">({{editedItem.priority}})</span></label>
         <button class="editable" on-click="{{priorityIncrease}}">Inc</button>
         <button class="editable" on-click="{{priorityDecrease}}">Dec</button>
+      </div>
+      <div class="editableGroup"><label>Background <input class="val" on-blur="{{refresh}}" value="{{editedItem.background}}"></label>
+        <button class="editable" on-click="{{setBackground}}" style="background: transparent; color: red">╱</button>
+        <button class="editable" on-click="{{setBackground}}" style="background: #EEE"></button>
+        <button class="editable" on-click="{{setBackground}}" style="background: #DDD"></button>
+        <button class="editable" on-click="{{setBackground}}" style="background: #CCC"></button>
+        <button class="editable" on-click="{{setBackground}}" style="background: #BBB"></button>
+        <button class="editable" on-click="{{setBackground}}" style="background: #AAA"></button>
       </div>
     </div>
     <element-selector id="elementEdited" overlay strokeWidth="3" strokeColor="#33579F" strokeOffset="3"></element-selector>
@@ -336,6 +349,10 @@
           var container = this.editedItem.container;
           this.sortableTilesModel.deleteContainer(this.editedItem);
           this.editedItem = container;
+        },
+        setBackground: function (ev) {
+          this.editedItem.background = ev.target.style.background;
+          this.sortableTilesModel.refresh();
         },
         editedItemChanged: function() {
           var element;

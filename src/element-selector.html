@@ -71,6 +71,9 @@
   }
 
   function calcFocusRect(focused, strokeOffset) {
+    if (!focused.offsetWidth) {
+      throw new Error("The element does not have a size!", focused);
+    }
     var fw = focused.offsetWidth+strokeOffset;
     var fh = focused.offsetHeight+strokeOffset;
     var pos = GetScreenCoordinates(focused);

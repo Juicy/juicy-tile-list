@@ -137,6 +137,9 @@ Package.prototype.packItems = function packItems( setup, elements ) {
         else {
           elStyle.overflowY = "auto";
         }
+        if(itemSetup.background) {
+          elStyle.backgroundColor = itemSetup.background;
+        }
       }
       // caluclate relative size
       if( typeof rect.height == "string" && rect.height.indexOf("%") > 0 ){
