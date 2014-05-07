@@ -44,11 +44,11 @@
 
 
 
-  function calcMask(cw, ch, focused) {
+  function calcMask(cw, ch, focused, strokeOffset) {
     var mask = "M 0 0 l " + cw + " 0 l 0 " + ch + " l " + -cw +" 0 Z";
     for (var i = 0, ilen = focused.length; i < ilen; i++) {
       // Clip out the window for the focused items
-      mask += calcFocusRect(focused[i]);
+      mask += calcFocusRect(focused[i], strokeOffset);
     }
     return mask;
   }
@@ -81,7 +81,7 @@
   function drawMask(maskElement, svg1, svg2, focusRect, overlay) {
     var availableWidth = document.documentElement.scrollWidth;
     var availableHeight = document.documentElement.scrollHeight; //document.documentElement.scrollHeight returns the dimension of the page
-    var str = calcMask(availableWidth, availableHeight, maskElement.focused);
+    var str = calcMask(availableWidth, availableHeight, maskElement.focused, maskElement.strokeOffset);
     if(overlay) {
       var mask = svg1.firstChild;
       mask.setAttribute("d",str);
