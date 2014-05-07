@@ -183,12 +183,14 @@
           }.bind(this);
 
           this.keyUpListener = function (ev) {
-            if (ev.ctrlKey) {
+            if (ev.ctrlKey || ev.metaKey) {
               if (ev.keyCode == 78) { //CTRL+N
                 this.newGroupFromSelection();
+                ev.preventDefault();
               }
               else if (ev.keyCode == 71) { //CTRL+G
                 this.moveSelectionToEditedItemContainer();
+                ev.preventDefault();
               }
               else if (ev.keyCode == 85) { //CTRL+U
                 //TODO ungroup selection
