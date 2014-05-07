@@ -1,5 +1,5 @@
 <!-- Define your custom element -->
-<polymer-element name="element-selector" attributes="overlay strokeWidth strokeColor">
+<polymer-element name="element-selector" attributes="overlay strokeWidth strokeColor strokeOffset">
     <script>
     (function() {
 
@@ -70,11 +70,11 @@
       return p;
   }
 
-  function calcFocusRect(focused) {
-    var fw = focused.offsetWidth+4;
-    var fh = focused.offsetHeight+4;
+  function calcFocusRect(focused, strokeOffset) {
+    var fw = focused.offsetWidth+strokeOffset;
+    var fh = focused.offsetHeight+strokeOffset;
     var pos = GetScreenCoordinates(focused);
-    return " M "+(pos.x-2)+" "+(pos.y-2)+" l "+fw+" 0 l 0 "+fh+" l -"+fw+" 0 Z";
+    return " M "+(pos.x-strokeOffset/2)+" "+(pos.y-strokeOffset/2)+" l "+fw+" 0 l 0 "+fh+" l -"+fw+" 0 Z";
   }
 
 
@@ -92,7 +92,7 @@
     if (maskElement.focused.length) {
       var str = '';
       for (var i = 0, ilen = maskElement.focused.length; i < ilen; i++) {
-        str += calcFocusRect(maskElement.focused[i]);
+        str += calcFocusRect(maskElement.focused[i], maskElement.strokeOffset);
       }
       rect.setAttribute("d", str);
     }
@@ -113,6 +113,7 @@
         overlay: false,
         strokeWidth: 1,
         strokeColor: "#000000",
+        strokeOffset: 1,
         focused: null,
         attached: function(){
           if(!svg1) {
@@ -120,7 +121,7 @@
             svg2 = CreateMask("#000000", 0.5);
           }
           if(!this.focusRect) {
-            this.focusRect = CreateFocusRect(this.strokeWidth, this.strokeColor);
+            this.focusRect = CreateFocusRect(this.strokeWidth, this.strokeColor, this.strokeOffset);
           }
         },
         drawMask: function () {
