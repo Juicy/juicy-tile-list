@@ -14,7 +14,6 @@
     -->
     <!-- Importing Custom Elements -->
     <link rel="import" href="../src/pj-sortable-tiles.html">
-    <link rel="import" href="../src/pj-sortable-tiles-editor.html">
 <style>
 * {
   margin:0px;
@@ -60,13 +59,6 @@ pj-sortable-tiles>:nth-child(5) {
 
 <body>
     <template bind>
-        <p>Press Ctrl or Command on your keyboard and move your mouse over an item to edit</p>
-        <label><input type="checkbox" checked="{{editingMode}}"> Show editor ({{editingMode}})</label>
-        <template if="{{editingMode}}">
-          <div id="aboveOverlay">
-            <pj-sortable-tiles-editor selectionMode></pj-sortable-tiles-editor>
-          </div>
-        </template>
         <pj-sortable-tiles setup="{{setup}}">
             <div>Item 0, 100% x 100px, priority 1, nested</div>
             <div>
