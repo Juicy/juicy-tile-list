@@ -178,4 +178,125 @@ describe('Rectangle', function() {
 
   });
 
+  describe('can `getSlotsAround` given rectangle inside itself', function() {
+
+    var rectA = new Rectangle({
+      height: 30,
+      width: 40,
+      x:10,
+      y:20
+    });
+    it("when it's complately inside", function(){
+      // 1111
+      //  BB 
+      //
+      // - 
+      // 1   
+      // 1BB 
+      // 1
+      // -
+      // 
+      //  BB
+      // 1111
+      // -
+      //    1
+      //  BB1
+      //    1
+      var rectB = new Rectangle({
+        x: 20,
+        y: 30,
+        width: 20,
+        height: 10
+      });
+      var slots = rectA.getSlotsAround( rectB );
+        assert.strictEqual( slots.length, 4, "4 slots around");
+        var rectTop = new Rectangle({
+          height: 10,
+          width: 40,
+          x: 10,
+          y: 20
+        });
+        assert.include( slots, rectTop, "one on top");
+        var rectLeft = new Rectangle({
+          height: 30,
+          width: 10,
+          x: 10,
+          y: 20
+        });
+        assert.include( slots, rectLeft, "one on left");
+        var rectRight = new Rectangle({
+          height: 30,
+          width: 10,
+          x: 40,
+          y: 20
+        });
+        assert.include( slots, rectRight, "one on right");
+        var rectBottom = new Rectangle({
+          height: 10,
+          width: 40,
+          x: 10,
+          y: 40
+        });
+        assert.include( slots, rectBottom, "one at the bottom");
+    });
+
+    it("when it's complately when its wider", function(){
+      //  1111
+      // BBBBBB
+      //  2222
+      var rectB = new Rectangle({
+        x: 0,
+        y: 30,
+        width: 60,
+        height: 10
+      });
+      var slots = rectA.getSlotsAround( rectB );
+        assert.strictEqual( slots.length, 2, "2 slots around");
+        var rect1 = new Rectangle({
+          height: 10,
+          width: 40,
+          x: 10,
+          y: 20
+        });
+        assert.include( slots, rect1, "one on top");
+        var rect2 = new Rectangle({
+          height: 10,
+          width: 40,
+          x: 10,
+          y: 40
+        });
+        assert.include( slots, rect2, "second at the bottom");
+    });
+    it("when it's complately when its higher", function(){
+      //  B
+      // 1B22
+      // 1B22
+      // 1B22
+      //  B
+      var rectB = new Rectangle({
+        x: 20,
+        y: 10,
+        width: 10,
+        height: 50
+      });
+      var slots = rectA.getSlotsAround( rectB );
+        assert.strictEqual( slots.length, 2, "2 slots around");
+        var rect1 = new Rectangle({
+          height: 30,
+          width: 10,
+          x: 10,
+          y: 20
+        });
+        assert.include( slots, rect1, "one on left");
+        var rect2 = new Rectangle({
+          height: 30,
+          width: 20,
+          x: 30,
+          y: 20
+        });
+        assert.include( slots, rect2, "second on right");
+    });
+
+  });
+
 });
