@@ -142,11 +142,12 @@ Package.prototype.packItems = function packItems( setup, elements ) {
         }
       }
       // caluclate relative size
+      // we cannot use calc(xx% - gap px) as it can be in virtual container which is a sibling
       if( typeof rect.height == "string" && rect.height.indexOf("%") > 0 ){
-        rect.height = (setup.height - setup.gap) * parseFloat(rect.height) /100 - setup.gap -1;
+        rect.height = ( (setup.height + setup.gap) * parseFloat(rect.height) /100 - setup.gap );
       }
       if( typeof rect.width == "string" && rect.width.indexOf("%") > 0 ){
-        rect.width = (setup.width - setup.gap) * parseFloat(rect.width) /100 - setup.gap -1;
+        rect.width = ( (setup.width + setup.gap) * parseFloat(rect.width) /100  - setup.gap);
       }
 
       // Pack item

@@ -48,6 +48,7 @@ Rectangle.prototype.intersects = function( another ) {
 /**
  * @param {Rectangle} what - the overlapping rectangle
  * @returns {Array<Rectangle>} slots - free slots (rectangles) around the `what`
+ * @todo  write tests, esspecialy for bigger ones (tomalec)
 **/
 Rectangle.prototype.getSlotsAround = function( what ) {
 

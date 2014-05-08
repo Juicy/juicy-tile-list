@@ -35,8 +35,8 @@ Packer.prototype.reset = function() {
   var initialSlot = new Rectangle({
     x: this.x || 0,
     y: this.y || 0,
-    width: this.width - this.gap,
-    height: this.height - this.gap
+    width: this.width,
+    height: this.height
   });
 
   this.slots.push( initialSlot );
@@ -62,7 +62,7 @@ Packer.prototype.add = function( rectangle ) {
   for ( var si=0, len = this.slots.length; si < len; si++ ) {
     var slot = this.slots[si];
 	//CHANGEME
-    if ( slot.canFit( rectangle, this.gap ) ) {
+    if ( slot.canFit( rectangle ) ) {
       this.placeAt( rectangle, slot );
       break;
     }
@@ -80,8 +80,8 @@ Packer.prototype.add = function( rectangle ) {
  */
 Packer.prototype.placeAt = function( rectangle, slot ) {
   // place rectangle in slot
-  rectangle.x = slot.x + this.gap;
-  rectangle.y = slot.y + this.gap;
+  rectangle.x = slot.x;
+  rectangle.y = slot.y;
 
   this.placed( rectangle );
   return rectangle;
@@ -94,8 +94,6 @@ Packer.prototype.placeAt = function( rectangle, slot ) {
  */
 Packer.prototype.placed = function( rectangle ) {
   if(this.gap){
-    rectangle.x -= this.gap;
-    rectangle.y -= this.gap;
     rectangle.width += this.gap;
     rectangle.height += this.gap;
   }
@@ -113,8 +111,6 @@ Packer.prototype.placed = function( rectangle ) {
     }
   }
   if(this.gap){
-    rectangle.x += this.gap;
-    rectangle.y += this.gap;
     rectangle.width -= this.gap;
     rectangle.height -= this.gap;
   }

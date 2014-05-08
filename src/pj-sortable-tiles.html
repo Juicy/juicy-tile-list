@@ -226,11 +226,15 @@
              */
            refresh: function( ) {
             // console.log(that.packer.width, that.clientWidth)
-            if( this.layersOrientation !== "vertical"){
-              this.setup.width = this.clientWidth;
-            } else {
-              this.setup.height = this.clientHeight;
-            }
+              if( this.layersOrientation !== "vertical" ){
+                this.setup.width = innerWidth(this);
+                this.setup.height = Number.POSITIVE_INFINITY;
+                this.setup.direction = "rightDown";
+              } else {
+                this.setup.width = Number.POSITIVE_INFINITY;
+                this.setup.height = innerHeight(this);
+                this.setup.direction = "downRight";
+              }
              this.saveToStorage();
              this.packItems( );
           },
