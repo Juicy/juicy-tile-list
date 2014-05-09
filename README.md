@@ -1,6 +1,6 @@
 # &lt;pj-sortable-tiles&gt; ![Bower Version](https://badge.fury.io/bo/pj-sortable-tiles.svg)
 
-`<pj-sortable-tiles>` is a Custom Element with sortable tiles that packs efficiently without changing HTML structure (changes CSS only).
+`<pj-sortable-tiles>` is a Polymer Element with sortable tiles that packs efficiently without changing HTML structure (changes CSS only).
 
 ## Demo
 
