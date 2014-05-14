@@ -4,7 +4,7 @@
 
 ## Demo
 
-[Check it live!](http://polyjuice.github.io/juicy-tiles)
+[Check it live!](http://juicy.github.io/juicy-tiles)
 
 ## Usage
 
