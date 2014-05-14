@@ -183,19 +183,7 @@
 
                     Package.call(this);
                     this.createItemsList();
-                    // TODO: support LTR
-                    if( this.layersOrientation !== "vertical" ){
-                      this.setup.width = innerWidth(this);
-                      this.setup.height = Number.POSITIVE_INFINITY;
-                      this.setup.direction = "rightDown";
-                    } else {
-                      this.setup.width = Number.POSITIVE_INFINITY;
-                      this.setup.height = innerHeight(this);
-                      this.setup.direction = "downRight";
-                    }
-
-                    this.saveToStorage();
-                    this.packItems();
+                    this.refresh();
 
                     window.addEventListener('resize', this.refresh.bind(this, null, null), true);
 
@@ -211,8 +199,7 @@
                             //DRY, performance
                             console.log("something was added")
                             that.createItemsList();
-                            that.saveToStorage();
-                            that.packItems();
+                            that.refresh();
                         }
                       });
                     });
@@ -225,7 +212,7 @@
              * Refresh everything
              */
            refresh: function( ) {
-            // console.log(that.packer.width, that.clientWidth)
+              // TODO: support LTR
               if( this.layersOrientation !== "vertical" ){
                 this.setup.width = innerWidth(this);
                 this.setup.height = Number.POSITIVE_INFINITY;
