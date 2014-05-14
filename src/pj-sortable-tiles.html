@@ -4,7 +4,7 @@
 <script src="package.js"></script>
 
 <!-- Define your custom element -->
-<polymer-element name="pj-sortable-tiles" constructor="PJSortableTiles" attributes="setup rowspans colspans layersOrientation">
+<polymer-element name="juicy-tiles" constructor="PJSortableTiles" attributes="setup rowspans colspans layersOrientation">
     <template>
     <style>
         :host {
@@ -148,7 +148,7 @@
           return min;
         }
 
-        Polymer('pj-sortable-tiles', Platform.mixin( {}, Package.prototype, {
+        Polymer('juicy-tiles', Platform.mixin( {}, Package.prototype, {
             setup: {
               gap: 8,
               items: []

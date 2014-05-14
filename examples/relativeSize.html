@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>&lt;pj-sortable-tiles&gt; with groups</title>
+    <title>&lt;juicy-tiles&gt; with groups</title>
 
     <!-- Importing Web Component's Polyfill -->
     
@@ -13,7 +13,7 @@
     <script src="bower_components/polymer/polymer.js"></script>
     -->
     <!-- Importing Custom Elements -->
-    <link rel="import" href="../src/pj-sortable-tiles.html">
+    <link rel="import" href="../src/juicy-tiles.html">
 <style>
 * {
   margin:0px;
@@ -22,35 +22,35 @@
 body,html{
     font-family: Helvetica, Arial, sans-serif;
 }
-pj-sortable-tiles{
+juicy-tiles{
     /*width: 300px;
     height: 150px;*/
     height: 100%;
     width: 100%;
     box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
 }
-pj-sortable-tiles>*{
+juicy-tiles>*{
     box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
 }
-pj-sortable-tiles>:first-child {
+juicy-tiles>:first-child {
     background:lightgreen;
 }
 
-pj-sortable-tiles>:nth-child(2) {
+juicy-tiles>:nth-child(2) {
     background:lightblue;
 }
 
-pj-sortable-tiles>:nth-child(3) {
+juicy-tiles>:nth-child(3) {
     background:yellow;
     overflow:auto;
 }
 
-pj-sortable-tiles>:nth-child(4) {
+juicy-tiles>:nth-child(4) {
     background:gray;
     overflow:auto;
 }
 
-pj-sortable-tiles>:nth-child(5) {
+juicy-tiles>:nth-child(5) {
     background:orange;
     max-height: 100px;
     overflow:auto;
@@ -59,7 +59,7 @@ pj-sortable-tiles>:nth-child(5) {
 
 <body>
     <template bind>
-        <pj-sortable-tiles setup="{{setup}}">
+        <juicy-tiles setup="{{setup}}">
             <div>Item 0, 100% x 100px, priority 1, nested</div>
             <div>
                 <button>Item 1, 100% x 75%, nested twice</button>
@@ -69,7 +69,7 @@ pj-sortable-tiles>:nth-child(5) {
             </div>
             <section>Item3, 400px x 100px , priority 0.6</section>
             <div>Item 4, 100% x 25% , priority 0, nested twice</div>
-        </pj-sortable-tiles>
+        </juicy-tiles>
     </template>
     <script type="text/javascript">
         // 011

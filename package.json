@@ -1,8 +1,8 @@
 {
-  "name": "pj-sortable-tiles",
+  "name": "juicy-tiles",
   "version": "0.0.0",
-  "description": "<pj-sortable-tiles> is a Custom Element with sortable tiles that packs efficiently without changing HTML structure (changes CSS only).",
-  "main": "src/pj-sortable-tiles.html",
+  "description": "<juicy-tiles> is a Polymer Element with sortable tiles that packs efficiently without changing HTML structure (changes CSS only).",
+  "main": "src/juicy-tiles.html",
   "directories": {
     "example": "examples",
     "test": "test"
@@ -21,10 +21,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Polyjuice/pj-sortable-tiles"
+    "url": "https://github.com/Juicy/juicy-tiles"
   },
   "bugs": {
-    "url": "https://github.com/Polyjuice/pj-sortable-tiles/issues"
+    "url": "https://github.com/Juicy/juicy-tiles/issues"
   },
   "license": "MIT"
 }

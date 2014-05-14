@@ -189,7 +189,7 @@ Package.prototype.stretchContainer = function( rectangle ) {
  * @param  {Item | Number | String} itemIndex    item index (the original item index in DOM), container name, or item itself
  * @param  {Boolean} increase  true - increases priority, false - decreases
  * @param  {Boolean} [end=false] true to move to the end
- * @return {pj-sortable-tiles}        self
+ * @return {juicy-tiles}        self
  * @TODO write tests
  */
 Package.prototype.reprioritizeItem =  function( item, increase, end ){
@@ -273,7 +273,7 @@ Package.prototype.reprioritizeItem =  function( item, increase, end ){
  * @param  {SetupItemRef} item   item from list, or item index (the original item index in DOM)
  * @param  {Number} width  number of cells/columns
  * @param  {Number} height number of cells/rows
- * @return {pj-sortable-tiles}        self
+ * @return {juicy-tiles}        self
  */
 Package.prototype.resizeItem = function(item, width, height){
   // if(typeof item !== 'object'){
@@ -334,7 +334,7 @@ Package.prototype.moveToContainer = function( what, where, noPacking ){
  * Delete virtual container, move items (if any) to one above.
  * @param  {Item | String} what        Reference to, or name of the container to delete.
  * @param  {Boolean} [noRepacking=false]  `true` to prevent  re-packing after setup change.
- * @return {pj-sortable-tiles}             self
+ * @return {juicy-tiles}             self
  */
 Package.prototype.deleteContainer = function( what, noRepacking ){
   // if( typeof what === "string" ){

@@ -1,17 +1,17 @@
-# &lt;pj-sortable-tiles&gt; ![Bower Version](https://badge.fury.io/bo/pj-sortable-tiles.svg)
+# &lt;juicy-tiles&gt; ![Bower Version](https://badge.fury.io/bo/juicy-tiles.svg)
 
-`<pj-sortable-tiles>` is a Polymer Element with sortable tiles that packs efficiently without changing HTML structure (changes CSS only).
+`<juicy-tiles>` is a Polymer Element with sortable tiles that packs efficiently without changing HTML structure (changes CSS only).
 
 ## Demo
 
-[Check it live!](http://polyjuice.github.io/pj-sortable-tiles)
+[Check it live!](http://polyjuice.github.io/juicy-tiles)
 
 ## Usage
 
 1. Install the component using [Bower](http://bower.io/):
 
     ```sh
-    $ bower install pj-sortable-tiles --save
+    $ bower install juicy-tiles --save
     ```
 
 2. Import Web Components' polyfill:
@@ -24,13 +24,13 @@
 3. Import Custom Element:
 
     ```html
-    <link rel="import" href="bower_components/pj-sortable-tiles/dist/pj-sortable-tiles.html">
+    <link rel="import" href="bower_components/juicy-tiles/dist/juicy-tiles.html">
     ```
 
 4. Start using it!
 
     ```html
-    <pj-sortable-tiles></pj-sortable-tiles>
+    <juicy-tiles></juicy-tiles>
     ```
 
 ## Options

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>&lt;pj-sortable-tiles&gt;</title>
+    <title>&lt;juicy-tiles&gt;</title>
 
     <!-- Importing Web Component's Polyfill -->
     
@@ -13,13 +13,13 @@
     <script src="bower_components/polymer/polymer.js"></script>
     -->
     <!-- Importing Custom Elements -->
-    <link rel="import" href="../src/pj-sortable-tiles.html">
+    <link rel="import" href="../src/juicy-tiles.html">
 <style>
 * {
   margin:0px;
   padding:0px;
 }
-pj-sortable-tiles{
+juicy-tiles{
     /*width: 300px;
     height: 150px;*/
     height: 320px;
@@ -27,28 +27,28 @@ pj-sortable-tiles{
     padding:1em;
     box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
 }
-pj-sortable-tiles>*{
+juicy-tiles>*{
     box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
 }
-pj-sortable-tiles>:first-child {
+juicy-tiles>:first-child {
     background:lightgreen;
 }
 
-pj-sortable-tiles>:nth-child(2) {
+juicy-tiles>:nth-child(2) {
     background:lightblue;
 }
 
-pj-sortable-tiles>:nth-child(3) {
+juicy-tiles>:nth-child(3) {
     background:yellow;
     overflow:auto;
 }
 
-pj-sortable-tiles>:nth-child(4) {
+juicy-tiles>:nth-child(4) {
     background:gray;
     overflow:auto;
 }
 
-pj-sortable-tiles>:nth-child(5) {
+juicy-tiles>:nth-child(5) {
     background:orange;
     max-height: 100px;
     overflow:auto;
@@ -57,7 +57,7 @@ pj-sortable-tiles>:nth-child(5) {
 
 <body>
     <template bind>
-        <pj-sortable-tiles setup="{{setup}}" layersOrientation="vertical">
+        <juicy-tiles setup="{{setup}}" layersOrientation="vertical">
             <div>Item 0 , priority 0.6</div>
             <div class="ple">
                 <button>Item 1, priority 0.9</button>
@@ -66,7 +66,7 @@ pj-sortable-tiles>:nth-child(5) {
                 <input value="Input2, priority 0.3">
             </div>
             <section>Item3, priority 0.4</section>
-        </pj-sortable-tiles>
+        </juicy-tiles>
     </template>
     <script type="text/javascript">
         // 011
