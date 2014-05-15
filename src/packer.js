@@ -26,6 +26,10 @@ Packer.prototype.width = Number.POSITIVE_INFINITY;
 Packer.prototype.height = Number.POSITIVE_INFINITY;
 Packer.prototype.gap = 0;
 Packer.prototype.direction = "rightDown";
+Packer.prototype.minWidth = 0;
+Packer.prototype.minHeight = 0;
+Packer.prototype.x = 0;
+Packer.prototype.y = 0;
 
 /**
  * Reset all free slots in packer.
@@ -114,11 +118,13 @@ Packer.prototype.placed = function( rectangle ) {
     rectangle.width -= this.gap;
     rectangle.height -= this.gap;
   }
+  // stretch container
+  this.minWidth = Math.max( rectangle.x + rectangle.width - this.x, this.minWidth );
+  this.minHeight = Math.max( rectangle.y + rectangle.height - this.y, this.minHeight );
 
+  // update slots
   this.slots = revisedSlots;
-
   Packer.cleanRedundant( this.slots );
-
   this.slots.sort( this.sorter );
 };
 

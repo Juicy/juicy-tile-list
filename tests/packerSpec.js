@@ -68,6 +68,13 @@ describe('Packer', function() {
         assert.equal(slot.y, 3, 'slot.y');
       });
 
+      it("calculates minWidth, and minHeight required to pack all already added items", function() {
+
+        // bottom slot is open
+        assert.equal(pkr.minWidth, 3, '3x3');
+        assert.equal(pkr.minHeight, 3, '3x3');
+      });
+
       describe("when there is already `.placed` one", function() {
         it('pack items around, still without holes and in given order', function() {
           var pkr = new Packer({
@@ -290,6 +297,11 @@ describe('Packer', function() {
         assert.equal(rect8.x, 10, 'rect8.x bottom left');
         assert.equal(rect8.y, 21, 'rect8.y bottom left');
 
+      });
+
+      it("and calculate correct minWidth and minHeight", function() {
+        assert.equal(pkr.minWidth, 3, '3x2');
+        assert.equal(pkr.minHeight, 2, '3x2');
       });
     });
 });

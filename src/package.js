@@ -153,8 +153,6 @@ Package.prototype.packItems = function packItems( setup, elements ) {
       // Pack item
       packer.add(rect);
 
-      that.stretchContainer(rect);
-
       if( element ){ // itemSetup.index - if it is real element not a virtual group
         // update oryginal element
         elStyle.top = rect.y + "px";
@@ -170,19 +168,24 @@ Package.prototype.packItems = function packItems( setup, elements ) {
       }
   });
 
-  if( that.layersOrientation !== "vertical"){
-      that.$.container.style.height = that.maxY + "px";
+  // stretch container
+  if( setup.direction === "rightDown"){
+    if( !setup.container ){ // root
+      that.$.container.style.height = packer.minHeight + "px";
+    } else {
+      // elements[ setup.name ].style.height = packer.minHeight + "px";      
+    }
   } else {
-      that.$.container.style.width = that.maxX + "px";
+      if( !setup.container ){ // root
+        that.$.container.style.width = packer.minWidth + "px";
+      } else {
+        // elements[ setup.name ].style.width = packer.minWidth + "px";      
+      }
   }
 
 
 };
 
-Package.prototype.stretchContainer = function( rectangle ) {
-  this.maxX = Math.max( rectangle.x + rectangle.width, this.maxX );
-  this.maxY = Math.max( rectangle.y + rectangle.height, this.maxY );
-};
 
 /**
  * Change priority of given item
