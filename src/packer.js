@@ -22,8 +22,8 @@ function Packer( props /*width, height, direction*/ ){
   }
   this.reset();
 }
-Packer.prototype.width = 0;
-Packer.prototype.height = 0;
+Packer.prototype.width = Number.POSITIVE_INFINITY;
+Packer.prototype.height = Number.POSITIVE_INFINITY;
 Packer.prototype.gap = 0;
 Packer.prototype.direction = "rightDown";
 

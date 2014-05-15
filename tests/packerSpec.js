@@ -4,6 +4,7 @@
 describe('Packer', function() {
     'use strict';
 
+
     var assert = chai.assert;
     describe("`.add`ing Rectangles", function() {
       var pkr = new Packer({
@@ -192,6 +193,50 @@ describe('Packer', function() {
           assert.equal(slot.height, 3, 'slot.height');
           assert.equal(slot.x, 3, 'slot.x top right');
           assert.equal(slot.y, 0, 'slot.y top right');
+
+        });
+      });
+
+      describe("with (default) infinite dimensions", function() {
+        var pkr = new Packer();
+
+        // 12hh
+        // 12hh
+        //   hh
+        //   hh
+
+        var rect1 = new Rectangle({
+          width: 1,
+          height: 2
+        });
+        var rect2 = new Rectangle({
+          width: 1,
+          height: 2
+        });
+        var huge = new Rectangle({
+          width: Number.POSITIVE_INFINITY,
+          height: Number.POSITIVE_INFINITY
+        });
+
+        pkr.add(rect1);
+        pkr.add(rect2);
+        pkr.add(huge);
+
+        it('should pack finite size rectangles', function addVertical() {
+          assert.equal(rect1.x, 0, 'rect1.x top left');
+          assert.equal(rect1.y, 0, 'rect1.y top left');
+
+          assert.equal(rect2.x, 1, 'rect2.x top 2nd left');
+          assert.equal(rect2.y, 0, 'rect2.y top 2nd left');
+
+        });
+        it('and still have space for infinitely big rectangle', function addVertical() {
+          assert.equal(huge.x, 2, 'huge.x top right');
+          assert.equal(huge.y, 0, 'huge.y top right');
+
+          assert.equal(pkr.slots.length, 1, 'one slot left');
+          assert.equal(pkr.slots[0].x, 0, 'bellow rect1 & rect2');
+          assert.equal(pkr.slots[0].y, 2, 'bellow rect1 & rect2');
 
         });
       });
