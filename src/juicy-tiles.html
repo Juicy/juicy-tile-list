@@ -211,13 +211,10 @@
              */
            refresh: function( ) {
               // TODO: support LTR
-              switch( this.setup.direction ){
-                case "rightDown":
+              if( this.setup.direction != "downRight"){
                   this.setup.width = innerWidth(this);
-                  break;                  
-                case "downRight":
+              } else {
                   this.setup.height = innerHeight(this);
-                  break;
               }
              this.saveToStorage();
              this.packItems( );
