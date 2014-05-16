@@ -125,7 +125,7 @@ describe('Rectangle', function() {
     });
 
 
-    it('should return `true` if rectangle intersects with given', function() {
+    it('should return `false` if rectangle does not intersects with given', function() {
       rectB.x = 0;
       rectB.y = 0;
 

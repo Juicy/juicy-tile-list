@@ -69,8 +69,6 @@ describe('Packer', function() {
       });
 
       it("calculates minWidth, and minHeight required to pack all already added items", function() {
-
-        // bottom slot is open
         assert.equal(pkr.minWidth, 3, '3x3');
         assert.equal(pkr.minHeight, 3, '3x3');
       });
@@ -190,8 +188,6 @@ describe('Packer', function() {
 
           assert.equal(rect5.x, 1, 'rect5.x top center');
           assert.equal(rect5.y, 0, 'rect5.y top center');
-
-          // bottom slot is open
         });
         it('leaves slot on right', function slotsVertical() {
           assert.equal(pkr.slots.length, 1, 'one slot open');
