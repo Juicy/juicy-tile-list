@@ -150,6 +150,7 @@
 
         Polymer('juicy-tiles', Platform.mixin( {}, Package.prototype, {
             setup: {
+              direction: "rightDown",
               gap: 8,
               items: []
             },
@@ -159,7 +160,6 @@
             //  containerName: {setup: setupObject, items: , packer: packer}        
             items: {}, 
 
-            layersOrientation: "horizontal",
             sorter: function byPriority(itemA, itemB){
                 return itemB.priority - itemA.priority;
             },
@@ -211,14 +211,13 @@
              */
            refresh: function( ) {
               // TODO: support LTR
-              if( this.layersOrientation !== "vertical" ){
-                this.setup.width = innerWidth(this);
-                this.setup.height = Number.POSITIVE_INFINITY;
-                this.setup.direction = "rightDown";
-              } else {
-                this.setup.width = Number.POSITIVE_INFINITY;
-                this.setup.height = innerHeight(this);
-                this.setup.direction = "downRight";
+              switch( this.setup.direction ){
+                case "rightDown":
+                  this.setup.width = innerWidth(this);
+                  break;                  
+                case "downRight":
+                  this.setup.height = innerHeight(this);
+                  break;
               }
              this.saveToStorage();
              this.packItems( );

@@ -57,7 +57,7 @@ juicy-tiles>:nth-child(5) {
 
 <body>
     <template bind>
-        <juicy-tiles setup="{{setup}}" layersOrientation="vertical">
+        <juicy-tiles setup="{{setup}}">
             <div>Item 0 , priority 0.6</div>
             <div class="ple">
                 <button>Item 1, priority 0.9</button>
@@ -81,6 +81,7 @@ juicy-tiles>:nth-child(5) {
         model = {
             setup: {
                 gap: 8,
+                direction: "downRight",
                 items: [
                     // 011
                     // 233

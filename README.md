@@ -47,7 +47,7 @@ Attribute                    | Options             | Default      | Description
 `setup.items[?].items`       | *Array(Items)*      |              | Recursive setup (for virtual containers)
 `setup.items[?].gap`         | *Number*            | `0`          | Recursive setup (for virtual containers)
 `setup.items[?].name`        | *String*            |              | Recursive setup (for virtual containers)
-`layersOrientation`          | *String*            | `horizontal` | How to align our package (`horizontal` or `vertical`)
+`setup.direction`            | *String*            | `rightDown`  | How to align our package (horicontal layers `rightDown`, or vertiaval layers: `downRight`)
 
 ## Properties
 

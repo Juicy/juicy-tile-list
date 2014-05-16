@@ -6,7 +6,8 @@
 "use strict";
 
 /**
- * [Packer description]
+ * Packs Rectangles to infinite rectangle (\infty × 
+ * infty, width × \infty, or height × \infty)
  * @param {Object} [props] packer properties
  * @param {Number} [props.width=0] packer width (in px)
  * @param {Number} [props.height=0] packer height (in px)
@@ -15,10 +16,16 @@
  * @param {Number} [props.x=0] x offset for all items (or position of package itself)
  * @param {Number} [props.y=0] y offset for all items (or position of package itself)
  * @TODO write tests for `#gap` (tomalec)
+ * @IDEA make it single dimentional, merge width and hegith into single constraint
  */
 function Packer( props /*width, height, direction*/ ){
   for ( var prop in props ) {
     this[ prop ] = props[ prop ];
+  }
+  if(this.direction == "rightDown"){
+    this.height = Number.POSITIVE_INFINITY;
+  } else {
+    this.width = Number.POSITIVE_INFINITY;
   }
   this.reset();
 }

@@ -6,10 +6,29 @@ describe('Packer', function() {
 
 
     var assert = chai.assert;
+
+
+    describe("when created", function() {
+      it("with default (`rightDown`) direction, makes itself infinitely tall, regardless of `height` given", function(){
+        var pkr = new Packer({
+          width: 3,
+          height: 10
+        });
+        assert.strictEqual( pkr.height, Number.POSITIVE_INFINITY);
+      });
+      it("with `downRight` direction, makes itself infinitely wide, regardless of `width` given", function(){
+        var pkr = new Packer({
+          width: 3,
+          height: 10,
+          direction: "downRight"
+        });
+        assert.strictEqual( pkr.width, Number.POSITIVE_INFINITY);
+      });
+    });
+
     describe("`.add`ing Rectangles", function() {
       var pkr = new Packer({
-        width: 3,
-        height: 10
+        width: 3
       });
 
       // 122
@@ -63,7 +82,7 @@ describe('Packer', function() {
         assert.equal(pkr.slots.length, 1, 'one slot open');
         var slot = pkr.slots[0];
         assert.equal(slot.width, 3, 'slot.width');
-        assert.equal(slot.height, 7, 'slot.height');
+        assert.equal(slot.height, Number.POSITIVE_INFINITY, 'slot.height');
         assert.equal(slot.x, 0, 'slot.x');
         assert.equal(slot.y, 3, 'slot.y');
       });
@@ -76,8 +95,7 @@ describe('Packer', function() {
       describe("when there is already `.placed` one", function() {
         it('pack items around, still without holes and in given order', function() {
           var pkr = new Packer({
-            width: 3,
-            height: 10
+            width: 3
           });
 
           // 235
@@ -137,7 +155,6 @@ describe('Packer', function() {
       });
       describe("with `direction: 'downRight'`", function() {
         var pkr = new Packer({
-          width: 10,
           height: 3,
           direction: 'downRight'
         });
@@ -192,7 +209,7 @@ describe('Packer', function() {
         it('leaves slot on right', function slotsVertical() {
           assert.equal(pkr.slots.length, 1, 'one slot open');
           var slot = pkr.slots[0];
-          assert.equal(slot.width, 7, 'slot.width');
+          assert.equal(slot.width, Number.POSITIVE_INFINITY, 'slot.width');
           assert.equal(slot.height, 3, 'slot.height');
           assert.equal(slot.x, 3, 'slot.x top right');
           assert.equal(slot.y, 0, 'slot.y top right');

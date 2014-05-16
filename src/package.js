@@ -101,6 +101,7 @@ Package.prototype.packItems = function packItems( setup, elements ) {
   var that = this,
       packer = new Packer(setup);
 
+
   if(!this.originalHeights) {
     this.originalHeights = [];
   }
@@ -170,17 +171,20 @@ Package.prototype.packItems = function packItems( setup, elements ) {
 
   // stretch container
   if( setup.direction === "rightDown"){
-    if( !setup.container ){ // root
+    // TODO this is ugly check, but we use packed rect as setup, so there is no .container property
+    if( setup.name == "root" ){ // root
       that.$.container.style.height = packer.minHeight + "px";
-    } else {
+    } else { //virtual group
+      // do nothing => overflow
       // elements[ setup.name ].style.height = packer.minHeight + "px";      
     }
   } else {
-      if( !setup.container ){ // root
-        that.$.container.style.width = packer.minWidth + "px";
-      } else {
-        // elements[ setup.name ].style.width = packer.minWidth + "px";      
-      }
+    if( !setup.container ){ // root
+      that.$.container.style.width = packer.minWidth + "px";
+    } else { //virtual group
+      // do nothing => overflow
+      // elements[ setup.name ].style.width = packer.minWidth + "px";      
+    }
   }
 
 
