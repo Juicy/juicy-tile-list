@@ -138,8 +138,8 @@ Package.prototype.packItems = function packItems( setup, elements ) {
         else {
           elStyle.overflowY = "auto";
         }
-        if(itemSetup.background) {
-          elStyle.backgroundColor = itemSetup.background;
+        if(itemSetup.background != undefined) {
+          elStyle.backgroundColor = itemSetup.background || "transparent";
         }
       }
       // caluclate relative size
