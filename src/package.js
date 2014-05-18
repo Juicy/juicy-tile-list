@@ -170,7 +170,7 @@ Package.prototype.packItems = function packItems( setup, elements ) {
   });
 
   // stretch container
-  if( setup.direction === "rightDown"){
+  if( setup.direction !== "downRight"){
     // TODO this is ugly check, but we use packed rect as setup, so there is no .container property
     if( setup.name == "root" ){ // root
       that.$.container.style.height = packer.minHeight + "px";
