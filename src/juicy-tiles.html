@@ -210,15 +210,41 @@
             /**
              * Refresh everything
              */
-           refresh: function( ) {
+          refresh: function( ) {
               // TODO: support LTR
-              if( this.setup.direction != "downRight"){
-                  this.setup.width = innerWidth(this);
-              } else {
-                  this.setup.height = innerHeight(this);
+            if( this.setup.direction != "downRight"){
+               this.setup.width = innerWidth(this);
+            } else {
+              this.setup.height = innerHeight(this);
+            }
+            this.saveToStorage();
+            var packedTree = this.packItems( );
+            var container = this.$.container;
+            
+            function renderTree( node, elements, offsetX, offsetY ){
+              var element = elements[ node.name || node.index ] 
+                            || container; //TODO: remove it from here, so we could remove renderTree to outer scope
+                  elementStyle = element.style;
+              offsetX = ( node.x || 0 ) + offsetX; 
+              offsetY = ( node.y || 0 ) + offsetY; 
+              elementStyle.left = offsetX + "px";
+              elementStyle.top = offsetY + "px";
+              elementStyle.width = node.width + "px";
+              elementStyle.height = node.height + "px";
+              if(node.background != undefined) {
+                elementStyle.backgroundColor = node.background || "transparent";
               }
-             this.saveToStorage();
-             this.packItems( );
+              
+              if(node.items){
+                var childNodeNo = node.items.length;  
+                while(childNodeNo--){
+                  renderTree( node.items[childNodeNo], elements, offsetX, offsetY);
+                }
+              }
+
+
+            }
+            renderTree( packedTree, this.elements, 0, 0);
           },
           saveToStorage: function() {
             saveJson(this.id, this.setup);

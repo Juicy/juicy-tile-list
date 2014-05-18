@@ -101,17 +101,14 @@ Package.prototype.packItems = function packItems( setup, elements ) {
   var that = this,
       packer = new Packer(setup);
 
-
-  if(!this.originalHeights) {
-    this.originalHeights = [];
-  }
-
   //pack rectangles, and calculate container size
-  setup.items
+  packer.items = setup.items
     .sort(this.sorter) // sort- if neded
-    .forEach(function(itemSetup){
+    .map(function(itemSetup){
       // TODO: do it more lightweight
       var rect = new Rectangle(itemSetup);
+      // TODO, property?
+      rect.container = setup;
 
       if (elements) {
         var element = elements[ itemSetup.index ];
@@ -120,74 +117,54 @@ Package.prototype.packItems = function packItems( setup, elements ) {
           if (!element) {
             element = document.createElement('DIV');
             element.style.zIndex = -1;
+            element.style.position = "absolute";// FIXME: should be done in css
             that.$.container.appendChild(element);
             elements[ itemSetup.name ] = element;
           }
         }
       }
 
-      if( element ){ // itemSetup.index - if it is real element not a virtual group
-        var elStyle = element.style;
-        if(typeof that.originalHeights[itemSetup.index] === 'undefined') {
-          that.originalHeights[itemSetup.index] = (element.clientHeight);
-        }
-        if(rect.height == "auto") {
-          rect.height = that.originalHeights[index];
-          elStyle.overflowY = "visible";
-        }
-        else {
-          elStyle.overflowY = "auto";
-        }
-        if(itemSetup.background != undefined) {
-          elStyle.backgroundColor = itemSetup.background || "transparent";
-        }
+      //first calculate rect width because it cannot be auto TODO: fix for downRight mode
+      if( typeof rect.width == "string" && rect.width != "auto" && rect.width.indexOf("%") > 0 ){
+        rect.width = ( (setup.width + setup.gap) * parseFloat(rect.width) /100  - setup.gap);
       }
       // caluclate relative size
       // we cannot use calc(xx% - gap px) as it can be in virtual container which is a sibling
-      if( typeof rect.height == "string" && rect.height.indexOf("%") > 0 ){
+      if( typeof rect.height == "string" && rect.height != "auto" && rect.height.indexOf("%") > 0 ){
         rect.height = ( (setup.height + setup.gap) * parseFloat(rect.height) /100 - setup.gap );
       }
-      if( typeof rect.width == "string" && rect.width.indexOf("%") > 0 ){
-        rect.width = ( (setup.width + setup.gap) * parseFloat(rect.width) /100  - setup.gap);
+
+      
+      if (itemSetup.items) { // container
+        // pack its items first, to figureout minSize
+        rect = that.packItems(
+          rect, // use caculated width and height
+          elements
+        );
+
+      } else { // element
+        if(itemSetup.height == "auto"){
+          // rect.height = element.clientHeight;          
+          element.style.height = ""; //slow, but I don't know another way to measure real height when element's content has shrinked other than remove height property before measuring (Marcin)
+          rect.height = element.scrollHeight; //now we can measure scrollHeight because width is already set and height is not constrained
+        }
+        if(itemSetup.width == "auto"){
+          // rect.width = element.clientWidth;
+          element.style.width = ""; //slow, but I don't know another way to measure real width when element's content has shrinked other than remove height property before measuring (Marcin)
+          rect.width = element.scrollWidth; //now we can measure scrollHeight because width is already set and height is not constrained
+        }
       }
 
       // Pack item
       packer.add(rect);
 
-      if( element ){ // itemSetup.index - if it is real element not a virtual group
-        // update oryginal element
-        elStyle.top = rect.y + "px";
-        elStyle.left = rect.x + "px";
-        elStyle.width = rect.width + "px";
-        elStyle.height = rect.height + "px"
-      }
-      if ( itemSetup.items ){
-        return that.packItems(
-          rect,// use packed (offset) rectangle as setup
-          elements
-        );
-      }
+      return rect;
   });
 
-  // stretch container
-  if( setup.direction !== "downRight"){
-    // TODO this is ugly check, but we use packed rect as setup, so there is no .container property
-    if( setup.name == "root" ){ // root
-      that.$.container.style.height = packer.minHeight + "px";
-    } else { //virtual group
-      // do nothing => overflow
-      // elements[ setup.name ].style.height = packer.minHeight + "px";      
-    }
-  } else {
-    if( !setup.container ){ // root
-      that.$.container.style.width = packer.minWidth + "px";
-    } else { //virtual group
-      // do nothing => overflow
-      // elements[ setup.name ].style.width = packer.minWidth + "px";      
-    }
-  }
-
-
+  //change Infinity back to real size:
+  packer.height = setup.height && ( setup.height != "auto" ) ? setup.height : packer.minHeight;
+  packer.width = setup.width && ( setup.width != "auto" ) ? setup.width : packer.minWidth;
+  return packer;
 };
 
 

@@ -283,38 +283,4 @@ describe('Packer', function() {
 
       });
     });
-
-    describe("when nested (or just have x,y offset specified)`.add`ing Rectangles", function() {
-
-      var pkr = new Packer({
-        x: 10,
-        y: 20,
-        width: 3,
-        height: 10
-      });
-      it(' should add Rectanled offset accordingly', function(){
-        var rect7 = new Rectangle({
-          width: 3,
-          height: 1
-        });
-        var rect8 = new Rectangle({
-          width: 3,
-          height: 1
-        });
-
-        pkr.add(rect7);
-        pkr.add(rect8);
-
-        assert.equal(rect7.x, 10, 'rect7.x bottom left');
-        assert.equal(rect7.y, 20, 'rect7.y bottom left');
-        assert.equal(rect8.x, 10, 'rect8.x bottom left');
-        assert.equal(rect8.y, 21, 'rect8.y bottom left');
-
-      });
-
-      it("and calculate correct minWidth and minHeight", function() {
-        assert.equal(pkr.minWidth, 3, '3x2');
-        assert.equal(pkr.minHeight, 2, '3x2');
-      });
-    });
 });

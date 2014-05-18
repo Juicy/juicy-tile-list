@@ -13,8 +13,6 @@
  * @param {Number} [props.height=0] packer height (in px)
  * @param {Number} [props.gap=0] gap between items (in px)
  * @param {String} [props.direction="rightDown"] packing direction `"rightDown"|"downRight"`
- * @param {Number} [props.x=0] x offset for all items (or position of package itself)
- * @param {Number} [props.y=0] y offset for all items (or position of package itself)
  * @TODO write tests for `#gap` (tomalec)
  * @IDEA make it single dimentional, merge width and hegith into single constraint
  */
@@ -35,8 +33,6 @@ Packer.prototype.gap = 0;
 Packer.prototype.direction = "rightDown";
 Packer.prototype.minWidth = 0;
 Packer.prototype.minHeight = 0;
-Packer.prototype.x = 0;
-Packer.prototype.y = 0;
 
 /**
  * Reset all free slots in packer.
@@ -44,8 +40,8 @@ Packer.prototype.y = 0;
 Packer.prototype.reset = function() {
   this.slots = [];
   var initialSlot = new Rectangle({
-    x: this.x || 0,
-    y: this.y || 0,
+    x: 0,
+    y: 0,
     width: this.width,
     height: this.height
   });
@@ -126,8 +122,8 @@ Packer.prototype.placed = function( rectangle ) {
     rectangle.height -= this.gap;
   }
   // stretch container
-  this.minWidth = Math.max( rectangle.x + rectangle.width - this.x, this.minWidth );
-  this.minHeight = Math.max( rectangle.y + rectangle.height - this.y, this.minHeight );
+  this.minWidth = Math.max( rectangle.x + rectangle.width, this.minWidth );
+  this.minHeight = Math.max( rectangle.y + rectangle.height, this.minHeight );
 
   // update slots
   this.slots = revisedSlots;
