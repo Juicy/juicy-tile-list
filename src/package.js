@@ -147,11 +147,15 @@ Package.prototype.packItems = function packItems( setup, elements ) {
           // rect.height = element.clientHeight;          
           element.style.height = ""; //slow, but I don't know another way to measure real height when element's content has shrinked other than remove height property before measuring (Marcin)
           rect.height = element.scrollHeight; //now we can measure scrollHeight because width is already set and height is not constrained
+        } else {
+          rect.height = parseFloat( rect.height );
         }
         if(itemSetup.width == "auto"){
           // rect.width = element.clientWidth;
           element.style.width = ""; //slow, but I don't know another way to measure real width when element's content has shrinked other than remove height property before measuring (Marcin)
           rect.width = element.scrollWidth; //now we can measure scrollHeight because width is already set and height is not constrained
+        } else {
+          rect.width = parseFloat( rect.width );
         }
       }
 
@@ -162,8 +166,8 @@ Package.prototype.packItems = function packItems( setup, elements ) {
   });
 
   //change Infinity back to real size:
-  packer.height = setup.height && ( setup.height != "auto" ) ? setup.height : packer.minHeight;
-  packer.width = setup.width && ( setup.width != "auto" ) ? setup.width : packer.minWidth;
+  packer.height = setup.height && ( setup.height != "auto" ) ? parseFloat( setup.height ) : packer.minHeight;
+  packer.width = setup.width && ( setup.width != "auto" ) ? parseFloat( setup.width ) : packer.minWidth;
   return packer;
 };
 

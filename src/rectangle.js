@@ -122,7 +122,7 @@ Rectangle.prototype.getSlotsAround = function( what ) {
  */
 Rectangle.prototype.canFit = function( what, buffer ) {
   buffer || (buffer = 0);
-  return this.width >= what.width + buffer && this.height >= what.height + buffer;
+  return this.width >= buffer + what.width && this.height >= buffer + what.height;
 };
 
 
