@@ -14,7 +14,7 @@
  * @param {Object} [items={}] map of items to update
  * @returns {Array} array of updated/created items
  */
-function parseSetup( setup, container, items ){
+function parseSetup( setup, container, items, root ){
     items = items || {};
     var name, currentContainer;
     if( !container ){
@@ -28,7 +28,7 @@ function parseSetup( setup, container, items ){
     // create item for current container
     items[ name ] = currentContainer = setup;
     Object.defineProperty(setup, "container", {value: container, writable: true});
-
+    Object.defineProperty(setup, "root", {value: this});
 
     // create items list
     for(var sNo = 0, sLen = setup.items.length; sNo < sLen; sNo++) {
@@ -41,10 +41,11 @@ function parseSetup( setup, container, items ){
         if(!itemSetup.name){
           itemSetup.name = ( currentContainer.name + "_" + sNo );
         }
-        parseSetup( itemSetup, currentContainer, items );
+        parseSetup.call( this, itemSetup, currentContainer, items );
       } else {
         items[ itemSetup.index ] = itemSetup;
         Object.defineProperty(itemSetup, "container", {value: currentContainer, writable: true });
+        Object.defineProperty(itemSetup, "root", {value: this});
       }
     }
     return items;
@@ -78,7 +79,7 @@ function Package( setup ){
   setup && (this.setup = setup);
   // XXX: this is only used by layer above (pj-srotable-tiles to match with elements)
   this.items = 
-  parseSetup( this.setup );
+  parseSetup.call(this, this.setup );
 
   // this.reset();
 }
@@ -135,7 +136,7 @@ Package.prototype.packItems = function packItems( setup, elements ) {
       }
 
       
-      if (itemSetup.items) { // container
+      if (itemSetup.items && itemSetup.propertyIsEnumerable("items")) { // container. propertyIsEnumerable is needed to rule out virtual "items" added by juicy-tiles-editor on nested tiles
         // pack its items first, to figureout minSize
         rect = that.packItems(
           rect, // use caculated width and height
