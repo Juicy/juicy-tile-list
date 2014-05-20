@@ -199,7 +199,9 @@
                     if(document.attachEvent){
                       element.detachEvent('onresize', this.refresh.bind(this, null, null));
                     } else {
-                      workaroundOnResizeEvent( this, this.refresh.bind(this, null, null) );
+                      //FIXME: async timeout look ugly (tomalec)
+                      //we wait for transition, so innerHeight won't miss the planned size
+                      workaroundOnResizeEvent( this, this.async.bind(this, "refresh", [null, null],500+1) );
                     }
 
                     window.addEventListener('resize', this.refresh.bind(this, null, null), true);
