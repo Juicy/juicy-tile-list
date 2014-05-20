@@ -149,6 +149,17 @@
           }
           return min;
         }
+        function workaroundOnResizeEvent(node, fn){
+          var parent = node;
+          parent = parent.parentNode;
+          while( parent && parent.tagName != "BODY" ){
+            if(parent.tagName == "JUICY-TILES"){
+              parent.addEventListener("juicy-tiles-refresh", fn);
+              break;
+            }
+            parent = parent.parentNode;
+          }
+        }
 
         Polymer('juicy-tiles', Platform.mixin( {}, Package.prototype, {
             setup: {
@@ -184,6 +195,12 @@
                     Package.call(this);
                     this.createItemsList();
                     this.refresh();
+
+                    if(document.attachEvent){
+                      element.detachEvent('onresize', this.refresh.bind(this, null, null));
+                    } else {
+                      workaroundOnResizeEvent( this, this.refresh.bind(this, null, null) );
+                    }
 
                     window.addEventListener('resize', this.refresh.bind(this, null, null), true);
 
@@ -246,6 +263,8 @@
 
             }
             renderTree( packedTree, this.elements, 0, 0);
+            // trigger event
+            this.dispatchEvent( new CustomEvent("juicy-tiles-refresh") );
           },
           saveToStorage: function() {
             saveJson(this.id, this.setup);

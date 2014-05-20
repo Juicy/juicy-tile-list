@@ -83,6 +83,13 @@ Name               | Param name | Type               | Default | Description
                    | what       | *Item* or *String* |         | Reference to, or name of the container to delete.
                    | noPacking  | *Boolean*          | `false` | `true` to prevent  re-packing after setup change.
 
+## Events
+
+Name                    | Data | Description
+---                     | ---  | ---                
+
+`juicy-tiles-refresh` |  -   | Triggered once layout is refreshed
+
 
 ## Contributing
 
@@ -95,7 +102,7 @@ Name               | Param name | Type               | Default | Description
 ## History
 
 #### v0.0.2
- - Virtaul grouping,
+ - Virtual grouping,
  - advenced editor features,
  - gaps
 
