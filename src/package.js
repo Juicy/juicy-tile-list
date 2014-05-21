@@ -28,7 +28,7 @@ function parseSetup( setup, container, items, root ){
     // create item for current container
     items[ name ] = currentContainer = setup;
     Object.defineProperty(setup, "container", {value: container, writable: true});
-    Object.defineProperty(setup, "root", {value: this});
+    Object.defineProperty(setup, "root", {value: this, writable: true}); //TODO investigate why with cleaned localStorage and empty setup attribute it only works with writable: true
 
     // create items list
     for(var sNo = 0, sLen = setup.items.length; sNo < sLen; sNo++) {
