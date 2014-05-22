@@ -14,7 +14,7 @@
  * @param {Object} [items={}] map of items to update
  * @returns {Array} array of updated/created items
  */
-function parseSetup( setup, container, items, root ){
+function parseSetup( setup, container, items ){
     items = items || {};
     var name, currentContainer;
     if( !container ){
@@ -28,7 +28,6 @@ function parseSetup( setup, container, items, root ){
     // create item for current container
     items[ name ] = currentContainer = setup;
     Object.defineProperty(setup, "container", {value: container, writable: true});
-    Object.defineProperty(setup, "root", {value: this, writable: true}); //TODO investigate why with cleaned localStorage and empty setup attribute it only works with writable: true
 
     // create items list
     for(var sNo = 0, sLen = setup.items.length; sNo < sLen; sNo++) {
@@ -41,11 +40,10 @@ function parseSetup( setup, container, items, root ){
         if(!itemSetup.name){
           itemSetup.name = ( currentContainer.name + "_" + sNo );
         }
-        parseSetup.call( this, itemSetup, currentContainer, items );
+        parseSetup( itemSetup, currentContainer, items );
       } else {
         items[ itemSetup.index ] = itemSetup;
         Object.defineProperty(itemSetup, "container", {value: currentContainer, writable: true });
-        Object.defineProperty(itemSetup, "root", {value: this});
       }
     }
     return items;
@@ -79,7 +77,7 @@ function Package( setup ){
   setup && (this.setup = setup);
   // XXX: this is only used by layer above (pj-srotable-tiles to match with elements)
   this.items = 
-  parseSetup.call(this, this.setup );
+  parseSetup( this.setup );
 
   // this.reset();
 }

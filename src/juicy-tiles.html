@@ -124,7 +124,6 @@
                 }
                 itemSetup.index = elNo;
                 Object.defineProperty(itemSetup, "container", {value:items["root"], writable: true})
-                Object.defineProperty(itemSetup, "root", {value:this, writable: true}); //TODO investigate why with cleaned localStorage and empty setup attribute it only works with writable: true
                 setupItems.push(itemSetup);
                 items[elNo] = itemSetup;
               }
@@ -178,7 +177,7 @@
             },
             createItemsList: function(){
               this.elements = filterNodes(this.children);
-              defaultSetup.call(this,
+              defaultSetup(
                 this.elements,
                 this.setup.items,
                 this.items
