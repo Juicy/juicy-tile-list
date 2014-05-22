@@ -74,7 +74,12 @@ function getMinimumPriority(arr) {
  * @todo remove #elements from here
  */
 function Package( setup ){
-  setup && (this.setup = setup);
+  this.setup = setup || {
+    name: "root",
+    direction: "rightDown",
+    gap: 0,
+    items: []
+  };
   // XXX: this is only used by layer above (pj-srotable-tiles to match with elements)
   this.items = 
   parseSetup( this.setup );
@@ -82,8 +87,8 @@ function Package( setup ){
   // this.reset();
 }
 // Package.prototype.elements = [];
-Package.prototype.items = {};
-Package.prototype.setup = {};
+Package.prototype.items = null;
+Package.prototype.setup = null;
 
 
 Package.prototype.direction = "rightDown";

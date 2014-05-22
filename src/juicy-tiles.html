@@ -161,16 +161,17 @@
         }
 
         Polymer('juicy-tiles', Platform.mixin( {}, Package.prototype, {
-            setup: {
-              direction: "rightDown",
-              gap: 8,
-              items: []
-            },
+            setup: null,
+            // {
+            //   direction: "rightDown",
+            //   gap: 8,
+            //   items: []
+            // },
             elements: null,
             // {
             //  index_in_DOM: {element: DOMElement, setup: setupObject, container},..
             //  containerName: {setup: setupObject, items: , packer: packer}        
-            items: {}, 
+            items: null,// {}, 
 
             sorter: function byPriority(itemA, itemB){
                 return itemB.priority - itemA.priority;
@@ -191,7 +192,7 @@
 
                     this.loadFromStorage();
 
-                    Package.call(this);
+                    Package.call(this, this.setup);
                     this.createItemsList();
                     this.refresh();
 
