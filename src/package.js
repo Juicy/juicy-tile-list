@@ -420,64 +420,6 @@ Package.prototype.createNewContainer = function( name, inContainer, rectangle, n
   }
   return setup;
 };
-/**
- * For an array of HTML elements, returns total size in which they would all fit in one dimension.
- * Dimension projection is read through startProp and sizeProp
- * @param {Array} elements
- * @param {String} startProp - "offsetLeft" or "offsetTop"
- * @param {String} sizeProp - "offsetWidth" or "offsetHeight"
- * @returns {Number}
- */
-Package.prototype._getMinimumDimension = function (elements, startProp, sizeProp) {
-  var ranges = [];
-
-  if (elements.length < 1) {
-    throw new Error("I need at least one element");
-  }
-
-  elements.sort(function (a, b) {
-    return a[startProp] - b[startProp];
-  });
-
-  ranges.push({
-    start: elements[0][startProp],
-    end: elements[0][startProp] + elements[0][sizeProp]
-  });
-
-  for (var i = 1, ilen = elements.length; i < ilen; i++) {
-    var last = ranges[ranges.length - 1];
-    var start = elements[i][startProp];
-    var end = elements[i][startProp] + elements[i][sizeProp];
-
-    if (last.end < start) {
-      ranges.push({
-        start: start,
-        end: end
-      });
-    }
-    else if (last.end < end) {
-      last.end = end;
-    }
-  }
-
-  var sizeSum = 0;
-  for (var i = 0, ilen = ranges.length; i < ilen; i++) {
-    sizeSum += ranges[i].end - ranges[i].start;
-  }
-
-  return sizeSum;
-}
-/**
- * For an array of HTML elements, returns the minimum width and height where they can fit
- * @param {Array} elements
- * @returns {{width: {Number}, height: {Number}}}
- */
-Package.prototype.getMinimumDimensions = function (elements) {
-  return {
-    width: this._getMinimumDimension(elements, 'offsetLeft', 'offsetWidth'),
-    height: this._getMinimumDimension(elements, 'offsetTop', 'offsetHeight')
-  }
-}
 
 
 // TODO: export
