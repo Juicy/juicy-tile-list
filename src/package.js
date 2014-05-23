@@ -186,10 +186,6 @@ Package.prototype.packItems = function packItems( setup, elements ) {
  */
 Package.prototype.reprioritizeItem =  function( item, increase, end ){
   var higher, lower, item;
-  // do nothing if there is nothing to rearrange
-  if( this.elements.length < 2){
-    return this;
-  }
   // if( typeof item !== 'object'){
   //   item = this.items[item];
   // }
@@ -200,6 +196,10 @@ Package.prototype.reprioritizeItem =  function( item, increase, end ){
   if( !collection ){
     throw new RangeError( "Cannot reprioritize root container");
     return false;
+  }
+  // do nothing if there is nothing to rearrange
+  if( collection.length < 2){
+    return this;
   }
   var sortedIndex = collection.indexOf( itemSetup );
 
