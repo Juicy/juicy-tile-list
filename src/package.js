@@ -139,7 +139,7 @@ Package.prototype.packItems = function packItems( setup, elements ) {
       }
 
       
-      if (itemSetup.items && itemSetup.propertyIsEnumerable("items")) { // container. propertyIsEnumerable is needed to rule out virtual "items" added by juicy-tiles-editor on nested tiles
+      if (itemSetup.items ) { // container
         // pack its items first, to figureout minSize
         rect = that.packItems(
           rect, // use caculated width and height
