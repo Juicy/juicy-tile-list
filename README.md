@@ -39,6 +39,8 @@ Attribute                    | Options             | Default      | Description
 ---                          | ---                 | ---          | ---
 `setup`                      | *Object*            |              | Tiles setup
 `setup.gap`                  | *Number*            | `0`          | Gap/cellspacing size in px
+`setup.direction`            | *String*            | `rightDown`  | How to align our package (horicontal layers `rightDown`, or vertiaval layers: `downRight`)
+
 `setup.items`                | *Array*             | `[]`         | Tiles setup
 `setup.items[?].priority`    | *Number* (0-1)      | `0`          | Importance of tile, used for sorting elements.
 `setup.items[?].width`       | *Number*            | `1`          | Tile width (number of colums)
@@ -47,8 +49,8 @@ Attribute                    | Options             | Default      | Description
 `setup.items[?].items`       | *Array(Items)*      |              | Recursive setup (for virtual containers)
 `setup.items[?].gap`         | *Number*            | `0`          | Recursive setup (for virtual containers)
 `setup.items[?].name`        | *String*            |              | Recursive setup (for virtual containers)
-`setup.direction`            | *String*            | `rightDown`  | How to align our package (horicontal layers `rightDown`, or vertiaval layers: `downRight`)
-
+`setup.items[?].name`        | *String*            |              | Recursive setup (for virtual containers)
+`setup.items[?].direction`   | *String*            |              | Recursive setup (for virtual containers)
 ## Properties
 
 Name                 | Options        | Description
