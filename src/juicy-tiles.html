@@ -227,21 +227,23 @@
                     // end of: Observe changes
                 });
             },
-            /**
-             * Refresh everything
-             */
-          refresh: function( ) {
-            var container = this.$.container;
-              // TODO: support LTR
+          /**
+           * Extend `Package.prototype.packItems` with DOM features: 
+           * `heightAuto`, `widthAuto`, 
+           * map virtual containers to real elements in ShadowDOM.
+           * @param  {Object} [setup=this.setup] setup to pack
+           * @return {Object} packed setup as in Package.prototype.packItems
+           * @see Package.prototype.packItems
+           */
+          packItems: function packDOMItems( setup ){
+            setup || (setup = this.setup);
+            // TODO: support LTR
             if( this.setup.direction != "downRight"){
                this.setup.width = innerWidth(this);
             } else {
               this.setup.height = innerHeight(this);
             }
-            this.saveToStorage();
-
             // IDEA move to outter scope, not to redefine it every time
-            // IDEA movce it to extension of this.packItems
             function makeContainersAndCalculateAuto( setup, elements, container ) {
               var itemSetup, itemsLength = setup.items.length;
               while( itemsLength--){
@@ -289,10 +291,20 @@
               }
             }
 
-            makeContainersAndCalculateAuto( this.setup, this.elements, container)
+            makeContainersAndCalculateAuto( setup, this.elements, this.$.container)
 
 
-            var packedTree = this.packItems( );
+            return Package.prototype.packItems.call( this, setup );
+
+          },
+            /**
+             * Refresh everything
+             */
+          refresh: function( ) {
+            var container = this.$.container;
+            var packedTree = this.packItems();
+
+            this.saveToStorage();            
             
             function renderTree( node, elements, offsetX, offsetY ){
               var element = elements[ node.name || node.index ] 
