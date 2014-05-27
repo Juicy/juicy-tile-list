@@ -46,10 +46,10 @@ Attribute                    | Options             | Default      | Description
 `setup.items[?].width`       | *Number*            | `1`          | Tile width (number of colums)
 `setup.items[?].heigh`       | *Number*            | `1`          | Tile height (number of rows)
 `setup.items[?].index`       | *Number*            |              | DOM ChildElement index (not needed for virtual containers)
+`setup.items[?].name`        | *String*            |              | Group name (for virtual containers)
+`setup.items[?].innerHTML`   | *String*            |              | Inner HTML for (for virtual containers)
 `setup.items[?].items`       | *Array(Items)*      |              | Recursive setup (for virtual containers)
 `setup.items[?].gap`         | *Number*            | `0`          | Recursive setup (for virtual containers)
-`setup.items[?].name`        | *String*            |              | Recursive setup (for virtual containers)
-`setup.items[?].name`        | *String*            |              | Recursive setup (for virtual containers)
 `setup.items[?].direction`   | *String*            |              | Recursive setup (for virtual containers)
 ## Properties
 
