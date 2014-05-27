@@ -139,8 +139,8 @@ Package.prototype.packItems = function packItems( setup ) {
   });
 
   //change Infinity back to real size:
-  packer.height = setup.heightAuto ? parseFloat( setup.height ) : packer.minHeight;
-  packer.width = setup.widthAuto ? parseFloat( setup.width ) : packer.minWidth;
+  packer.height = setup.heightAuto ? packer.minHeight : parseFloat( setup.height );
+  packer.width = setup.widthAuto ? packer.minWidth : parseFloat( setup.width );
   return packer;
 };
 

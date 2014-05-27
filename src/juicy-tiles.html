@@ -237,6 +237,7 @@
            */
           packItems: function packDOMItems( setup ){
             setup || (setup = this.setup);
+            var elements = this.elements;
             // TODO: support LTR
             if( this.setup.direction != "downRight"){
                this.setup.width = innerWidth(this);
@@ -244,51 +245,40 @@
               this.setup.height = innerHeight(this);
             }
             // IDEA move to outter scope, not to redefine it every time
-            function makeContainersAndCalculateAuto( setup, elements, container ) {
-              var itemSetup, itemsLength = setup.items.length;
-              while( itemsLength--){
-                  // TODO: do it more lightweight
-                  itemSetup = setup.items[itemsLength];
+            var itemSetup, itemsLength = setup.items.length;
+            while( itemsLength--){
+                // TODO: do it more lightweight
+                itemSetup = setup.items[itemsLength];
 
-                  if (elements) {
-                    var element = elements[ itemSetup.index ];
+                if (elements) {
+                  var element = elements[ itemSetup.index ];
+                  if (!element) {
+                    element = elements[ itemSetup.name ];
                     if (!element) {
-                      element = elements[ itemSetup.name ];
-                      if (!element) {
-                        element = document.createElement('DIV');
-                        element.style.zIndex = -1;
-                        element.style.position = "absolute";// FIXME: should be done in css
-                        container.appendChild(element);
-                        elements[ itemSetup.name ] = element;
-                      }
+                      element = document.createElement('DIV');
+                      element.style.zIndex = -1;
+                      element.style.position = "absolute";// FIXME: should be done in css
+                      this.$.container.appendChild(element);
+                      elements[ itemSetup.name ] = element;
                     }
                   }
-                  
-                  if (itemSetup.items ) { // container
-                    // traverse recursively
-                    makeContainersAndCalculateAuto(
-                      itemSetup,
-                      elements,
-                      container
-                    );
-
-                  } else { // element
-                    if(itemSetup.heightAuto){
-                      // itemSetup.height = element.clientHeight;          
-                      element.style.height = ""; //slow, but I don't know another way to measure real height when element's content has shrinked other than remove height property before measuring (Marcin)
-                      itemSetup.height = element.scrollHeight; //now we can measure scrollHeight because width is already set and height is not constrained
-                    }
-                    if(itemSetup.widthAuto){
-                      // itemSetup.width = element.clientWidth;
-                      element.style.width = ""; //slow, but I don't know another way to measure real width when element's content has shrinked other than remove height property before measuring (Marcin)
-                      itemSetup.width = element.scrollWidth; //now we can measure scrollHeight because width is already set and height is not constrained
-                    }
+                }
+                
+                if (! itemSetup.items ){ // element
+                  if(itemSetup.heightAuto){
+                    // itemSetup.height = element.clientHeight;          
+                    element.style.height = ""; //slow, but I don't know another way to measure real height when element's content has shrinked other than remove height property before measuring (Marcin)
+                    itemSetup.height = element.scrollHeight; //now we can measure scrollHeight because width is already set and height is not constrained
                   }
-              }
+                  if(itemSetup.widthAuto){
+                    // itemSetup.width = element.clientWidth;
+                    element.style.width = ""; //slow, but I don't know another way to measure real width when element's content has shrinked other than remove height property before measuring (Marcin)
+                    itemSetup.width = element.scrollWidth; //now we can measure scrollHeight because width is already set and height is not constrained
+                  }
+                }
+                //recursion is done in Package#packItems 
             }
-
-            makeContainersAndCalculateAuto( setup, this.elements, this.$.container)
-
+            
 
             return Package.prototype.packItems.call( this, setup );
 
