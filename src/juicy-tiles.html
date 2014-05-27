@@ -231,6 +231,7 @@
              * Refresh everything
              */
           refresh: function( ) {
+            var container = this.$.container;
               // TODO: support LTR
             if( this.setup.direction != "downRight"){
                this.setup.width = innerWidth(this);
@@ -238,8 +239,60 @@
               this.setup.height = innerHeight(this);
             }
             this.saveToStorage();
+
+            // IDEA move to outter scope, not to redefine it every time
+            // IDEA movce it to extension of this.packItems
+            function makeContainersAndCalculateAuto( setup, elements, container ) {
+              var itemSetup, itemsLength = setup.items.length;
+              while( itemsLength--){
+                  // TODO: do it more lightweight
+                  itemSetup = setup.items[itemsLength];
+
+                  if (elements) {
+                    var element = elements[ itemSetup.index ];
+                    if (!element) {
+                      element = elements[ itemSetup.name ];
+                      if (!element) {
+                        element = document.createElement('DIV');
+                        element.style.zIndex = -1;
+                        element.style.position = "absolute";// FIXME: should be done in css
+                        container.appendChild(element);
+                        elements[ itemSetup.name ] = element;
+                      }
+                    }
+                  }
+                  
+                  if (itemSetup.items ) { // container
+                    // traverse recursively
+                    calculateAutoHeightForElements(
+                      itemSetup,
+                      elements.
+                      container
+                    );
+
+                  } else { // element
+                    if(itemSetup.heightAuto){
+                      // itemSetup.height = element.clientHeight;          
+                      element.style.height = ""; //slow, but I don't know another way to measure real height when element's content has shrinked other than remove height property before measuring (Marcin)
+                      itemSetup.height = element.scrollHeight; //now we can measure scrollHeight because width is already set and height is not constrained
+                    } else {
+                      itemSetup.height = parseFloat( itemSetup.height );
+                    }
+                    if(itemSetup.widthAuto){
+                      // itemSetup.width = element.clientWidth;
+                      element.style.width = ""; //slow, but I don't know another way to measure real width when element's content has shrinked other than remove height property before measuring (Marcin)
+                      itemSetup.width = element.scrollWidth; //now we can measure scrollHeight because width is already set and height is not constrained
+                    } else {
+                      itemSetup.width = parseFloat( itemSetup.width );
+                    }
+                  }
+              }
+            }
+
+            makeContainersAndCalculateAuto( this.setup, this.elements, container)
+
+
             var packedTree = this.packItems( );
-            var container = this.$.container;
             
             function renderTree( node, elements, offsetX, offsetY ){
               var element = elements[ node.name || node.index ] 
@@ -255,7 +308,7 @@
                 elementStyle.backgroundColor = node.background || "transparent";
               }
               
-              if(node.items){
+              if(node.items){// virtual container
                 var childNodeNo = node.items.length;  
                 while(childNodeNo--){
                   renderTree( node.items[childNodeNo], elements, offsetX, offsetY);

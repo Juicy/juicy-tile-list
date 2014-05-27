@@ -70,8 +70,6 @@ function getMinimumPriority(arr) {
 /**
  * [Package description]
  * @param {Object} [setup] packer setup
- *
- * @todo remove #elements from here
  */
 function Package( setup ){
   this.setup = setup || {
@@ -86,7 +84,6 @@ function Package( setup ){
 
   // this.reset();
 }
-// Package.prototype.elements = [];
 Package.prototype.items = null;
 Package.prototype.setup = null;
 
@@ -97,11 +94,9 @@ Package.prototype.direction = "rightDown";
 /**
  * [packItems description]
  * @param {Object} setup setup of items fo pack, if not give `#setup` will be used
- * @param {Array<Element>} elements array of DOM elements to update.
  */
-Package.prototype.packItems = function packItems( setup, elements ) {
+Package.prototype.packItems = function packItems( setup ) {
   setup || (setup = this.setup);
-  elements || (elements = this.elements);
   var that = this,
       packer = new Packer(setup);
 
@@ -113,20 +108,6 @@ Package.prototype.packItems = function packItems( setup, elements ) {
       var rect = new Rectangle(itemSetup);
       // TODO, property?
       rect.container = setup;
-
-      if (elements) {
-        var element = elements[ itemSetup.index ];
-        if (!element) {
-          element = elements[ itemSetup.name ];
-          if (!element) {
-            element = document.createElement('DIV');
-            element.style.zIndex = -1;
-            element.style.position = "absolute";// FIXME: should be done in css
-            that.$.container.appendChild(element);
-            elements[ itemSetup.name ] = element;
-          }
-        }
-      }
 
       //first calculate rect width because it cannot be auto TODO: fix for downRight mode
       if( typeof rect.width == "string" && rect.width != "auto" && rect.width.indexOf("%") > 0 ){
@@ -142,25 +123,9 @@ Package.prototype.packItems = function packItems( setup, elements ) {
       if (itemSetup.items ) { // container
         // pack its items first, to figureout minSize
         rect = that.packItems(
-          rect, // use caculated width and height
-          elements
+          rect // use caculated width and height
         );
 
-      } else { // element
-        if(itemSetup.height == "auto"){
-          // rect.height = element.clientHeight;          
-          element.style.height = ""; //slow, but I don't know another way to measure real height when element's content has shrinked other than remove height property before measuring (Marcin)
-          rect.height = element.scrollHeight; //now we can measure scrollHeight because width is already set and height is not constrained
-        } else {
-          rect.height = parseFloat( rect.height );
-        }
-        if(itemSetup.width == "auto"){
-          // rect.width = element.clientWidth;
-          element.style.width = ""; //slow, but I don't know another way to measure real width when element's content has shrinked other than remove height property before measuring (Marcin)
-          rect.width = element.scrollWidth; //now we can measure scrollHeight because width is already set and height is not constrained
-        } else {
-          rect.width = parseFloat( rect.width );
-        }
       }
 
       // Pack item
