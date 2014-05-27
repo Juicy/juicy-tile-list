@@ -268,7 +268,7 @@
                     // traverse recursively
                     makeContainersAndCalculateAuto(
                       itemSetup,
-                      elements.
+                      elements,
                       container
                     );
 
@@ -277,15 +277,11 @@
                       // itemSetup.height = element.clientHeight;          
                       element.style.height = ""; //slow, but I don't know another way to measure real height when element's content has shrinked other than remove height property before measuring (Marcin)
                       itemSetup.height = element.scrollHeight; //now we can measure scrollHeight because width is already set and height is not constrained
-                    } else {
-                      itemSetup.height = parseFloat( itemSetup.height );
                     }
                     if(itemSetup.widthAuto){
                       // itemSetup.width = element.clientWidth;
                       element.style.width = ""; //slow, but I don't know another way to measure real width when element's content has shrinked other than remove height property before measuring (Marcin)
                       itemSetup.width = element.scrollWidth; //now we can measure scrollHeight because width is already set and height is not constrained
-                    } else {
-                      itemSetup.width = parseFloat( itemSetup.width );
                     }
                   }
               }

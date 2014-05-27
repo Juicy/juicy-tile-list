@@ -110,13 +110,17 @@ Package.prototype.packItems = function packItems( setup ) {
       rect.container = setup;
 
       //first calculate rect width because it cannot be auto TODO: fix for downRight mode
-      if( typeof rect.width == "string" && rect.width != "auto" && rect.width.indexOf("%") > 0 ){
+      if( !rect.widthAuto && typeof rect.width == "string" && rect.width.indexOf("%") > 0 ){
         rect.width = ( (setup.width + setup.gap) * parseFloat(rect.width) /100  - setup.gap);
+      } else {
+        rect.width = parseFloat( rect.width );
       }
       // caluclate relative size
       // we cannot use calc(xx% - gap px) as it can be in virtual container which is a sibling
-      if( typeof rect.height == "string" && rect.height != "auto" && rect.height.indexOf("%") > 0 ){
+      if( !rect.heightAuto && typeof rect.height == "string" && rect.height.indexOf("%") > 0 ){
         rect.height = ( (setup.height + setup.gap) * parseFloat(rect.height) /100 - setup.gap );
+      } else {
+        rect.height = parseFloat( rect.height );
       }
 
       
@@ -135,8 +139,8 @@ Package.prototype.packItems = function packItems( setup ) {
   });
 
   //change Infinity back to real size:
-  packer.height = setup.height && ( setup.height != "auto" ) ? parseFloat( setup.height ) : packer.minHeight;
-  packer.width = setup.width && ( setup.width != "auto" ) ? parseFloat( setup.width ) : packer.minWidth;
+  packer.height = setup.heightAuto ? parseFloat( setup.height ) : packer.minHeight;
+  packer.width = setup.widthAuto ? parseFloat( setup.width ) : packer.minWidth;
   return packer;
 };
 
