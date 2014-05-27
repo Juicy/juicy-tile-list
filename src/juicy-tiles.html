@@ -15,18 +15,23 @@
             position: relative;
         }
         polyfill-next-selector { content: ':host #container> *'; }
-        #container ::content>* {
+        #container ::content>*,
+        #container >*  {
             position: absolute;
+            z-index: 2;
+        }
+        polyfill-next-selector { content: ':host #container.animate> *'; }
+        #container.animate ::content>*,
+        #container.animate >*  {
             -webkit-transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s, -webkit-transform 0.5s;
             transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s, transform 0.5s;
             transition-timing-function: ease-out;
-            z-index: 2;
         }
         #container {
           z-index: 0;
         }
     </style>
-    <div id="container"><content></content></div>
+    <div id="container" class="animate"><content></content></div>
     </template>
     <script>
     (function( scope ){
@@ -257,7 +262,6 @@
                     if (!element) {
                       element = document.createElement('DIV');
                       element.style.zIndex = -1;
-                      element.style.position = "absolute";// FIXME: should be done in css
                       this.$.container.appendChild(element);
                       elements[ itemSetup.name ] = element;
                     }
@@ -289,6 +293,7 @@
           refresh: function( ) {
             var container = this.$.container;
             var packedTree = this.packItems();
+
 
             this.saveToStorage();            
             
