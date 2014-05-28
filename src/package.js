@@ -70,6 +70,7 @@ function getMinimumPriority(arr) {
 /**
  * [Package description]
  * @param {Object} [setup] packer setup
+ * @IDEA remove this.items (tomalec)
  */
 function Package( setup ){
   this.setup = setup || {
@@ -295,7 +296,7 @@ Package.prototype.moveToContainer = function( what, where, noPacking ){
  * Delete virtual container, move items (if any) to one above.
  * @param  {Item | String} what        Reference to, or name of the container to delete.
  * @param  {Boolean} [noRepacking=false]  `true` to prevent  re-packing after setup change.
- * @return {juicy-tiles}             self
+ * @return {Object}             deleted item
  */
 Package.prototype.deleteContainer = function( what, noRepacking ){
   // if( typeof what === "string" ){
@@ -319,9 +320,9 @@ Package.prototype.deleteContainer = function( what, noRepacking ){
   }
 
   // remove setup
-  siblingsList.splice( siblingsList.indexOf(what), 1);
+  var removed = siblingsList.splice( siblingsList.indexOf(what), 1)[0];
   // remove item
-  // delete this.items[what.name];
+  delete this.items[what.name];
 
 
   if(!noRepacking){
@@ -329,7 +330,7 @@ Package.prototype.deleteContainer = function( what, noRepacking ){
     //TODO: repack only applicable ones
     this.packItems();
   }
-  return this;
+  return removed;
 };
 /**
  * Create a unique name for a container

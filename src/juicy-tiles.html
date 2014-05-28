@@ -165,6 +165,7 @@
           }
         }
 
+
         Polymer('juicy-tiles', Platform.mixin( {}, Package.prototype, {
             setup: null,
             // {
@@ -233,6 +234,20 @@
                 });
             },
           /**
+           * Delete virtual container, move items (if any) to one above.
+           * @extends Package#deleteContainer
+           * Remove corresponding ShadowDOM element.
+           * @param  {Item | String} what        Reference to, or name of the container to delete.
+           * @param  {Boolean} [noRepacking=false]  `true` to prevent  re-packing after setup change.
+           * @return {Object}             deleted item
+           */
+          deleteContainer: function( what, noRepacking ){
+            var deletedItem = Package.prototype.deleteContainer.call(this, what, noRepacking);
+            var deletedElement = this.elements[deletedItem.name];
+            deletedElement.parentNode.removeChild(deletedElement);
+            return deletedItem;
+          },
+          /**
            * Extend `Package.prototype.packItems` with DOM features: 
            * `heightAuto`, `widthAuto`, 
            * map virtual containers to real elements in ShadowDOM.
@@ -265,7 +280,8 @@
                       this.$.container.appendChild(element);
                       elements[ itemSetup.name ] = element;
                     }
-                    itemSetup.innerHTML != undefined && (element.innerHTML = itemSetup.innerHTML);
+
+                    (itemSetup.innerHTML != undefined) && (element.innerHTML = itemSetup.innerHTML);
                   }
                 }
                 
