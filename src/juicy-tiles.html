@@ -265,7 +265,7 @@
                       this.$.container.appendChild(element);
                       elements[ itemSetup.name ] = element;
                     }
-                    itemSetup.innerHTML && (element.innerHTML = itemSetup.innerHTML);
+                    itemSetup.innerHTML != undefined && (element.innerHTML = itemSetup.innerHTML);
                   }
                 }
                 
