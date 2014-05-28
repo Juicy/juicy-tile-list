@@ -48,6 +48,7 @@ Attribute                    | Options             | Default      | Description
 `setup.items[?].index`       | *Number*            |              | DOM ChildElement index (not needed for virtual containers)
 `setup.items[?].name`        | *String*            |              | Group name (for virtual containers)
 `setup.items[?].innerHTML`   | *String*            |              | Inner HTML for (for virtual containers)
+`setup.items[?].oversize`    | *Number*            | `0`          | Make container's box & background bleed for this aoumt of pixels out of packed box. So, render box bigger, but pack with iths original size (for virtual containers)
 `setup.items[?].items`       | *Array(Items)*      |              | Recursive setup (for virtual containers)
 `setup.items[?].gap`         | *Number*            | `0`          | Recursive setup (for virtual containers)
 `setup.items[?].direction`   | *String*            |              | Recursive setup (for virtual containers)

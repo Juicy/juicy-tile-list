@@ -319,11 +319,12 @@
                             || container; //TODO: remove it from here, so we could remove renderTree to outer scope
                   elementStyle = element.style;
               offsetX = ( node.x || 0 ) + offsetX; 
-              offsetY = ( node.y || 0 ) + offsetY; 
-              elementStyle.left = offsetX + "px";
-              elementStyle.top = offsetY + "px";
-              elementStyle.width = node.width + "px";
-              elementStyle.height = node.height + "px";
+              offsetY = ( node.y || 0 ) + offsetY;
+              var oversize = node.oversize || 0;
+              elementStyle.left = ( offsetX - oversize ) + "px";
+              elementStyle.top = ( offsetY - oversize ) + "px";
+              elementStyle.width = ( node.width + 2 * oversize ) + "px";
+              elementStyle.height = ( node.height + 2 * oversize ) + "px";
               if(node.background != undefined) {
                 elementStyle.backgroundColor = node.background || "transparent";
               }
