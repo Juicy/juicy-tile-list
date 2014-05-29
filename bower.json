@@ -2,7 +2,7 @@
   "name": "juicy-tiles",
   "version": "0.0.0",
   "homepage": "https://github.com/Juicy/juicy-tiles",
-  "description": "<juicy-tiles> is a Custom Element with sortable tiles that packs efficiently without changing HTML structure (changes CSS only).",
+  "description": "<juicy-tiles> is a Polymer Element with sortable tiles that packs efficiently without changing HTML structure (changes CSS only).",
   "license": "MIT",
   "main": "src/juicy-tiles.html",
   "keywords": [
@@ -17,7 +17,7 @@
     "examples/"
   ],
   "dependencies": {
-    "platform": "Polymer/platform#~0.2.2",
-    "polymer": "Polymer/polymer#~0.2.2"
+    "platform": "Polymer/platform#~0.3.0",
+    "polymer": "Polymer/polymer#~0.3.0"
   }
 }
