@@ -2,7 +2,14 @@
  * JuicyTiles tests
  */
 describe('juicy-tiles', function() {
-  var JuicyTiles = document.createElement("juicy-tiles").constructor;
+  var JuicyTiles;
+  before(function( done ){
+    Polymer.whenPolymerReady( function(){
+      JuicyTiles = document.createElement("juicy-tiles").constructor;
+      done();
+    });
+  });
+
   describe('method getMinimumDimensions', function () {
 
     it('for a single element should return the element', function () {
