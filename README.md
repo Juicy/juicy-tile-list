@@ -1,17 +1,17 @@
-# &lt;juicy-tiles&gt; ![Bower Version](https://badge.fury.io/bo/juicy-tiles.svg)
+# &lt;juicy-tile-list&gt; ![Bower Version](https://badge.fury.io/bo/juicy-tile-list.svg)
 
-`<juicy-tiles>` is a Polymer Element with sortable tiles that packs efficiently without changing HTML structure (changes CSS only).
+`<juicy-tile-list>` is a Polymer Element with sortable tiles that packs efficiently without changing HTML structure (changes CSS only).
 
 ## Demo
 
-[Check it live!](http://juicy.github.io/juicy-tiles)
+[Check it live!](http://juicy.github.io/juicy-tile-list)
 
 ## Usage
 
 1. Install the component using [Bower](http://bower.io/):
 
     ```sh
-    $ bower install juicy-tiles --save
+    $ bower install juicy-tile-list --save
     ```
 
 2. Import Web Components' polyfill:
@@ -24,13 +24,13 @@
 3. Import Custom Element:
 
     ```html
-    <link rel="import" href="../juicy-tiles/dist/juicy-tiles.html">
+    <link rel="import" href="../juicy-tile-list/dist/juicy-tile-list.html">
     ```
 
 4. Start using it!
 
     ```html
-    <juicy-tiles></juicy-tiles>
+    <juicy-tile-list></juicy-tile-list>
     ```
 
 ## Options
@@ -91,7 +91,7 @@ Name               | Param name | Type               | Default | Description
 Name                    | Data | Description
 ---                     | ---  | ---                
 
-`juicy-tiles-refresh` |  -   | Triggered once layout is refreshed
+`juicy-tile-list-refresh` |  -   | Triggered once layout is refreshed
 
 
 ## Contributing

@@ -151,7 +151,7 @@ Package.prototype.packItems = function packItems( setup ) {
  * @param  {Item | Number | String} itemIndex    item index (the original item index in DOM), container name, or item itself
  * @param  {Boolean} increase  true - increases priority, false - decreases
  * @param  {Boolean} [end=false] true to move to the end
- * @return {juicy-tiles}        self
+ * @return {juicy-tile-list}        self
  * @TODO write tests
  */
 Package.prototype.reprioritizeItem =  function( item, increase, end ){
@@ -235,7 +235,7 @@ Package.prototype.reprioritizeItem =  function( item, increase, end ){
  * @param  {SetupItemRef} item   item from list, or item index (the original item index in DOM)
  * @param  {Number} width  number of cells/columns
  * @param  {Number} height number of cells/rows
- * @return {juicy-tiles}        self
+ * @return {juicy-tile-list}        self
  */
 Package.prototype.resizeItem = function(item, width, height){
   // if(typeof item !== 'object'){

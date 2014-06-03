@@ -4,7 +4,7 @@
 <script src="package.js"></script>
 
 <!-- Define your custom element -->
-<polymer-element name="juicy-tiles" constructor="PJSortableTiles" attributes="setup rowspans colspans layersOrientation">
+<polymer-element name="juicy-tile-list" constructor="PJSortableTiles" attributes="setup rowspans colspans layersOrientation">
     <template>
     <style>
         :host {
@@ -157,8 +157,8 @@
           var parent = node;
           parent = parent.parentNode;
           while( parent && parent.tagName != "BODY" ){
-            if(parent.tagName == "JUICY-TILES"){
-              parent.addEventListener("juicy-tiles-refresh", fn);
+            if(parent.tagName == "JUICY-TILE-LIST"){
+              parent.addEventListener("juicy-tile-list-refresh", fn);
               break;
             }
             parent = parent.parentNode;
@@ -166,7 +166,7 @@
         }
 
 
-        Polymer('juicy-tiles', Platform.mixin( {}, Package.prototype, {
+        Polymer('juicy-tile-list', Platform.mixin( {}, Package.prototype, {
             setup: null,
             // {
             //   direction: "rightDown",
@@ -340,7 +340,7 @@
             }
             renderTree( packedTree, this.elements, 0, 0);
             // trigger event
-            this.dispatchEvent( new CustomEvent("juicy-tiles-refresh") );
+            this.dispatchEvent( new CustomEvent("juicy-tile-list-refresh") );
           },
           saveToStorage: function() {
             saveJson(this.id, this.setup);

@@ -1,11 +1,11 @@
 /**
  * JuicyTiles tests
  */
-describe('juicy-tiles', function() {
+describe('juicy-tile-list', function() {
   var JuicyTiles;
   before(function( done ){
     Polymer.whenPolymerReady( function(){
-      JuicyTiles = document.createElement("juicy-tiles").constructor;
+      JuicyTiles = document.createElement("juicy-tile-list").constructor;
       done();
     });
   });

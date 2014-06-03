@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>&lt;juicy-tiles&gt; nested</title>
+    <title>&lt;juicy-tile-list&gt; nested</title>
 
     <!-- Importing Web Component's Polyfill -->
     
@@ -13,41 +13,41 @@
     <script src="../polymer/polymer.js"></script>
     -->
     <!-- Importing Custom Elements -->
-    <link rel="import" href="../src/juicy-tiles.html">
+    <link rel="import" href="../src/juicy-tile-list.html">
 <style>
 * {
   margin:0px;
   padding:0px;
 }
-body>juicy-tiles{
+body>juicy-tile-list{
     /*width: 300px;
     height: 150px;*/
     width: 616px;
     padding:1em;
     box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
 }
-juicy-tiles>*{
+juicy-tile-list>*{
     box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
 }
-juicy-tiles>:first-child {
+juicy-tile-list>:first-child {
     background:lightgreen;
 }
 
-juicy-tiles>:nth-child(2) {
+juicy-tile-list>:nth-child(2) {
     background:lightblue;
 }
 
-juicy-tiles>:nth-child(3) {
+juicy-tile-list>:nth-child(3) {
     background:yellow;
     overflow:auto;
 }
 
-juicy-tiles>:nth-child(4) {
+juicy-tile-list>:nth-child(4) {
     background:gray;
     overflow:auto;
 }
 
-juicy-tiles>:nth-child(5) {
+juicy-tile-list>:nth-child(5) {
     background:orange;
     max-height: 100px;
     overflow:auto;
@@ -56,9 +56,9 @@ juicy-tiles>:nth-child(5) {
 
 <body>
     <template bind>
-        <juicy-tiles setup="{{setup}}">
+        <juicy-tile-list setup="{{setup}}">
             <div>Item 0 </div>
-            <juicy-tiles setup="{{setup2}}">
+            <juicy-tile-list setup="{{setup2}}">
                 <div>Item 0 </div>
                 <div>
                     <button>Item 1</button>
@@ -67,12 +67,12 @@ juicy-tiles>:nth-child(5) {
                     <input value="Input2">
                 </div>
                 <section>Item3</section>
-            </juicy-tiles>
+            </juicy-tile-list>
             <div>
                 <input value="Input2">
             </div>            
             <section>Item3</section>            
-        </juicy-tiles>
+        </juicy-tile-list>
     </template>
     <script type="text/javascript">
         // 011
@@ -209,16 +209,16 @@ juicy-tiles>:nth-child(5) {
                 element[method].apply(element, args);
             }
             document.getElementById("callResize").addEventListener("click", function (event){
-                callMethod( document.querySelector("juicy-tiles"), "resizeItem", event );
+                callMethod( document.querySelector("juicy-tile-list"), "resizeItem", event );
             });
             document.getElementById("callReprioritize").addEventListener("click", function (event){
-                callMethod( document.querySelector("juicy-tiles"), "reprioritizeItem", event );
+                callMethod( document.querySelector("juicy-tile-list"), "reprioritizeItem", event );
             });
             document.getElementById("callNestedResize").addEventListener("click", function (event){
-                callMethod( document.querySelector("juicy-tiles juicy-tiles"), "resizeItem", event );
+                callMethod( document.querySelector("juicy-tile-list juicy-tile-list"), "resizeItem", event );
             });
             document.getElementById("callNestedReprioritize").addEventListener("click", function (event){
-                callMethod( document.querySelector("juicy-tiles juicy-tiles"), "reprioritizeItem", event );
+                callMethod( document.querySelector("juicy-tile-list juicy-tile-list"), "reprioritizeItem", event );
             });
         });
         </script>
