@@ -66,26 +66,24 @@
       }
 
       /**
-       * Save JSON tree to the local storage using the provided key
+       * Save string to the local storage using the provided key
        * @param {String} key
-       * @param {Object} value
+       * @param {String} value
        */
       function saveJson(key, value) {
         if (key) {
-          var str = JSON.stringify(value);
-          localStorage.setItem(key, str);
+          localStorage.setItem(key, value);
         }
       }
 
       /**
-       * Loads JSON tree from the local storage using the provided key
+       * Loads string from the local storage using the provided key
        * @param {String} key
-       * @return {Object}
+       * @return {String}
        */
       function loadJson(key) {
         if (key) {
-          var str = localStorage.getItem(key);
-          return JSON.parse(str);
+          return localStorage.getItem(key);
         }
       }
 
@@ -168,6 +166,7 @@
 
         Polymer('juicy-tile-list', Platform.mixin( {}, Package.prototype, {
             setup: null,
+             _storedSetup: null, //string
             // {
             //   direction: "rightDown",
             //   gap: 8,
@@ -197,10 +196,6 @@
                     var that = this;
 
                     this.loadFromStorage();
-
-                    Package.call(this, this.setup);
-                    this.createItemsList();
-                    this.refresh();
 
                     if(document.attachEvent){
                       element.detachEvent('onresize', this.refresh.bind(this, null, null));
@@ -248,6 +243,15 @@
             return deletedItem;
           },
           /**
+           Deletes fake containers from DOM
+           */
+          cleanupDOM: function() {
+            var containerBackgrounds = this.$.container.querySelectorAll('.containerBackground');
+            for (var i = 0, ilen = containerBackgrounds.length; i < ilen; i++) {
+              this.$.container.removeChild(containerBackgrounds[i]);
+            }
+          },
+          /**
            * Extend `Package.prototype.packItems` with DOM features: 
            * `heightAuto`, `widthAuto`, 
            * map virtual containers to real elements in ShadowDOM.
@@ -276,6 +280,7 @@
                     element = elements[ itemSetup.name ];
                     if (!element) {
                       element = document.createElement('DIV');
+                      element.className = 'containerBackground';
                       element.style.zIndex = -1;
                       this.$.container.appendChild(element);
                       elements[ itemSetup.name ] = element;
@@ -312,8 +317,6 @@
             var packedTree = this.packItems();
 
 
-            this.saveToStorage();            
-            
             function renderTree( node, elements, offsetX, offsetY ){
               var element = elements[ node.name || node.index ] 
                             || container; //TODO: remove it from here, so we could remove renderTree to outer scope
@@ -342,15 +345,31 @@
             // trigger event
             this.dispatchEvent( new CustomEvent("juicy-tile-list-refresh") );
           },
-          saveToStorage: function() {
-            saveJson(this.id, this.setup);
+
+          /**
+           * Returns true if current setup state is different from loaded from storage
+           * @return {Boolean}
+           */
+          isModified: function() {
+            return (JSON.stringify(this.setup) !== this._storedSetup);
+          },
+
+          saveToStorage: function(customSetup) {
+            this._storedSetup = JSON.stringify(customSetup || this.setup);
+            saveJson(this.id, this._storedSetup);
           },
 
           loadFromStorage: function() {
-            var loadedSetup = loadJson(this.id);
-            if(loadedSetup) {
-              this.setup = loadedSetup;
+            this.cleanupDOM();
+
+            this._storedSetup = loadJson(this.id);
+            if (this._storedSetup) {
+              this.setup = JSON.parse(this._storedSetup);
             }
+
+            Package.call(this, this.setup);
+            this.createItemsList();
+            this.refresh();
           },
 
           /**
