@@ -8,7 +8,7 @@
     <template>
     <style>
         :host {
-            display: block;
+            display: inline-block;
             padding: 16px;
         }
         #container{
@@ -183,6 +183,7 @@
             },
             createItemsList: function(){
               this.elements = filterNodes(this.children);
+              this.elements["root"] = this.$.container;
               defaultSetup(
                 this.elements,
                 this.setup.items,
@@ -265,8 +266,10 @@
             // TODO: support LTR
             if( this.setup.direction != "downRight"){
                this.setup.width = innerWidth(this);
+               this.setup.heightAuto = true;
             } else {
               this.setup.height = innerHeight(this);
+              this.setup.widthAuto = true;
             }
             // IDEA move to outter scope, not to redefine it every time
             var itemSetup, itemsLength = setup.items.length;
