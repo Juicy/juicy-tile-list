@@ -224,7 +224,6 @@ Package.prototype.reprioritizeItem =  function( item, increase, end ){
       itemSetup.priority = (higher.priority + lower.priority)/2;
   }
 
-  this.saveToStorage();
   // TODO only this scope
   this.packItems( );
   return this;
@@ -243,7 +242,6 @@ Package.prototype.resizeItem = function(item, width, height){
   // }
   item.width = width;
   item.height = height;
-  // this.saveToStorage();
   // re-pack only applicable branch
   // this.packItems( item.container, item.container.packer );
   // re-pack everthing
@@ -287,7 +285,6 @@ Package.prototype.moveToContainer = function( what, where, noPacking ){
 
   if(!noPacking){
     //TODO: repack only applicable ones
-    // this.saveToStorage();
     this.packItems();
   }
 
@@ -326,7 +323,6 @@ Package.prototype.deleteContainer = function( what, noRepacking ){
 
 
   if(!noRepacking){
-    // this.saveToStorage();
     //TODO: repack only applicable ones
     this.packItems();
   }
@@ -385,7 +381,6 @@ Package.prototype.createNewContainer = function( name, inContainer, rectangle, n
 
   if(!noRepacking){
     //TODO: repack only applicable ones
-    // this.saveToStorage();
     this.packItems();
   }
   return setup;
