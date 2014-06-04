@@ -42,6 +42,7 @@ function parseSetup( setup, container, items ){
         }
         parseSetup( itemSetup, currentContainer, items );
       } else {
+        // TODO: make index not mandatory (tomalec)
         items[ itemSetup.index ] = itemSetup;
         Object.defineProperty(itemSetup, "container", {value: currentContainer, writable: true });
       }
@@ -107,8 +108,6 @@ Package.prototype.packItems = function packItems( setup ) {
     .map(function(itemSetup){
       // TODO: do it more lightweight
       var rect = new Rectangle(itemSetup);
-      // TODO, property?
-      rect.container = setup;
 
       //first calculate rect width because it cannot be auto TODO: fix for downRight mode
       if( !rect.widthAuto && typeof rect.width == "string" && rect.width.indexOf("%") > 0 ){
