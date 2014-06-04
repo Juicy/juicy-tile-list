@@ -1,11 +1,11 @@
 # &lt;juicy-tile-list&gt; ![Bower Version](https://badge.fury.io/bo/juicy-tile-list.svg)
 
-`<juicy-tile-list>` is masonry-like Polymer Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only).
+> `<juicy-tile-list>` is masonry-like Polymer Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only).
 
 ## Features 
 
 It gives you:
- - masonry-like, gap-less layout, 
+ - masonry-like, gap-less layout (bin-packing), 
  - prioritizing items, 
  - grouping into virtual, nested containers,
  - alignment in different orientations/directions,
