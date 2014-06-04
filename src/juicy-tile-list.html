@@ -318,33 +318,10 @@
           refresh: function( ) {
             var container = this.$.container;
             var packedTree = this.packItems();
-
-
-            function renderTree( node, elements, offsetX, offsetY ){
-              var element = elements[ node.name || node.index ] 
-                            || container; //TODO: remove it from here, so we could remove renderTree to outer scope
-                  elementStyle = element.style;
-              offsetX = ( node.x || 0 ) + offsetX; 
-              offsetY = ( node.y || 0 ) + offsetY;
-              var oversize = node.oversize || 0;
-              elementStyle.left = ( offsetX - oversize ) + "px";
-              elementStyle.top = ( offsetY - oversize ) + "px";
-              elementStyle.width = ( node.width + 2 * oversize ) + "px";
-              elementStyle.height = ( node.height + 2 * oversize ) + "px";
-              if(node.background != undefined) {
-                elementStyle.backgroundColor = node.background || "transparent";
-              }
-              
-              if(node.items){// virtual container
-                var childNodeNo = node.items.length;  
-                while(childNodeNo--){
-                  renderTree( node.items[childNodeNo], elements, offsetX, offsetY);
-                }
-              }
-
-
-            }
-            renderTree( packedTree, this.elements, 0, 0);
+            
+            container.style.width = packedTree.width + "px";
+            container.style.height = packedTree.height + "px";
+            this.renderer( packedTree, this.elements, 0, 0);
             // trigger event
             this.dispatchEvent( new CustomEvent("juicy-tile-list-refresh") );
           },
@@ -434,6 +411,33 @@
             return {
               width: this._getMinimumDimension(elements, 'offsetLeft', 'offsetWidth'),
               height: this._getMinimumDimension(elements, 'offsetTop', 'offsetHeight')
+            }
+          },
+          /**
+           * Renderer method, used to render packed tree to DOM
+           */
+          renderer: function positionAbsolute( node, elements, offsetX, offsetY ){
+            var childNodeNo = node.items.length,
+                child,
+                element, elementStyle, left, top;  
+            while(childNodeNo--){
+              child = node.items[childNodeNo]
+              element = elements[ child.name || child.index ];
+              elementStyle = element.style;
+              left = ( child.x || 0 ) + offsetX; 
+              top = ( child.y || 0 ) + offsetY;
+              var oversize = child.oversize || 0;
+              elementStyle.left = ( left - oversize ) + "px";
+              elementStyle.top = ( top - oversize ) + "px";
+              elementStyle.width = ( child.width + 2 * oversize ) + "px";
+              elementStyle.height = ( child.height + 2 * oversize ) + "px";
+              if(child.background !== undefined) {
+                elementStyle.backgroundColor = child.background || "transparent";
+              }
+              
+              if(child.items){// virtual container
+                positionAbsolute( child, elements, left, top);
+              }
             }
           }
          }) 
