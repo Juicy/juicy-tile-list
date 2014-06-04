@@ -8,7 +8,8 @@ module.exports = function(grunt) {
                 },
                 files: [
                     '*.html',
-                    'examples/**/*.html'
+                    'examples/**/*.html',
+                    'tests/*.js'
                 ],
                 // tasks: ['jshint'],
             },
