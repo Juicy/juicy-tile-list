@@ -1,6 +1,19 @@
 # &lt;juicy-tile-list&gt; ![Bower Version](https://badge.fury.io/bo/juicy-tile-list.svg)
 
-`<juicy-tile-list>` is a Polymer Element with sortable tiles that packs efficiently without changing HTML structure (changes CSS only).
+`<juicy-tile-list>` is masonry-like Polymer Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only).
+
+## Features 
+
+It gives you:
+ - masonry-like, gap-less layout, 
+ - prioritizing items, 
+ - grouping into virtual, nested containers,
+ - alignment in different orientations/directions,
+ - dynamically changing size,
+ - auto adjusting container sizes,
+ - gap/gutter/cell-spacing between tiles,
+ - adapting to window size changes.
+
 
 ## Demo
 
@@ -38,17 +51,16 @@
 Attribute                    | Options             | Default      | Description
 ---                          | ---                 | ---          | ---
 `setup`                      | *Object*            |              | Tiles setup
-`setup.gap`                  | *Number*            | `0`          | Gap/cellspacing size in px
-`setup.direction`            | *String*            | `rightDown`  | How to align our package (horicontal layers `rightDown`, or vertiaval layers: `downRight`)
-
+`setup.gap`                  | *Number*            | `0`          | Gap/cell-spacing size in px
+`setup.direction`            | *String*            | `rightDown`  | How to align our package (horizontal layers `rightDown`, or vertiaval layers: `downRight`)
 `setup.items`                | *Array*             | `[]`         | Tiles setup
 `setup.items[?].priority`    | *Number* (0-1)      | `0`          | Importance of tile, used for sorting elements.
-`setup.items[?].width`       | *Number*            | `1`          | Tile width (number of colums)
+`setup.items[?].width`       | *Number*            | `1`          | Tile width (number of columns)
 `setup.items[?].heigh`       | *Number*            | `1`          | Tile height (number of rows)
 `setup.items[?].index`       | *Number*            |              | DOM ChildElement index (not needed for virtual containers)
 `setup.items[?].name`        | *String*            |              | Group name (for virtual containers)
 `setup.items[?].innerHTML`   | *String*            |              | Inner HTML for (for virtual containers)
-`setup.items[?].oversize`    | *Number*            | `0`          | Make container's box & background bleed for this aoumt of pixels out of packed box. So, render box bigger, but pack with iths original size (for virtual containers)
+`setup.items[?].oversize`    | *Number*            | `0`          | Make container's box & background bleed for this amount of pixels out of packed box. So, render box bigger, but pack with its original size (for virtual containers)
 `setup.items[?].items`       | *Array(Items)*      |              | Recursive setup (for virtual containers)
 `setup.items[?].gap`         | *Number*            | `0`          | Recursive setup (for virtual containers)
 `setup.items[?].direction`   | *String*            |              | Recursive setup (for virtual containers)
@@ -89,8 +101,7 @@ Name               | Param name | Type               | Default | Description
 ## Events
 
 Name                    | Data | Description
----                     | ---  | ---                
-
+---                     | ---  | ---   
 `juicy-tile-list-refresh` |  -   | Triggered once layout is refreshed
 
 
@@ -106,7 +117,7 @@ Name                    | Data | Description
 
 #### v0.0.2
  - Virtual grouping,
- - advenced editor features,
+ - advanced editor features,
  - gaps
 
 #### v0.0.1

@@ -14,44 +14,28 @@
     -->
     <!-- Importing Custom Elements -->
     <link rel="import" href="src/juicy-tile-list.html">
+
+    <link rel="stylesheet" href="examples/github-markdown.css">
 <style>
-* {
-  margin:0px;
-  padding:0px;
+body {
+    font-family: sans-serif;
+    min-width: 200px;
+    width: 50%;
+    margin: 0 auto;
+    padding: 30px;
 }
 juicy-tile-list{
     /*width: 300px;
     height: 150px;*/
-    width: 616px;
-    margin: 2em;
+    display: block;
+    width: 100%;
     padding:1em;
     box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
 }
 juicy-tile-list>*{
-    box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
-}
-juicy-tile-list>:first-child {
-    background:lightgreen;
-}
-
-juicy-tile-list>:nth-child(2) {
-    background:lightblue;
-}
-
-juicy-tile-list>:nth-child(3) {
-    background:yellow;
-    overflow:auto;
-}
-
-juicy-tile-list>:nth-child(4) {
-    background:gray;
-    overflow:auto;
-}
-
-juicy-tile-list>:nth-child(5) {
-    background:orange;
-    max-height: 100px;
-    overflow:auto;
+    box-shadow:     0px 0px 10px 0px rgba(50, 50, 50, 0.75);
+    text-align: center;
+    border-radius: 2px;
 }
 section input{
     width: 4em;
@@ -59,85 +43,109 @@ section input{
 </style>
 
 <body>
+<article class="markdown-body">
+    <h1>&lt;juicy-tile-list&gt;</h1>
+    Masonry-like Polymer Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only).
     <template bind>
         <juicy-tile-list setup="{{setup}}">
-            <div>Item 0 </div>
+            <div>0</div>
             <div>
-                <button>Item 1</button>
+                <button>1</button>
             </div>
             <div>
-                <input value="Input2">
+                <input value="2">
             </div>
-            <section>Item3</section>
+            <section>3</section>
+            <div>
+                <textarea>4</textarea>
+            </div>
+            <div>5</div>
+            <div>6</div>
+            <div>7</div>
+            <div>8</div>
+            <div>9</div>
+            <div>10</div>
+            <div>11</div>
         </juicy-tile-list>
     </template>
     <script type="text/javascript">
-        // 011
-        // 233
-        // 2
-        // 
-        // prioritized
-        // 
-        // 110
-        // 233
-        // 2
         model = {
             setup: {
                 gap: 8,
                 items:[
-                    // 011
-                    // 233
-                    // 2
-                    // prioritized
-                    // 
-                    // 110
-                    // 233
-                    // 2
                     {
                         index:0,
                         priority:0.9,// 0.6,
-                        height: 100,
-                        width: 200
+                        height: 50,
+                        width: 50
                     },
                     {
                         index:1,
                         priority:0.8,// 0.9,
                         height: 100,
-                        width:400
+                        width:50
                     },
                     {
                         index:2,
-                        priority:0.6,// 0.3,
-                        height: 100,
-                        width: 400
+                        priority:0.7,// 0.3,
+                        height: 50,
+                        width: 200
                     },
                     {
                         index:3,
+                        priority:0.6,
+                        height: 50,
+                        width: 150
+                    },
+                    {
+                        index:4,
+                        priority:0.5,
+                        height: 50,
+                        width: 200
+                    },
+                    {
+                        index:5,
                         priority:0.4,
-                        height: 200,
+                        height: 100,
+                        width: 50
+                    },
+                    {
+                        index:6,
+                        priority:0.3,
+                        height: 150,
+                        width: 100
+                    },
+                    {
+                        index:7,
+                        priority:0.2,
+                        height: 50,
+                        width: 50
+                    },
+                    {
+                        index:8,
+                        priority:0.1,
+                        height: 50,
+                        width: 50
+                    },
+                    {
+                        index:9,
+                        priority:0.09,
+                        height: 150,
+                        width: 50
+                    },
+                    {
+                        index:10,
+                        priority:0.08,
+                        height: 50,
+                        width: 100
+                    },
+                    {
+                        index:11,
+                        priority:0.07,
+                        height: 50,
                         width: 200
                     }
-                    // 
-                    // 122
-                    // 145
-                    // 333
-                    // 
-                    // {
-                    //   width: 200,
-                    //   height: 2
-                    // }, {
-                    //   width: 400,
-                    //   height:  100
-                    // }, {
-                    //   width: 600,
-                    //   height:  100
-                    // }, {
-                    //   width: 200,
-                    //   height:  100
-                    // }, {
-                    //   width: 200,
-                    //   height:  100
-                    // }
+                   
                 ]
             }
         };
@@ -162,7 +170,9 @@ section input{
             function callMethod(element, method, event){
                 var args = event.target.parentElement.querySelectorAll("input")
                             .array().map(function(e){return parseInt(e.value)});
+                args[0] = element.items[args[0]];
                 element[method].apply(element, args);
+                element.refresh();
             }
             document.getElementById("callResize").addEventListener("click", function (event){
                 callMethod( document.querySelector("juicy-tile-list"), "resizeItem", event );
@@ -179,10 +189,16 @@ section input{
             <li><a href="examples/prioritized.html">Prioritized/weighted tiles</a></li>
             <li><a href="examples/verticalLayers.html">Vertical layers</a></li>
             <li><a href="examples/fullWidth.html">Full width package</a></li>
+            <li><a href="examples/relativeSize.html">Relative dimensions</a></li>
             <li><a href="examples/nested.html">Nested packages</a></li>
-            <li><a href="http://juicy.github.io/juicy-tile-list-editor/">Editing the grid with &lt;juicy-tile-list-editor&gt;</a></li>
+            <li><a href="examples/recursiveGroups.html">Virtual nested groups</a></li>
+            <li><a href="examples/recursiveGroupsHeightAuto.html">Virtual groups with automatically adjusted height</a></li>
+            <li><a href="examples/oversize.html">Oversize background of virtual container</a></li>
+            <li><a href="examples/innerHTML.html">HTML/CSS content for virtual group</a></li>
+
+            <li><a href="http://juicy.github.io/juicy-tile-editor/">Editing the grid with &lt;juicy-tile-editor&gt;</a></li>
         </ul>
     </footer>
 
-
+</article>
 </body>
