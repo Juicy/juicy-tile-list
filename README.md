@@ -120,6 +120,18 @@ Name                      | Data | Description
 
 ## History
 
+#### v0.0.3
+ - better separation of DOM vs packing,
+ - oversizing containers,
+ - innerHTML property for virtual containers,
+ - better `heightAuto`, `widthAuto` behavior,
+ - auto same to storage removed,
+ - update to Polymer 0.3.0,
+ - containers stretching behavior in case of  overflow,
+ - rename to `juicy-tile-list`,
+ - [`juicy-tile-editor`](https://github.com/Juicy/juicy-tile-editor), and [`juicy-highlight`](https://github.com/Juicy/juicy-highlight) separated to its own repos,
+ - tons of fixes, tests, and minor changes.
+
 #### v0.0.2
  - Virtual grouping,
  - advanced editor features,
