@@ -24,8 +24,7 @@
         #container.animate ::content>*,
         #container.animate >*  {
             -webkit-transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s, -webkit-transform 0.5s;
-            transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s, transform 0.5s;
-            transition-timing-function: ease-out;
+            transition: width 0.5s ease-out, height 0.5s ease-out, top 0.5s ease-out, left 0.5s ease-out, transform 0.5s ease-out;
         }
         #container {
           z-index: 0;
@@ -43,10 +42,10 @@
       function innerWidth(elem) {
         var outerWidth = elem.offsetWidth;
         var computedStyle = window.getComputedStyle(elem, null);
-        var borderLeft = parseInt(computedStyle.getPropertyValue('border-left'), 10);
-        var borderRight = parseInt(computedStyle.getPropertyValue('border-right'), 10);
-        var paddingLeft = parseInt(computedStyle.getPropertyValue('padding-left'), 10);
-        var paddingRight = parseInt(computedStyle.getPropertyValue('padding-right'), 10);
+        var borderLeft = parseFloat(computedStyle.getPropertyValue('border-left')) || 0;
+        var borderRight = parseFloat(computedStyle.getPropertyValue('border-right')) || 0;
+        var paddingLeft = parseFloat(computedStyle.getPropertyValue('padding-left')) || 0;
+        var paddingRight = parseFloat(computedStyle.getPropertyValue('padding-right')) || 0;
         return outerWidth - borderLeft - borderRight - paddingLeft - paddingRight;
       }
 
@@ -58,10 +57,10 @@
       function innerHeight(elem) {
         var outerHeight = elem.offsetHeight;
         var computedStyle = window.getComputedStyle(elem, null);
-        var borderTop = parseInt(computedStyle.getPropertyValue('border-top'), 10);
-        var borderBottom = parseInt(computedStyle.getPropertyValue('border-bottom'), 10);
-        var paddingTop = parseInt(computedStyle.getPropertyValue('padding-top'), 10);
-        var paddingBottom = parseInt(computedStyle.getPropertyValue('padding-bottom'), 10);
+        var borderTop = parseFloat(computedStyle.getPropertyValue('border-top')) || 0;
+        var borderBottom = parseFloat(computedStyle.getPropertyValue('border-bottom')) || 0;
+        var paddingTop = parseFloat(computedStyle.getPropertyValue('padding-top')) || 0;
+        var paddingBottom = parseFloat(computedStyle.getPropertyValue('padding-bottom')) || 0;
         return outerHeight - borderTop - borderBottom - paddingTop - paddingBottom;
       }
 

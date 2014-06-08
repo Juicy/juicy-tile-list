@@ -16,7 +16,7 @@
     <link rel="import" href="src/juicy-tile-list.html">
 
     <link rel="stylesheet" href="examples/github-markdown.css">
-<style>
+<style shim-shadowdom>
 body {
     font-family: sans-serif;
     min-width: 200px;
@@ -32,6 +32,7 @@ juicy-tile-list{
     padding:1em;
     box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
 }
+juicy-tile-list #container>*, /** <-- oh, our `beloved` IE does not get concept of Shadow DOM */
 juicy-tile-list>*{
     box-shadow:     0px 0px 10px 0px rgba(50, 50, 50, 0.75);
     text-align: center;
