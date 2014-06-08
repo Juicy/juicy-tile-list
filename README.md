@@ -64,6 +64,7 @@ Attribute                    | Options             | Default      | Description
 `setup.items[?].items`       | *Array(Items)*      |              | Recursive setup (for virtual containers)
 `setup.items[?].gap`         | *Number*            | `0`          | Recursive setup (for virtual containers)
 `setup.items[?].direction`   | *String*            |              | Recursive setup (for virtual containers)
+
 ## Properties
 
 Name                 | Options        | Description
@@ -100,10 +101,14 @@ Name               | Param name | Type               | Default | Description
 
 ## Events
 
-Name                    | Data | Description
----                     | ---  | ---   
+Name                      | Data | Description
+---                       | ---  | ---   
 `juicy-tile-list-refresh` |  -   | Triggered once layout is refreshed
 
+## Related components
+
+- [`<juicy-tile-editor>`](Juicy/juicy-tile-editor) - GUI for editing tiles JSON setup
+- [`<juicy-tile-grid>`](Juicy/juicy-tile-grid) - Tiles rendered with CSS Grid Layout
 
 ## Contributing
 
