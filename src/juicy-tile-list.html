@@ -344,13 +344,15 @@
           },
 
           loadFromStorage: function() {
-            this.cleanupDOM();
-
             this._storedSetup = loadJson(this.id);
-            if (this._storedSetup) {
-              this.setup = JSON.parse(this._storedSetup);
-            }
+            this.loadFromString(this._storedSetup);
+          },
 
+          loadFromString: function(setupString) {
+            this.cleanupDOM();
+            if(setupString) {
+              this.setup = JSON.parse(setupString);
+            }
             Package.call(this, this.setup);
             this.createItemsList();
             this.refresh();
