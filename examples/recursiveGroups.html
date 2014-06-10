@@ -6,58 +6,25 @@
 
     <!-- Importing Web Component's Polyfill -->
     
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.0/platform.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.0/polymer.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.1/platform.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.1/polymer.js"></script>
     <!--
     <script src="../platform/platform.js"></script>
     <script src="../polymer/polymer.js"></script>
     -->
     <!-- Importing Custom Elements -->
     <link rel="import" href="../src/juicy-tile-list.html">
-<style>
-* {
-  margin:0px;
-  padding:0px;
-}
-body,html{
-    font-family: Helvetica, Arial, sans-serif;
-}
-juicy-tile-list{
-    /*width: 300px;
-    height: 150px;*/
-    height: 100%;
-    width: 100%;
-    box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
-}
-juicy-tile-list>*{
-    box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
-}
-juicy-tile-list>:first-child {
-    background:lightgreen;
-}
 
-juicy-tile-list>:nth-child(2) {
-    background:lightblue;
-}
-
-juicy-tile-list>:nth-child(3) {
-    background:yellow;
-    overflow:auto;
-}
-
-juicy-tile-list>:nth-child(4) {
-    background:gray;
-    overflow:auto;
-}
-
-juicy-tile-list>:nth-child(5) {
-    background:orange;
-    max-height: 100px;
-    overflow:auto;
-}
-</style>
-
+    <link rel="stylesheet" href="github-markdown.css">
+    <link rel="stylesheet" href="examples.css">
+</head>
 <body>
+<a href="https://github.com/Juicy/juicy-tile-list"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+<article class="markdown-body">
+    <h1>&lt;juicy-tile-list&gt;</h1>
+    <blockquote><p>Masonry-like Polymer Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only).</p></blockquote>
+
+    <!-- EXAMPLE STARTS HERE -->
     <template bind>
         <juicy-tile-list setup="{{setup}}">
             <div>Item 0, 1x1, priority 0, nested</div>
@@ -93,7 +60,7 @@ juicy-tile-list>:nth-child(5) {
                     },
                     {
                         priority: 0.8,
-                        height: 216,
+                        height: 144,
                         width: 216,
                         // group properties
                         name: "group1", //group name (optional?)
@@ -104,7 +71,7 @@ juicy-tile-list>:nth-child(5) {
                             
                             {
                                 priority: 0.8,
-                                height: 100,
+                                height: 40,
                                 width: 100,
                                 // group properties
                                 name: "group2", //group name (optional?)
@@ -146,6 +113,17 @@ juicy-tile-list>:nth-child(5) {
         document.addEventListener("polymer-ready", function(){
             document.querySelector("template").model = model;
             
-        })
+        });
     </script>
+    <!-- EXAMPLE ENDS HERE -->
+    <section>
+        <h3><a href="https://github.com/Juicy/juicy-tile-list#juicy-tile-list-">API</a></h3>
+        <ul>
+            <li><code>juicytilelist.resizeItem</code>(<input placeholder="itemIndex">, <input placeholder="width">, <input placeholder="height">) <button id="callResize">call</button></li>
+                
+            <li><code>juicytilelist.reprioritizeItem</code>(<input placeholder="itemIndex">, <input placeholder="increase" title="Boolean (0|1)">, <input placeholder="end" title="Boolean (0|1)">) <button id="callReprioritize">call</button></li>
+        </ul>
+        <script type="text/javascript" src="examples-api.js"></script>
+    </section>
+</article>
 </body>
