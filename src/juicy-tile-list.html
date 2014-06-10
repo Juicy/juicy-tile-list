@@ -276,9 +276,12 @@
                 // TODO: do it more lightweight
                 itemSetup = setup.items[itemsLength];
 
+                var element;
                 if (elements) {
-                  var element = elements[ itemSetup.index ];
-                  if (!element) {
+                  if(itemSetup.index !== undefined) {
+                    element = elements[ itemSetup.index ];
+                  }
+                  else if (itemSetup.name !== undefined) {
                     element = elements[ itemSetup.name ];
                     if (!element) {
                       element = document.createElement('DIV');
@@ -291,7 +294,7 @@
                     (itemSetup.innerHTML != undefined) && (element.innerHTML = itemSetup.innerHTML);
                   }
                 }
-                
+
                 if (! itemSetup.items ){ // element
                   if(itemSetup.heightAuto){
                     // itemSetup.height = element.clientHeight;          
@@ -424,6 +427,9 @@
             while(childNodeNo--){
               child = node.items[childNodeNo]
               element = elements[ child.name || child.index ];
+              if(!element) {
+                continue; //if element is not found, perhaps DOM was not yet rendered? Skip gracefully
+              }
               elementStyle = element.style;
               left = ( child.x || 0 ) + offsetX; 
               top = ( child.y || 0 ) + offsetY;
