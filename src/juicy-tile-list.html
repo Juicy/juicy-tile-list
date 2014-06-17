@@ -195,7 +195,6 @@
                 this.async(function asyncAttached(){
                     var that = this;
 
-                    this.loadFromStorage();
 
                     if(document.attachEvent){
                       element.detachEvent('onresize', this.refresh.bind(this, null, null));
@@ -206,6 +205,10 @@
                     }
 
                     window.addEventListener('resize', this.refresh.bind(this, null, null), true);
+
+                    // It's kinda strange but `loadFromStorage` initializes Packer instance <-smells badly
+                    // It also calls `.refresh()` which need to be called after setting listeners.
+                    this.loadFromStorage();
 
                     var that = this;
 
