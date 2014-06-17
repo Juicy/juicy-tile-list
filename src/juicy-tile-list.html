@@ -154,7 +154,7 @@
           var parent = node;
           parent = parent.parentNode;
           while( parent && parent.tagName != "BODY" ){
-            if(parent.tagName == "JUICY-TILE-LIST"){
+            if(parent.tagName == node.tagName){
               parent.addEventListener("juicy-tile-list-refresh", fn);
               break;
             }
