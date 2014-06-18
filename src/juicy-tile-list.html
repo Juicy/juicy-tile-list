@@ -189,47 +189,41 @@
                 this.items
               );
             },
-            attached: function gridAttached(){
-                //ensure any element upgrades have been processed
-                //TODO Add mutation observer for window resize, and items change
-                this.async(function asyncAttached(){
-                    var that = this;
+            domReady: function gridAttached(){
+              var that = this;
+
+              if(document.attachEvent){
+                this.attachEvent('onresize', this.refresh.bind(this, null, null));
+              } else {
+                //FIXME: async timeout look ugly (tomalec)
+                //we wait for transition, so innerHeight won't miss the planned size
+                workaroundOnResizeEvent( this, this.async.bind(this, "refresh", [null, null],500+1) );
+              }
+
+              window.addEventListener('resize', this.refresh.bind(this, null, null), true);
+
+              // It's kinda strange but `loadFromStorage` initializes Packer instance <-smells badly
+              // It also calls `.refresh()` which need to be called after setting listeners.
+              this.loadFromStorage();
 
 
-                    if(document.attachEvent){
-                      element.detachEvent('onresize', this.refresh.bind(this, null, null));
-                    } else {
-                      //FIXME: async timeout look ugly (tomalec)
-                      //we wait for transition, so innerHeight won't miss the planned size
-                      workaroundOnResizeEvent( this, this.async.bind(this, "refresh", [null, null],500+1) );
-                    }
-
-                    window.addEventListener('resize', this.refresh.bind(this, null, null), true);
-
-                    // It's kinda strange but `loadFromStorage` initializes Packer instance <-smells badly
-                    // It also calls `.refresh()` which need to be called after setting listeners.
-                    this.loadFromStorage();
-
-                    var that = this;
-
-                    // Observe changes
-                    // TODO: Make it cleaner
-                    // create an observer instance
-                    var observer = new MutationObserver(function(mutations) {
-                      mutations.forEach(function(mutation) {
-                        console.log("observation", mutation.type, arguments, mutations);
-                        if(mutation.addedNodes){
-                            //DRY, performance
-                            console.log("something was added")
-                            that.createItemsList();
-                            that.refresh();
-                        }
-                      });
-                    });
-                    // pass in the target node, as well as the observer options
-                    observer.observe(this, { childList: true });
-                    // end of: Observe changes
+              // Observe changes
+              // TODO: Make it cleaner
+              // create an observer instance
+              var observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                  console.log("observation", mutation.type, arguments, mutations);
+                  if(mutation.addedNodes){
+                      //DRY, performance
+                      console.log("something was added")
+                      that.createItemsList();
+                      that.refresh();
+                  }
                 });
+              });
+              // pass in the target node, as well as the observer options
+              observer.observe(this, { childList: true });
+              // end of: Observe changes
             },
           /**
            * Delete virtual container, move items (if any) to one above.
