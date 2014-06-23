@@ -293,6 +293,53 @@ describe('Package', function() {
         expect(packedTree.items[1]).to.have.property("x").equal(0, "should not fit in second column");
         expect(packedTree.items[1]).to.have.property("y").equal(60, "second row should be 10 (gap) lower");
       });
+      it('in root (more complicated example (issue #17)', function() {
+        var setup = {
+          "gap": 25,
+          "items": [
+
+            {
+              "index": 0,
+              "priority": 0.9,
+              "height": 25,
+              "width": 200,
+            },
+            {
+              "index": 1,
+              "priority": 0.8,
+              "height": 75,
+              "width": 100
+            },
+            {
+              "index": 2,
+              "priority": 0.7,
+              "height": 25,
+              "width": 100
+            },
+            {
+              "index": 3,
+              "priority": 0.6,
+              "height": 25,
+              "width": 100
+            }
+          ],
+          "name": "root",
+          "width": 350
+        };
+        var pkg = new Package(setup);
+        var packedTree = pkg.packItems();
+        expect(packedTree.items[0]).to.have.property("x").equal(0);
+        expect(packedTree.items[0]).to.have.property("y").equal(0);
+
+        expect(packedTree.items[1]).to.have.property("x").equal(225, "should fit 25 after #0");
+        expect(packedTree.items[1]).to.have.property("y").equal(0);
+
+        expect(packedTree.items[2]).to.have.property("x").equal(0);
+        expect(packedTree.items[2]).to.have.property("y").equal(50, "should fit 25 below #0");
+
+        expect(packedTree.items[3]).to.have.property("x").equal(0, "should not fit between #1 and #2, should be below");
+        expect(packedTree.items[3]).to.have.property("y").equal(100);
+      });
       it('in containers', function() {
         var setup = {
           width: 150,

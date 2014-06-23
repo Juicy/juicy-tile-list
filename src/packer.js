@@ -101,8 +101,10 @@ Packer.prototype.placeAt = function( rectangle, slot ) {
  */
 Packer.prototype.placed = function( rectangle ) {
   if(this.gap){
-    rectangle.width += this.gap;
-    rectangle.height += this.gap;
+    rectangle.width += 2 * this.gap;
+    rectangle.height += 2 * this.gap;
+    rectangle.x -= this.gap;
+    rectangle.y -= this.gap;
   }
   // update slots
   var revisedSlots = [];
@@ -118,8 +120,10 @@ Packer.prototype.placed = function( rectangle ) {
     }
   }
   if(this.gap){
-    rectangle.width -= this.gap;
-    rectangle.height -= this.gap;
+    rectangle.width -= 2 * this.gap;
+    rectangle.height -= 2 * this.gap;
+    rectangle.x += this.gap;
+    rectangle.y += this.gap;
   }
   // stretch container
   this.minWidth = Math.max( rectangle.x + rectangle.width, this.minWidth );
