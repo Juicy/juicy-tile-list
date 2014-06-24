@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>&lt;juicy-tile-editor&gt; Launcher bug</title>
+
+    <!-- Importing Web Component's Polyfill -->
+    <!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.3/platform.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.3/polymer.js"></script> -->
+    <script src="../../platform/platform.js"></script>
+    <link rel="import" href="../../polymer/polymer.html">
+
+    <!-- Importing Custom Elements -->
+    <link rel="import" href="../../juicy-tile-grid/src/juicy-tile-grid.html">
+
+    <link rel="stylesheet" href="http://juicy.github.io/juicy-tile-list/examples/github-markdown.css">
+    <style>
+      body {
+          font-family: sans-serif;
+          min-width: 200px;
+          width: 100%;
+          padding: 30px;
+      }
+      .markdown-body{
+          width: 70%;
+          margin: 0 auto;
+      }
+      .markdown-body.playground{
+          display: grid;
+          grid-template-columns: auto minmax(15em, 1fr)  min-content;
+          overflow: visible;
+      }
+      juicy-tile-list{
+          /*width: 300px;
+          height: 150px;*/
+          display: block;
+          width: calc( 200px * 2 + 15px * 2 + 25px);
+          padding: 15px;
+          box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
+      }
+      juicy-tile-list #container>*, /** <-- oh, our `beloved` IE does not get concept of Shadow DOM */
+      juicy-tile-list>*{
+          box-shadow:     0px 0px 10px 0px rgba(50, 50, 50, 0.75);
+          text-align: center;
+          border-radius: 2px;
+      }
+      section input{
+          width: 4em;
+      }
+      juicy-jsoneditor{
+          width: 100%;
+          height: 100%;
+          grid-column-start: 2;
+      }
+      .playground > button{
+          grid-column-start: 3;
+      }
+      #aboveOverlay {
+            position: relative;
+            z-index: 100;
+            background-color: #fff;
+          }
+    </style>
+
+</head>
+<body class="markdown-body">
+<template bind>
+  <juicy-tile-list disabled>
+    <!-- Here it is, if we remove this line it works -->
+      <link rel="import" href="launcher-82/whatever.html">
+
+    <div>1</div> 
+    <div>2</div>   
+  </juicy-tile-list>
+</template>
+<script type="text/javascript">
+  model = {};
+  document.addEventListener("polymer-ready", function(){
+    console.log("bind model");
+    document.querySelector("template").model = model;
+
+  });
+</script>
+</body>
