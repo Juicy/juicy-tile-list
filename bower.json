@@ -17,7 +17,8 @@
     "node_modules",
     "bower_components",
     "tests/",
-    "examples/"
+    "examples/",
+    "bugs"
   ],
   "dependencies": {
     "platform": "Polymer/platform#~0.3.0",
