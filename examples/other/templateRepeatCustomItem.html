@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>&lt;juicy-tile-list&gt; with template repeat and Custom_item inside</title>
+
+    <!-- Importing Web Component's Polyfill -->
+    
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.3/platform.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.3/polymer.js"></script>
+    <!--
+    <script src="../platform/platform.js"></script>
+    <script src="../polymer/polymer.js"></script>
+    -->
+    <!-- Importing Custom Elements -->
+    <link rel="import" href="../../src/juicy-tile-list.html">
+
+    <link rel="stylesheet" href="../github-markdown.css">
+    <link rel="stylesheet" href="../examples.css">
+</head>
+<body>
+<a href="https://github.com/Juicy/juicy-tile-list"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+<article class="markdown-body">
+    <h1>&lt;juicy-tile-list&gt; - example for <a href="http://stackoverflow.com/questions/24600698/how-can-i-use-packery-with-polymer-elements">StackOverflow question</a></h1>
+    <blockquote><p>Masonry-like Polymer Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only).</p></blockquote>
+    <p>This is an example of <code>&lt;juicy-tile-list&gt;</code> containing <code>&lt;template repeat&gt;</code> and some custom-element inside</p>
+
+    <!-- EXAMPLE STARTS HERE -->
+    <juicy-tile-list>
+        <template repeat="{{list}}">
+            <custom-item some="{{attr}}">{{desc}}</custom-item>
+        </template>
+    </juicy-tile-list>
+    <script type="text/javascript">
+        model = {
+            list:[
+            {
+                desc: "first",
+                attr: "a"
+            },
+            {
+                desc: "second",
+                attr: "b"
+            },
+            {
+                desc: "third",
+                attr: "c"
+            },
+            {
+                desc: "forth",
+                attr: "d"
+            }
+            ]
+        };
+        document.addEventListener("polymer-ready", function(){
+            document.querySelector("template").model = model;
+            
+        });
+    </script>
+    <!-- EXAMPLE ENDS HERE -->
+    <section>
+        <h3><a href="https://github.com/Juicy/juicy-tile-list#juicy-tile-list-">API</a></h3>
+        <ul>
+            <li><code>juicytilelist.resizeItem</code>(<input placeholder="itemIndex">, <input placeholder="width">, <input placeholder="height">) <button id="callResize">call</button></li>
+                
+            <li><code>juicytilelist.reprioritizeItem</code>(<input placeholder="itemIndex">, <input placeholder="increase" title="Boolean (0|1)">, <input placeholder="end" title="Boolean (0|1)">) <button id="callReprioritize">call</button></li>
+        </ul>
+        <script type="text/javascript" src="../examples-api.js"></script>
+    </section>
+</article>
+</body>
