@@ -50,6 +50,7 @@ It gives you:
 
 Attribute                    | Options             | Default      | Description
 ---                          | ---                 | ---          | ---
+`defaultTileSetup`           | *Object*            | see below    | Overwrites default values for Tiles (`setup.items[?].?`)
 `setup`                      | *Object*            |              | Tiles setup
 `setup.gap`                  | *Number*            | `0`          | Gap/cell-spacing size in px
 `setup.direction`            | *String*            | `rightDown`  | How to align our package (horizontal layers `rightDown`, or vertiaval layers: `downRight`)

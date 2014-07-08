@@ -10,7 +10,7 @@
 <script src="package.js"></script>
 
 <!-- Define your custom element -->
-<polymer-element name="juicy-tile-list" constructor="JuicyTileListElement" attributes="setup rowspans colspans layersOrientation">
+<polymer-element name="juicy-tile-list" constructor="JuicyTileListElement" attributes="setup rowspans colspans layersOrientation defaultTileSetup">
     <template>
     <style>
         :host {
@@ -92,7 +92,7 @@
         }
       }
 
-        var defaultSetupNode = {
+        var defaultTileSetup = {
             width: 256,
             height: 128,
             priority: 0
@@ -118,12 +118,14 @@
          * Modifies setup array with default settings for not mapped elements
          * @param {Array} elements
          * @param {Array} setupItems
+         * @param {Array} item
+         * @param {Object} defaultTileSetup
          */
-        function defaultSetup( elements, setupItems, items ){
+        function defaultSetup( elements, setupItems, items, defaultTileSetup ){
             for(var elNo = 0, eLen = elements.length; elNo < eLen; elNo++) {
               var element = elements[elNo];
               if( !items[elNo] ){
-                var itemSetup = JSON.parse(JSON.stringify(defaultSetupNode));
+                var itemSetup = JSON.parse(JSON.stringify(defaultTileSetup));
                 if(setupItems.length == 0) {
                   itemSetup.priority = 0.5;
                 }
@@ -183,6 +185,7 @@
             //  containerName: {setup: setupObject, items: , packer: packer}        
             items: null,// {}, 
 
+            defaultTileSetup: defaultTileSetup,
             sorter: function byPriority(itemA, itemB){
                 return itemB.priority - itemA.priority;
             },
@@ -192,7 +195,8 @@
               defaultSetup(
                 this.elements,
                 this.setup.items,
-                this.items
+                this.items,
+                this.defaultTileSetup
               );
             },
             domReady: function gridAttached(){
