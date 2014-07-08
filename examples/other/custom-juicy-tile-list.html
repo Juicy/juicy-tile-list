@@ -4,14 +4,11 @@
 <polymer-element name="custom-juicy-tile-list">
 <template> 
   <style>
-    :host{
-        display: block;
-        width: 100%;
-    }
+    /* juicy-tile-list is in-line block by default, 
+     * so we need to specify the size constraint */
     juicy-tile-list{
         width: 100%;
     }
-
    
     custom-item {
         background-color: white;
