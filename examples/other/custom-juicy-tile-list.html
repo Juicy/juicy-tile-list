@@ -1,0 +1,54 @@
+<!-- <link rel="import" href="../../../polymer/polymer.html"> -->
+<link rel="import" href="../../src/juicy-tile-list.html">
+
+<polymer-element name="custom-juicy-tile-list">
+<template> 
+  <style>
+    :host{
+        display: block;
+        width: 100%;
+    }
+    juicy-tile-list{
+        width: 100%;
+    }
+
+   
+    custom-item {
+        background-color: white;
+        display: block;
+        box-shadow:     0px 0px 10px 0px rgba(50, 50, 50, 0.75);
+  	}
+   
+  </style>
+    
+  <juicy-tile-list>
+    <template repeat="{{item in items}}">	
+    	<custom-item title="{{item.title}}" class="item">{{item.body}}</custom-item> 
+    </template>
+  </juicy-tile-list>
+</template>
+ 
+ 
+<script>
+Polymer('custom-juicy-tile-list', {
+  items:[
+  {
+      body: "first",
+      title: "a"
+  },
+  {
+      body: "second",
+      title: "b"
+  },
+  {
+      body: "third",
+      title: "c"
+  },
+  {
+      body: "forth",
+      title: "d"
+  }
+  ]	
+});
+</script>
+</polymer-element>
