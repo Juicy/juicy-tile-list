@@ -342,7 +342,7 @@ Package.prototype.generatePackageName = function (container) {
 /**
  * Create new empty virtual container.
  * @param  {String} name        Name for the container. If empty, a unique name will be generated
- * @param  {Item | String} [inContainer="root"] Container name or item
+ * @param  {Item | String} [inContainer="root"] Container item
  * @param  {Rectangle} [rectangle]   rectangle setup (width, height, priority)
  * @param  {Boolean} [noRepacking=false] `true` block re-packing items after setup change
  * @return {item}             created container
@@ -368,10 +368,10 @@ Package.prototype.createNewContainer = function( name, inContainer, rectangle, n
       items: [],
       name: name,
       priority: rectangle ? rectangle.priority : getMinimumPriority(siblings)/2,
-      width: (rectangle || defaultSetupNode).width,
-      height: (rectangle || defaultSetupNode).height
+      width: rectangle && rectangle.width || 0,  // consider use of this.defaultTileSetup
+      height: rectangle && rectangle.height || 0 // consider use of this.defaultTileSetup
   };
-  // this.items[ name ] = containerItem;
+  this.items[ name ] = setup;
   // 
   // XXX: setter?
   Object.defineProperty(setup, "container", { value: inContainer, writable: true });

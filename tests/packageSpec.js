@@ -487,6 +487,56 @@ describe('Package', function() {
 
   });
 
+  describe('method createNewContainer', function() {
+
+    it('by default should create empty virtual container', function() {
+      var pkg = new Package({
+        items: []
+      });
+      pkg.createNewContainer();
+      expect( pkg.items["root_0"] ).to.be.defined;
+      expect( pkg.items["root_0"] ).to.have.property("items");
+    });
+
+    it('should create empty virtual container with given name', function() {
+      var pkg = new Package({
+        items: []
+      });
+      pkg.createNewContainer("givenName");
+      expect( pkg.items["givenName"] ).to.be.defined;
+      expect( pkg.items["givenName"] ).to.have.property("items");
+    });
+
+    it('should create empty virtual container in given container', function() {
+      var pkg = new Package({
+        items: []
+      });
+      var givenContainer = pkg.createNewContainer("givenContainer");
+      var createdContainer = pkg.createNewContainer("another", givenContainer);
+      expect( pkg.items["another"] ).to.be.defined;
+      expect( pkg.items["another"] ).to.have.property("items");
+      expect( pkg.items["givenContainer"] ).property("items").to.contain(createdContainer);
+    });
+
+    it('should create new containers with unique names', function() {
+      var pkg = new Package({
+        items: []
+      });
+      var first = pkg.createNewContainer();
+      var second = pkg.createNewContainer();
+      var third_nested = pkg.createNewContainer(undefined, second);
+      expect( first ).to.have.property("name");
+      expect( second ).to.have.property("name").not.equal(first.name);
+      expect( third_nested ).to.have.property("name").not.equal(first.name);
+      expect( third_nested ).to.have.property("name").not.equal(second.name);
+
+      expect( pkg.items ).to.have.property( "root_0", first );
+      expect( pkg.items ).to.have.property( "root_1", second );
+      expect( pkg.items ).to.have.property( "root_1_0", third_nested );
+    });
+
+  });
+
   // describe('method getMinimumDimensions', function () {
 
   //   it('for a single element should return the element', function () {
