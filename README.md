@@ -121,6 +121,11 @@ Name                      | Data | Description
 
 ## History
 
+#### v0.0.4
+ - `defaultTileSetup` attribute
+ - many bug fixes
+ - update Polymer to 0.3.4
+
 #### v0.0.3
  - better separation of DOM vs packing,
  - oversizing containers,
