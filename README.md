@@ -121,6 +121,9 @@ Name                      | Data | Description
 
 ## History
 
+#### v0.0.5
+ - critical fix
+
 #### v0.0.4
  - `defaultTileSetup` attribute
  - many bug fixes
