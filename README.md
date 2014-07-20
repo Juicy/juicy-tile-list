@@ -121,6 +121,9 @@ Name                      | Data | Description
 
 ## History
 
+#### v0.0.6
+ - minifying task - dist folder for production use.
+
 #### v0.0.5
  - critical fix
 
