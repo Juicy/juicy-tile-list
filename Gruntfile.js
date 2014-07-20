@@ -33,17 +33,53 @@ module.exports = function(grunt) {
 		  options: {
 		    run: true
 		  }
-		}
+		},
+
+        uglify: {
+          options: {
+            beautify: {
+              ascii_only: true,
+            },
+            sourceMap: true,
+            sourceMapIncludeSources: true,
+            preserveComments: "some"
+          },
+          default: {
+            files: [
+              {
+                expand: true,     // Enable dynamic expansion.
+                cwd: 'src/',      // Src matches are relative to this path.
+                src: ['*.js'], // Actual pattern(s) to match.
+                dest: 'dist/',   // Destination path prefix.
+                //ext: '.js',   // Dest filepaths will have this extension.
+                extDot: 'first'   // Extensions in filenames begin after the first dot
+              },
+            ]
+          }
+        },
+        htmlmin: {                                     // Task
+            dist: {                                      // Target
+              options: {                                 // Target options
+                collapseWhitespace: true
+              },
+              files: {                                   // Dictionary of files
+                'dist/juicy-tile-list.html': 'src/juicy-tile-list.html'     // 'destination': 'source'
+              }
+            }
+        }
     });
 
     grunt.loadNpmTasks('grunt-text-replace');
     // grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
   	grunt.loadNpmTasks('grunt-mocha');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-htmlmin');
 
 
     grunt.registerTask('default', ['watch']);
     grunt.registerTask('build', ['replace']);
   	grunt.registerTask('test', ['mocha']);
+    grunt.registerTask('minify', ['uglify','htmlmin']);
 
 };
