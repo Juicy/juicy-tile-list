@@ -60,7 +60,9 @@ module.exports = function(grunt) {
         htmlmin: {                                     // Task
             dist: {                                      // Target
               options: {                                 // Target options
-                collapseWhitespace: true
+                collapseWhitespace: true,
+                minifyJS: true,
+                minifyCSS: true
               },
               files: {                                   // Dictionary of files
                 'dist/juicy-tile-list.html': 'src/juicy-tile-list.html'     // 'destination': 'source'
@@ -75,7 +77,6 @@ module.exports = function(grunt) {
   	grunt.loadNpmTasks('grunt-mocha');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
-
 
     grunt.registerTask('default', ['watch']);
     grunt.registerTask('build', ['replace']);
