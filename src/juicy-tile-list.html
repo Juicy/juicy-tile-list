@@ -278,14 +278,13 @@
               this.setup.height = innerHeight(this);
               this.setup.widthAuto = true;
             }
-            // IDEA move to outter scope, not to redefine it every time
-            var itemSetup, itemsLength = setup.items.length;
-            while( itemsLength--){
-                // TODO: do it more lightweight
-                itemSetup = setup.items[itemsLength];
+            if (elements) {
+              var itemSetup, itemsLength = setup.items.length;
+              while( itemsLength--){
+                  // TODO: do it more lightweight
+                  itemSetup = setup.items[itemsLength];
 
-                var element;
-                if (elements) {
+                  var element;
                   if(itemSetup.index !== undefined) {
                     element = elements[ itemSetup.index ];
                   }
@@ -301,29 +300,29 @@
 
                     (itemSetup.innerHTML != undefined) && (element.innerHTML = itemSetup.innerHTML);
                   }
-                }
+                  
 
-                if (! itemSetup.items ){ // element
-                  if(itemSetup.widthAuto){
-                    // itemSetup.width = element.clientWidth;
-                    element.style.width = ""; //slow, but I don't know another way to measure real width when element's content has shrinked other than remove height property before measuring (Marcin)
-                    element.style["grid-row"] = "";
-                    element.style["grid-column"] = "";
-                    itemSetup.width = element.scrollWidth; //now we can measure scrollHeight because width is already set and height is not constrained
-                  } 
-                  if(itemSetup.heightAuto){
-                    // us width constraint first, if given.
-                    if( !itemSetup.widthAuto ){
-                      element.style.width = itemSetup.width + "px";
+                  if ( element && !itemSetup.items ){ // element
+                    if(itemSetup.widthAuto){
+                      // itemSetup.width = element.clientWidth;
+                      element.style.width = ""; //slow, but I don't know another way to measure real width when element's content has shrinked other than remove height property before measuring (Marcin)
+                      element.style["grid-row"] = "";
+                      element.style["grid-column"] = "";
+                      itemSetup.width = element.scrollWidth; //now we can measure scrollHeight because width is already set and height is not constrained
+                    } 
+                    if(itemSetup.heightAuto){
+                      // us width constraint first, if given.
+                      if( !itemSetup.widthAuto ){
+                        element.style.width = itemSetup.width + "px";
+                      }
+                      // itemSetup.height = element.clientHeight;          
+                      element.style.height = ""; //slow, but I don't know another way to measure real height when element's content has shrinked other than remove height property before measuring (Marcin)
+                      itemSetup.height = element.scrollHeight; //now we can measure scrollHeight because width is already set and height is not constrained
                     }
-                    // itemSetup.height = element.clientHeight;          
-                    element.style.height = ""; //slow, but I don't know another way to measure real height when element's content has shrinked other than remove height property before measuring (Marcin)
-                    itemSetup.height = element.scrollHeight; //now we can measure scrollHeight because width is already set and height is not constrained
                   }
-                }
-                //recursion is done in Package#packItems 
+                  //recursion is done in Package#packItems 
+              }
             }
-            
 
             return Package.prototype.packItems.call( this, setup );
 
