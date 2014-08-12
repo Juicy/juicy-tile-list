@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>content select="[attribute=selector]" bug</title>
+<body>
+<div id="myElement">
+  <div stringattribute="works">stringattribute="works"</div>
+  <div numberattribute="0">numberattribute="0"</div>
+  <div justattribute="works">justattribute="works"</div>
+  <div justattribute="0">justattribute="0"</div>
+</div>
+
+<script type="text/javascript">
+    document.getElementById("stringattribute");
+    var container = document.getElementById('myElement');
+    var shadowRoot = container.createShadowRoot();
+    shadowRoot.innerHTML = 'My element should show distributed content, for:'+
+        '<ul>'+
+        '<li>&lt;content select="[stringattribute=works]"&gt;(1): ' +
+            '<content select="[stringattribute=works]"></content></li>'+
+        '<li>&lt;content select="[numberattribute=0]"&gt;(1): ' +
+            '<content select="[numberattribute=0]"></content></li>'+
+        '<li>&lt;content select="[justattribute]"&gt;(2): ' +
+            '<content select="[justattribute]"></content></li>'+
+        '</ul>';
+
+</script>
+</body>
