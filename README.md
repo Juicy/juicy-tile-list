@@ -11,7 +11,7 @@ It gives you:
  - alignment in different orientations/directions,
  - dynamically changing size,
  - auto adjusting container sizes,
- - gap/gutter/cell-spacing between tiles,
+ - gutter/cell-spacing between tiles,
  - adapting to window size changes.
 
 
@@ -52,7 +52,7 @@ Attribute                    | Options             | Default      | Description
 ---                          | ---                 | ---          | ---
 `defaultTileSetup`           | *Object*            | see below    | Overwrites default values for Tiles (`setup.items[?].?`)
 `setup`                      | *Object*            |              | Tiles setup
-`setup.gap`                  | *Number*            | `0`          | Gap/cell-spacing size in px
+`setup.gutter`                  | *Number*            | `0`       | Gutter/cell-spacing size in px
 `setup.direction`            | *String*            | `rightDown`  | How to align our package (horizontal layers `rightDown`, or vertiaval layers: `downRight`)
 `setup.items`                | *Array*             | `[]`         | Tiles setup
 `setup.items[?].priority`    | *Number* (0-1)      | `0`          | Importance of tile, used for sorting elements.
@@ -63,7 +63,7 @@ Attribute                    | Options             | Default      | Description
 `setup.items[?].innerHTML`   | *String*            |              | Inner HTML for (for virtual containers)
 `setup.items[?].oversize`    | *Number*            | `0`          | Make container's box & background bleed for this amount of pixels out of packed box. So, render box bigger, but pack with its original size (for virtual containers)
 `setup.items[?].items`       | *Array(Items)*      |              | Recursive setup (for virtual containers)
-`setup.items[?].gap`         | *Number*            | `0`          | Recursive setup (for virtual containers)
+`setup.items[?].gutter`      | *Number*            | `0`          | Recursive setup (for virtual containers)
 `setup.items[?].direction`   | *String*            |              | Recursive setup (for virtual containers)
 
 ## Properties
@@ -120,6 +120,9 @@ Name                      | Data | Description
 5. Submit a pull request :D
 
 ## History
+
+#### v0.0.?
+ - gap renamed to gutter
 
 #### v0.0.6
  - minifying task - dist folder for production use.

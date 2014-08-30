@@ -77,7 +77,7 @@ function Package( setup ){
   this.setup = setup || {
     name: "root",
     direction: "rightDown",
-    gap: 0,
+    gutter: 0,
     items: []
   };
   // XXX: this is only used by layer above (pj-srotable-tiles to match with elements)
@@ -111,14 +111,14 @@ Package.prototype.packItems = function packItems( setup ) {
 
       //first calculate rect width because it cannot be auto TODO: fix for downRight mode
       if( !rect.widthAuto && typeof rect.width == "string" && rect.width.indexOf("%") > 0 ){
-        rect.width = ( (setup.width + setup.gap) * parseFloat(rect.width) /100  - setup.gap);
+        rect.width = ( (setup.width + setup.gutter) * parseFloat(rect.width) /100  - setup.gutter);
       } else {
         rect.width = parseFloat( rect.width );
       }
       // caluclate relative size
-      // we cannot use calc(xx% - gap px) as it can be in virtual container which is a sibling
+      // we cannot use calc(xx% - gutter px) as it can be in virtual container which is a sibling
       if( !rect.heightAuto && typeof rect.height == "string" && rect.height.indexOf("%") > 0 ){
-        rect.height = ( (setup.height + setup.gap) * parseFloat(rect.height) /100 - setup.gap );
+        rect.height = ( (setup.height + setup.gutter) * parseFloat(rect.height) /100 - setup.gutter );
       } else {
         rect.height = parseFloat( rect.height );
       }
@@ -364,7 +364,7 @@ Package.prototype.createNewContainer = function( name, inContainer, rectangle, n
 
 ////-----------------
   var setup = {
-      gap: 0,
+      gutter: 0,
       items: [],
       name: name,
       priority: rectangle ? rectangle.priority : getMinimumPriority(siblings)/2,

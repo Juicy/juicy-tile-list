@@ -13,7 +13,6 @@ describe('juicy-tile-list', function() {
   describe('method getMinimumDimensions', function () {
 
     it('for a single element should return the element', function () {
-      debugger
       var pkg = new JuicyTiles();
       var elements = [
         {

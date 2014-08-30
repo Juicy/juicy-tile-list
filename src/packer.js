@@ -11,9 +11,9 @@
  * @param {Object} [props] packer properties
  * @param {Number} [props.width=0] packer width (in px)
  * @param {Number} [props.height=0] packer height (in px)
- * @param {Number} [props.gap=0] gap between items (in px)
+ * @param {Number} [props.gutter=0] gutter between items (in px)
  * @param {String} [props.direction="rightDown"] packing direction `"rightDown"|"downRight"`
- * @TODO write tests for `#gap` (tomalec)
+ * @TODO write tests for `#gutter` (tomalec)
  * @IDEA make it single dimentional, merge width and hegith into single constraint
  */
 function Packer( props /*width, height, direction*/ ){
@@ -29,7 +29,7 @@ function Packer( props /*width, height, direction*/ ){
 }
 Packer.prototype.width = Number.POSITIVE_INFINITY;
 Packer.prototype.height = Number.POSITIVE_INFINITY;
-Packer.prototype.gap = 0;
+Packer.prototype.gutter = 0;
 Packer.prototype.direction = "rightDown";
 Packer.prototype.minWidth = 0;
 Packer.prototype.minHeight = 0;
@@ -100,11 +100,11 @@ Packer.prototype.placeAt = function( rectangle, slot ) {
  * @param  {Rectangle} rectangle being added
  */
 Packer.prototype.placed = function( rectangle ) {
-  if(this.gap){
-    rectangle.width += 2 * this.gap;
-    rectangle.height += 2 * this.gap;
-    rectangle.x -= this.gap;
-    rectangle.y -= this.gap;
+  if(this.gutter){
+    rectangle.width += 2 * this.gutter;
+    rectangle.height += 2 * this.gutter;
+    rectangle.x -= this.gutter;
+    rectangle.y -= this.gutter;
   }
   // update slots
   var revisedSlots = [];
@@ -119,11 +119,11 @@ Packer.prototype.placed = function( rectangle ) {
       revisedSlots.push( slot );
     }
   }
-  if(this.gap){
-    rectangle.width -= 2 * this.gap;
-    rectangle.height -= 2 * this.gap;
-    rectangle.x += this.gap;
-    rectangle.y += this.gap;
+  if(this.gutter){
+    rectangle.width -= 2 * this.gutter;
+    rectangle.height -= 2 * this.gutter;
+    rectangle.x += this.gutter;
+    rectangle.y += this.gutter;
   }
   // stretch container
   this.minWidth = Math.max( rectangle.x + rectangle.width, this.minWidth );

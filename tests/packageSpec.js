@@ -119,7 +119,7 @@ describe('Package', function() {
           priority: 0.8, // 0.9,
           height: 200,
           width: 200,
-          gap: 0,
+          gutter: 0,
           items: [{
             index: 3,
             priority: 1,
@@ -130,7 +130,7 @@ describe('Package', function() {
             priority: 0.8, // 0.9,
             height: 200,
             width: 200,
-            gap: 0,
+            gutter: 0,
             items: [{
               index: 2,
               priority: 0.4,
@@ -171,7 +171,7 @@ describe('Package', function() {
           "priority": 0.8,
           "height": 200,
           "width": 150,
-          "gap": 0,
+          "gutter": 0,
           "items": [{
             "index": 3,
             "priority": 1,
@@ -184,7 +184,7 @@ describe('Package', function() {
             "priority": 0.8,
             "height": 200,
             "width": 200,
-            "gap": 0,
+            "gutter": 0,
             "items": [{
               "index": 2,
               "priority": 0.4,
@@ -268,11 +268,11 @@ describe('Package', function() {
         "minHeight": 350
       }));
     });
-    describe('should support gaps', function() {
+    describe('should support gutter', function() {
       it('in root', function() {
         var setup = {
           width: 150,
-          gap: 10,
+          gutter: 10,
           items: [{
             index: 0,
             priority: 0.9, // 0.6,
@@ -291,11 +291,11 @@ describe('Package', function() {
         expect(packedTree.items[0]).to.have.property("y").equal(0);
 
         expect(packedTree.items[1]).to.have.property("x").equal(0, "should not fit in second column");
-        expect(packedTree.items[1]).to.have.property("y").equal(60, "second row should be 10 (gap) lower");
+        expect(packedTree.items[1]).to.have.property("y").equal(60, "second row should be 10 (gutter) lower");
       });
       it('in root (more complicated example (issue #17)', function() {
         var setup = {
-          "gap": 25,
+          "gutter": 25,
           "items": [
 
             {
@@ -343,10 +343,10 @@ describe('Package', function() {
       it('in containers', function() {
         var setup = {
           width: 150,
-          gap: 10,
+          gutter: 10,
           items: [{
             name: "group",
-            gap: 5,
+            gutter: 5,
             priority: 0.7, // 0.3,
             height: 100,
             width: 100,
@@ -380,7 +380,7 @@ describe('Package', function() {
       var setup = {
         width: 200,
         height: 100,
-        gap: 0,
+        gutter: 0,
         items: [{
           index: 0,
           priority: 0.9, // 0.6,
@@ -406,10 +406,10 @@ describe('Package', function() {
     it('should support heightAuto for containers', function() {
       var setup = {
         width: 150,
-        gap: 10,
+        gutter: 10,
         items: [{
           name: "group",
-          gap: 5,
+          gutter: 5,
           priority: 0.7, // 0.3,
           heightAuto: true,
           width: 100,
@@ -433,10 +433,10 @@ describe('Package', function() {
     it('should support widthAuto for containers (with vertical orientation)', function() {
       var setup = {
         width: 150,
-        gap: 10,
+        gutter: 10,
         items: [{
           name: "group",
-          gap: 5,
+          gutter: 5,
           priority: 0.7, // 0.3,
           height: 100,
           direction: "downRight",
