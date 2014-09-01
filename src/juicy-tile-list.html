@@ -82,17 +82,6 @@
         }
       }
 
-      /**
-       * Loads string from the local storage using the provided key
-       * @param {String} key
-       * @return {String}
-       */
-      function loadJson(key) {
-        if (key) {
-          return localStorage.getItem(key);
-        }
-      }
-
         var defaultTileSetup = {
             width: 256,
             height: 128,
@@ -213,9 +202,13 @@
 
               window.addEventListener('resize', this.refresh.bind(this, null, null), true);
 
-              // It's kinda strange but `loadFromStorage` initializes Packer instance <-smells badly
+              
+              //to be removed, after we figure out how to save to localstorage in editor/Launcher
+              this._storedSetup = this.setup;
+
+              // It's kinda strange but `loadFromString` initializes Packer instance <-smells badly
               // It also calls `.refresh()` which need to be called after setting listeners.
-              this.loadFromStorage();
+              this.loadFromString();
 
 
               // Observe changes
@@ -353,11 +346,6 @@
           saveToStorage: function(customSetup) {
             this._storedSetup = JSON.stringify(customSetup || this.setup);
             saveJson(this.id, this._storedSetup);
-          },
-
-          loadFromStorage: function() {
-            this._storedSetup = loadJson(this.id);
-            this.loadFromString(this._storedSetup);
           },
 
           loadFromString: function(setupString) {
