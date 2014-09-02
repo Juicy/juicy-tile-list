@@ -71,16 +71,6 @@
         return outerHeight - borderTop - borderBottom - paddingTop - paddingBottom;
       }
 
-      /**
-       * Save string to the local storage using the provided key
-       * @param {String} key
-       * @param {String} value
-       */
-      function saveJson(key, value) {
-        if (key) {
-          localStorage.setItem(key, value);
-        }
-      }
 
         var defaultTileSetup = {
             width: 256,
@@ -333,19 +323,6 @@
             this.renderer( packedTree, this.elements, 0, 0);
             // trigger event
             this.dispatchEvent( new CustomEvent("juicy-tile-list-refresh") );
-          },
-
-          /**
-           * Returns true if current setup state is different from loaded from storage
-           * @return {Boolean}
-           */
-          isModified: function() {
-            return (JSON.stringify(this.setup) !== this._storedSetup);
-          },
-
-          saveToStorage: function(customSetup) {
-            this._storedSetup = JSON.stringify(customSetup || this.setup);
-            saveJson(this.id, this._storedSetup);
           },
 
           loadFromString: function(setupString) {
