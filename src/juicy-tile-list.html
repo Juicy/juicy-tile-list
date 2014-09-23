@@ -153,7 +153,6 @@
 
         Polymer('juicy-tile-list', Platform.mixin( {}, Package.prototype, {
             setup: null,
-             _storedSetup: null, //string
             // {
             //   direction: "rightDown",
             //   gutter: 8,
@@ -182,6 +181,11 @@
             domReady: function gridAttached(){
               var that = this;
 
+              Package.call(this, this.setup);
+
+              this.createItemsList();
+
+
               if(document.attachEvent){
                 this.attachEvent('onresize', this.refresh.bind(this, null, null));
               } else {
@@ -192,13 +196,7 @@
 
               window.addEventListener('resize', this.refresh.bind(this, null, null), true);
 
-              
-              //to be removed, after we figure out how to save to localstorage in editor/Launcher
-              this._storedSetup = this.setup;
-
-              // It's kinda strange but `loadFromString` initializes Packer instance <-smells badly
-              // It also calls `.refresh()` which need to be called after setting listeners.
-              this.loadFromString();
+              this.refresh();
 
 
               // Observe changes
@@ -218,7 +216,13 @@
               // pass in the target node, as well as the observer options
               observer.observe(this, { childList: true });
               // end of: Observe changes
+              
+              // This is ugly hack not to run attrChanged observers until domReady and our element is fully set up.(tomalec)
+              this.async(function(){
+                this.isReady = true;
+              });
             },
+            //TODO: detached: function(){}, //clean .elements, etc. (tomalec)
           /**
            * Delete virtual container, move items (if any) to one above.
            * @extends Package#deleteContainer
@@ -315,6 +319,7 @@
              * Refresh everything
              */
           refresh: function( ) {
+            console.info(this,"refresh");
             var container = this.$.container;
             var packedTree = this.packItems();
             
@@ -325,14 +330,26 @@
             this.dispatchEvent( new CustomEvent("juicy-tile-list-refresh") );
           },
 
-          loadFromString: function(setupString) {
-            this.cleanupDOM();
-            if(setupString) {
-              this.setup = JSON.parse(setupString);
-            }
-            Package.call(this, this.setup);
-            this.createItemsList();
-            this.refresh();
+          // attributeChanged: function (attr, oldVal, newVal){
+          //   if(attr =="setup"){
+          //     console.log("setupChanged", "\n",oldVal, newVal, this.setup, this.elements, this, arguments);
+          //     this.cleanupDOM();
+
+          //     Package.call(this, this.setup);
+          //     this.createItemsList();
+          //     this.refresh();
+          //   }
+          // },
+          setupChanged: function ( oldVal, newVal){
+              // do nothing before domReady
+              if(this.isReady){
+                console.info("setupChanged");
+                this.cleanupDOM();
+
+                Package.call(this, this.setup);
+                this.createItemsList();
+                this.refresh();
+              }
           },
 
           /**
