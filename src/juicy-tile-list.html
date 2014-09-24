@@ -10,7 +10,7 @@
 <script src="package.js"></script>
 
 <!-- Define your custom element -->
-<polymer-element name="juicy-tile-list" constructor="JuicyTileListElement" attributes="setup rowspans colspans layersOrientation defaultTileSetup">
+<polymer-element name="juicy-tile-list" constructor="JuicyTileListElement" attributes="setup layersOrientation defaultTileSetup gutter">
     <template>
     <style>
         :host {
@@ -182,6 +182,9 @@
               var that = this;
 
               Package.call(this, this.setup);
+              if(this.gutter != undefined){
+                this.setup.gutter = parseInt(this.gutter, 10);
+              }
 
               this.createItemsList();
 
@@ -319,7 +322,6 @@
              * Refresh everything
              */
           refresh: function( ) {
-            console.info(this,"refresh");
             var container = this.$.container;
             var packedTree = this.packItems();
             

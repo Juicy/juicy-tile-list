@@ -51,6 +51,7 @@ It gives you:
 Attribute                    | Options             | Default      | Description
 ---                          | ---                 | ---          | ---
 `defaultTileSetup`           | *Object*            | see below    | Overwrites default values for Tiles (`setup.items[?].?`)
+`gutter`                     | *Number*            | `0`          | Overwrites default value of `setup.gutter`
 `setup`                      | *Object*            |              | Tiles setup
 `setup.gutter`                  | *Number*            | `0`       | Gutter/cell-spacing size in px
 `setup.direction`            | *String*            | `rightDown`  | How to align our package (horizontal layers `rightDown`, or vertiaval layers: `downRight`)
