@@ -122,8 +122,10 @@ Name                      | Data | Description
 
 ## History
 
-#### v0.0.?
+#### v0.0.7
  - gap renamed to gutter
+ - removed localStorage features (use [`<juicy-tiles-setup-sync>`](https://github.com/Juicy/juicy-tiles-setup-sync) if needed)
+ - auto height fixes
 
 #### v0.0.6
  - minifying task - dist folder for production use.

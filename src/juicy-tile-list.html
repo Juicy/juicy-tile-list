@@ -150,7 +150,7 @@
 
 
         Polymer('juicy-tile-list', Platform.mixin( {}, Package.prototype, {
-            setup: null,
+            // setup: {}, // set in `created` 'constructor'
             // {
             //   direction: "rightDown",
             //   gutter: 8,
@@ -163,6 +163,9 @@
             items: null,// {}, 
 
             defaultTileSetup: defaultTileSetup,
+            created: function(){
+              this.setup = {};
+            },
             sorter: function byPriority(itemA, itemB){
                 return itemB.priority - itemA.priority;
             },
