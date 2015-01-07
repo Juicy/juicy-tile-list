@@ -52,8 +52,9 @@ Attribute                    | Options             | Default      | Description
 ---                          | ---                 | ---          | ---
 `defaultTileSetup`           | *Object*            | see below    | Overwrites default values for Tiles (`setup.items[?].?`)
 `gutter`                     | *Number*            | `0`          | Overwrites default value of `setup.gutter`
+`duration`                   | *Number*            | `0.5`        | Duration of repack animation (in seconds).
 `setup`                      | *Object*            |              | Tiles setup
-`setup.gutter`                  | *Number*            | `0`       | Gutter/cell-spacing size in px
+`setup.gutter`               | *Number*            | `0`          | Gutter/cell-spacing size in px
 `setup.direction`            | *String*            | `rightDown`  | How to align our package (horizontal layers `rightDown`, or vertiaval layers: `downRight`)
 `setup.items`                | *Array*             | `[]`         | Tiles setup
 `setup.items[?].priority`    | *Number* (0-1)      | `0`          | Importance of tile, used for sorting elements.
@@ -71,7 +72,8 @@ Attribute                    | Options             | Default      | Description
 
 Name                 | Options        | Description
 ---                  | ---            | ---
-`elements`   | *Array*        | Array of children which are going to be arranged.
+`elements`           | *Array*        | Array of children which are going to be arranged.
+`duration`           | *Number*       | `0.5`        | Duration of repack animation (in seconds).
 `setup`              | *Object*       | Up to date tiles setup. Structure as in attributes.
 `items`              | *Object*       | Map of setup nodes. Ones reflecting real DOM elements are indexed with `0-n` as in HTML, virtual containers are mapped with names. Root container is available under `items['root']`.
 `items[.].container` | *Object*       | Reference to container item. (non-enumerable property)
