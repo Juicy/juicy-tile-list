@@ -166,7 +166,7 @@
 
             defaultTileSetup: defaultTileSetup,
             created: function(){
-              this.setup = {};
+              this.setup = {}; //Polymer's type detection.
             },
             sorter: function byPriority(itemA, itemB){
                 return itemB.priority - itemA.priority;
@@ -183,8 +183,8 @@
             },
             domReady: function gridAttached(){
               var that = this;
-
-              Package.call(this, this.setup);
+              // pass setup if contains something (not `{}`-used for Polymer type detection)
+              Package.call(this, this.setup && this.setup.items !== undefined ? this.setup : undefined);
               if(this.gutter != undefined){
                 this.setup.gutter = parseInt(this.gutter, 10);
               }
