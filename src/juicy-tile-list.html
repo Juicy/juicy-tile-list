@@ -10,7 +10,7 @@
 <script src="package.js"></script>
 
 <!-- Define your custom element -->
-<polymer-element name="juicy-tile-list" constructor="JuicyTileListElement" attributes="setup layersOrientation defaultTileSetup gutter">
+<polymer-element name="juicy-tile-list" constructor="JuicyTileListElement" attributes="setup duration layersOrientation defaultTileSetup gutter">
     <template>
     <style>
         :host {
@@ -28,8 +28,8 @@
         polyfill-next-selector { content: ':host #container.animate> *'; }
         #container.animate ::content>*,
         #container.animate >*  {
-            -webkit-transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s, -webkit-transform 0.5s;
-            transition: width 0.5s ease-out, height 0.5s ease-out, top 0.5s ease-out, left 0.5s ease-out, transform 0.5s ease-out;
+            -webkit-transition: width {{duration}}s, height {{duration}}s, top {{duration}}s, left {{duration}}s, -webkit-transform {{duration}}s;
+            transition: width {{duration}}s ease-out, height {{duration}}s ease-out, top {{duration}}s ease-out, left {{duration}}s ease-out, transform {{duration}}s ease-out;
         }
         #container {
           z-index: 0;
@@ -161,6 +161,8 @@
             //  index_in_DOM: {element: DOMElement, setup: setupObject, container},..
             //  containerName: {setup: setupObject, items: , packer: packer}        
             items: null,// {}, 
+
+            duration: .5,
 
             defaultTileSetup: defaultTileSetup,
             created: function(){
