@@ -166,7 +166,7 @@
 
             defaultTileSetup: defaultTileSetup,
             created: function(){
-              this.setup = {}; //Polymer's type detection.
+              this.setup = {}; // Polymer's type detection.
             },
             sorter: function byPriority(itemA, itemB){
                 return itemB.priority - itemA.priority;
@@ -184,6 +184,7 @@
             domReady: function gridAttached(){
               var that = this;
               // pass setup if contains something (not `{}`-used for Polymer type detection)
+              // IDEA: consider merging with createItemsList, and re-flow setup, to fix Polyjuice glitches (tomalec)
               Package.call(this, this.setup && this.setup.items !== undefined ? this.setup : undefined);
               if(this.gutter != undefined){
                 this.setup.gutter = parseInt(this.gutter, 10);

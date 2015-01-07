@@ -18,7 +18,7 @@ function parseSetup( setup, container, items ){
     items = items || {};
     var name, currentContainer;
     if( !container ){
-      name = setup.name = "root"
+      name = setup.name = "root";
       container = null;
     } else {
       name = setup.name || ( (container && container.name) + "_" + sNo );
@@ -70,28 +70,29 @@ function getMinimumPriority(arr) {
 
 /**
  * [Package description]
- * @param {Object} [setup] packer setup
+ * @param {Object} [setup] packer setup (*Warning*: object will be modified!)
  * @IDEA remove this.items (tomalec)
  */
 function Package( setup ){
-  this.setup = setup || {
-    name: "root",
-    direction: "rightDown",
-    gutter: 0,
-    items: []
-  };
-  // XXX: this is only used by layer above (pj-srotable-tiles to match with elements)
-  this.items = 
-  parseSetup( this.setup );
-
-  // this.reset();
+  if(setup){
+    this.setup = setup;
+    // XXX: this is used only by layer above (juicy-tile-list to match with elements)
+    this.items = parseSetup( setup );
+  }else{
+    this.setup = {
+      name: "root",
+      direction: "rightDown",
+      gutter: 0,
+      items: []
+    };
+    this.items = {root: this.setup};
+  }
 }
 Package.prototype.items = null;
 Package.prototype.setup = null;
 
 
 Package.prototype.direction = "rightDown";
-
 
 /**
  * [packItems description]
