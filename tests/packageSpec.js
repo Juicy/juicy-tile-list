@@ -459,6 +459,77 @@ describe('Package', function() {
       expect(packedTree.items[0]).to.have.property("width").equal(80, "packed tree should have width calculated to minWidth that covers all items");
     });
 
+    it('should support hidden items (will not be packed)', function() {
+      var setup = {
+        width: 200,
+        gutter: 0,
+        items: [{
+          index: 0,
+          priority: 1,
+          height: 100,
+          width: 100
+        }, {
+          index: 1,
+          priority: 0.7,
+          height: 100,
+          width: 100,
+          hidden: true
+        }, {
+          index: 2,
+          priority: 0.5,
+          height: 100,
+          width: 100
+        }]
+      };
+      var pkg = new Package(setup);
+      var packedTree = pkg.packItems();
+      expect(packedTree.items[1]).to.equal(setup.items[1], "packed hidden item should be same as given one");
+      expect(packedTree.items[2]).to.have.property("x").equal(100, "third item should be packed just after first");
+      expect(packedTree.items[2]).to.have.property("y").equal(0, "third item should be packed just after first");
+    });
+
+    it('should support hidden groups (none of items will be packed)', function() {
+      var setup = {
+        width: 200,
+        gutter: 0,
+        items: [{
+          index: 0,
+          priority: 1,
+          height: 100,
+          width: 100
+        }, {
+          name: 'group',
+          priority: 0.7,
+          height: 100,
+          width: 100,
+          hidden: true,
+          items:[{
+              index: 0,
+              priority: 1,
+              height: 100,
+              width: 100
+            }, {
+              index: 3,
+              priority: 0.7,
+              height: 100,
+              width: 100,
+              hidden: true
+            }
+          ]
+        }, {
+          index: 2,
+          priority: 0.5,
+          height: 100,
+          width: 100
+        }]
+      };
+      var pkg = new Package(setup);
+      var packedTree = pkg.packItems();
+      expect(packedTree.items[1]).to.equal(setup.items[1], "packed hidden item should be same as given one");
+      expect(packedTree.items[2]).to.have.property("x").equal(100, "third item should be packed just after first");
+      expect(packedTree.items[2]).to.have.property("y").equal(0, "third item should be packed just after first");
+    });
+
   });
 
   describe('method generateUniqueName', function() {

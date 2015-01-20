@@ -107,6 +107,9 @@ Package.prototype.packItems = function packItems( setup ) {
   packer.items = setup.items
     .sort(this.sorter) // sort- if neded
     .map(function(itemSetup){
+      if(itemSetup.hidden){
+        return itemSetup;
+      }
       // TODO: do it more lightweight
       var rect = new Rectangle(itemSetup);
 

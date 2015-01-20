@@ -424,10 +424,10 @@
           /**
            * Renderer method, used to render packed tree to DOM
            */
-          renderer: function positionAbsolute( node, elements, offsetX, offsetY ){
+          renderer: function positionAbsolute( node, elements, offsetX, offsetY, hideAll ){
             var childNodeNo = node.items.length,
                 child,
-                element, elementStyle, left, top;  
+                element, elementStyle, left, top, hidden;  
             while(childNodeNo--){
               child = node.items[childNodeNo]
               element = elements[ child.name || child.index ];
@@ -435,19 +435,28 @@
                 continue; //if element is not found, perhaps DOM was not yet rendered? Skip gracefully
               }
               elementStyle = element.style;
-              left = ( child.x || 0 ) + offsetX; 
-              top = ( child.y || 0 ) + offsetY;
-              var oversize = child.oversize || 0;
-              elementStyle.left = ( left - oversize ) + "px";
-              elementStyle.top = ( top - oversize ) + "px";
-              elementStyle.width = ( child.width + 2 * oversize ) + "px";
-              elementStyle.height = ( child.height + 2 * oversize ) + "px";
-              if(child.background !== undefined) {
-                elementStyle.backgroundColor = child.background || "transparent";
+              // hide items marked as hidden ;)
+              hidden = hideAll || child.hidden;
+              if(hidden){
+                elementStyle.display = "none";
+                //continue; // do not process children?
+              } else {
+                // force default - block 
+                elementStyle.display = "";
+                left = ( child.x || 0 ) + offsetX; 
+                top = ( child.y || 0 ) + offsetY;
+                var oversize = child.oversize || 0;
+                elementStyle.left = ( left - oversize ) + "px";
+                elementStyle.top = ( top - oversize ) + "px";
+                elementStyle.width = ( child.width + 2 * oversize ) + "px";
+                elementStyle.height = ( child.height + 2 * oversize ) + "px";
+                if(child.background !== undefined) {
+                  elementStyle.backgroundColor = child.background || "transparent";
+                }
               }
               
               if(child.items){// virtual container
-                positionAbsolute( child, elements, left, top);
+                positionAbsolute( child, elements, left, top, hidden);
               }
             }
           }
