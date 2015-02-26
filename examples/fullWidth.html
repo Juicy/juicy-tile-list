@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>&lt;juicy-tile-list&gt; with groups</title>
+    <title>&lt;juicy-tile-list&gt; full screen width</title>
 
     <!-- Importing Web Component's Polyfill -->
     <script src="../../webcomponentsjs/webcomponents.js"></script>
@@ -17,42 +17,21 @@
 <article class="markdown-body">
     <h1>&lt;juicy-tile-list&gt;</h1>
     <blockquote><p>Masonry-like Polymer Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only).</p></blockquote>
-
+    <p>&lt;juicy-tile-list&gt; can adapt to screen/container width.</p>
     <!-- EXAMPLE STARTS HERE -->
     <template bind>
         <juicy-tile-list setup="{{setup}}">
             <div>Try</div>
-            <div>
-                <button>to</button>
-            </div>
-            <div>
-                <input value="resize">
-            </div>
+            <button>to</button>
+            <input value="resize">
             <section>browser window</section>
         </juicy-tile-list>
     </template>
     <script type="text/javascript">
-        // 011
-        // 233
-        // 2
-        // 
-        // prioritized
-        // 
-        // 110
-        // 233
-        // 2
         model = {
             setup: {
                 gutter: 8,
                 items:[
-                    // 011
-                    // 233
-                    // 2
-                    // prioritized
-                    // 
-                    // 110
-                    // 233
-                    // 2
                     {
                         index:0,
                         priority:0.9,
@@ -80,27 +59,6 @@
                         width:400,
                         widthAuto: true
                     }
-                    // 
-                    // 122
-                    // 145
-                    // 333
-                    // 
-                    // {
-                    //   width: 200,
-                    //   height: 200
-                    // }, {
-                    //   width: 400,
-                    //   height: 100
-                    // }, {
-                    //   width: 600,
-                    //   height: 100
-                    // }, {
-                    //   width: 200,
-                    //   height: 100
-                    // }, {
-                    //   width: 200,
-                    //   height: 100
-                    // }
                 ]
             }
         };
