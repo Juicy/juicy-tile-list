@@ -6,16 +6,16 @@
 
 /**
  * Extend JSON setup, with circular references to items' containers.
- * Creates an array of items and virtual containers, 
+ * Creates an array of all items and virtual containers, 
  * that maps to nodes in setup tree.
  * Applies default container name.
  * @param {Object} setup packer setup
  * @param {Item} [container] parent node
- * @param {Object} [items={}] map of items to update
+ * @param {Object} [allItems={}] map of items to update
  * @returns {Array} array of updated/created items
  */
-function parseSetup( setup, container, items ){
-    items = items || {};
+function parseSetup( setup, container, allItems ){
+    allItems = allItems || {};
     var name, currentContainer;
     if( !container ){
       name = setup.name = "root";
@@ -26,10 +26,10 @@ function parseSetup( setup, container, items ){
       setup.name = name;
     }
     // create item for current container
-    items[ name ] = currentContainer = setup;
+    allItems[ name ] = currentContainer = setup;
     Object.defineProperty(setup, "container", {value: container, writable: true});
 
-    // create items list
+    // create allItems list
     for(var sNo = 0, sLen = setup.items.length; sNo < sLen; sNo++) {
       var itemSetup = setup.items[sNo];
 
@@ -40,14 +40,14 @@ function parseSetup( setup, container, items ){
         if(!itemSetup.name){
           itemSetup.name = ( currentContainer.name + "_" + sNo );
         }
-        parseSetup( itemSetup, currentContainer, items );
+        parseSetup( itemSetup, currentContainer, allItems );
       } else {
         // TODO: make index not mandatory (tomalec)
-        items[ itemSetup.index ] = itemSetup;
+        allItems[ itemSetup.index ] = itemSetup;
         Object.defineProperty(itemSetup, "container", {value: currentContainer, writable: true });
       }
     }
-    return items;
+    return allItems;
 }
  /**
  * Returns the minimum value of the priority property from the given array of objects
@@ -77,7 +77,7 @@ function Package( setup ){
   if(setup){
     this.setup = setup;
     // XXX: this is used only by layer above (juicy-tile-list to match with elements)
-    this.items = parseSetup( setup );
+    this.allItems = parseSetup( setup );
   }else{
     this.setup = {
       name: "root",
@@ -85,10 +85,10 @@ function Package( setup ){
       gutter: 0,
       items: []
     };
-    this.items = {root: this.setup};
+    this.allItems = {root: this.setup};
   }
 }
-Package.prototype.items = null;
+Package.prototype.allItems = null;
 Package.prototype.setup = null;
 
 
@@ -322,7 +322,7 @@ Package.prototype.deleteContainer = function( what, noRepacking ){
   // remove setup
   var removed = siblingsList.splice( siblingsList.indexOf(what), 1)[0];
   // remove item
-  delete this.items[what.name];
+  delete this.allItems[what.name];
 
 
   if(!noRepacking){
@@ -338,7 +338,7 @@ Package.prototype.deleteContainer = function( what, noRepacking ){
  */
 Package.prototype.generatePackageName = function (container) {
   var i = 0;
-  while (this.items[container.name + '_' + i]) {
+  while (this.allItems[container.name + '_' + i]) {
     i++;
   }
   return container.name + '_' + i;
@@ -375,7 +375,7 @@ Package.prototype.createNewContainer = function( name, inContainer, rectangle, n
       width: rectangle && rectangle.width || 0,  // consider use of this.defaultTileSetup
       height: rectangle && rectangle.height || 0 // consider use of this.defaultTileSetup
   };
-  this.items[ name ] = setup;
+  this.allItems[ name ] = setup;
   // 
   // XXX: setter?
   Object.defineProperty(setup, "container", { value: inContainer, writable: true });

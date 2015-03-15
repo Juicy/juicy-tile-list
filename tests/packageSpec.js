@@ -5,7 +5,7 @@ describe('Package', function() {
   var expect = chai.expect;
   describe('constructor', function() {
 
-    it('should create `#items` map from given setup', function() {
+    it('should create `#allItems` map from given setup', function() {
       var item0 = {
         index: 0,
         width: 10,
@@ -21,8 +21,8 @@ describe('Package', function() {
       var pkg = new Package({
         items: [item0, item1]
       });
-      chai.assert.equal(pkg.items[0], item0);
-      chai.assert.equal(pkg.items[1], item1);
+      chai.assert.equal(pkg.allItems[0], item0);
+      chai.assert.equal(pkg.allItems[1], item1);
     });
 
   });
@@ -538,7 +538,7 @@ describe('Package', function() {
       var pkg = new Package({
         items: []
       });
-      chai.assert.equal(pkg.generatePackageName(pkg.items.root), 'root_0');
+      chai.assert.equal(pkg.generatePackageName(pkg.allItems.root), 'root_0');
     });
 
     it('should create a unique name with lowest possible integer suffix', function() {
@@ -553,7 +553,7 @@ describe('Package', function() {
           }
         ]
       });
-      chai.assert.equal(pkg.generatePackageName(pkg.items.root), 'root_1');
+      chai.assert.equal(pkg.generatePackageName(pkg.allItems.root), 'root_1');
     });
 
   });
@@ -565,8 +565,8 @@ describe('Package', function() {
         items: []
       });
       pkg.createNewContainer();
-      expect( pkg.items["root_0"] ).to.be.defined;
-      expect( pkg.items["root_0"] ).to.have.property("items");
+      expect( pkg.allItems["root_0"] ).to.be.defined;
+      expect( pkg.allItems["root_0"] ).to.have.property("items");
     });
 
     it('should create empty virtual container with given name', function() {
@@ -574,8 +574,8 @@ describe('Package', function() {
         items: []
       });
       pkg.createNewContainer("givenName");
-      expect( pkg.items["givenName"] ).to.be.defined;
-      expect( pkg.items["givenName"] ).to.have.property("items");
+      expect( pkg.allItems["givenName"] ).to.be.defined;
+      expect( pkg.allItems["givenName"] ).to.have.property("items");
     });
 
     it('should create empty virtual container in given container', function() {
@@ -584,9 +584,9 @@ describe('Package', function() {
       });
       var givenContainer = pkg.createNewContainer("givenContainer");
       var createdContainer = pkg.createNewContainer("another", givenContainer);
-      expect( pkg.items["another"] ).to.be.defined;
-      expect( pkg.items["another"] ).to.have.property("items");
-      expect( pkg.items["givenContainer"] ).property("items").to.contain(createdContainer);
+      expect( pkg.allItems["another"] ).to.be.defined;
+      expect( pkg.allItems["another"] ).to.have.property("items");
+      expect( pkg.allItems["givenContainer"] ).property("items").to.contain(createdContainer);
     });
 
     it('should create new containers with unique names', function() {
@@ -601,9 +601,9 @@ describe('Package', function() {
       expect( third_nested ).to.have.property("name").not.equal(first.name);
       expect( third_nested ).to.have.property("name").not.equal(second.name);
 
-      expect( pkg.items ).to.have.property( "root_0", first );
-      expect( pkg.items ).to.have.property( "root_1", second );
-      expect( pkg.items ).to.have.property( "root_1_0", third_nested );
+      expect( pkg.allItems ).to.have.property( "root_0", first );
+      expect( pkg.allItems ).to.have.property( "root_1", second );
+      expect( pkg.allItems ).to.have.property( "root_1_0", third_nested );
     });
 
   });

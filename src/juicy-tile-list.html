@@ -115,10 +115,10 @@
          * @param {Array} item
          * @param {Object} defaultTileSetup
          */
-        function defaultSetup( tiles, setupItems, items, defaultTileSetup ){
+        function defaultSetup( tiles, setupItems, allItems, defaultTileSetup ){
             for(var elNo = 0, eLen = tiles.length; elNo < eLen; elNo++) {
-              var element = tiles[elNo];
-              if( !items[elNo] ){
+              var tile = tiles[elNo];
+              if( !allItems[elNo] ){
                 var itemSetup = JSON.parse(JSON.stringify(defaultTileSetup));
                 if(setupItems.length == 0) {
                   itemSetup.priority = 0.5;
@@ -127,9 +127,9 @@
                   itemSetup.priority = getMinimumPriority(setupItems) * (1-1/eLen);
                 }
                 itemSetup.index = elNo;
-                Object.defineProperty(itemSetup, "container", {value:items["root"], writable: true})
+                Object.defineProperty(itemSetup, "container", {value:allItems["root"], writable: true})
                 setupItems.push(itemSetup);
-                items[elNo] = itemSetup;
+                allItems[elNo] = itemSetup;
               }
             }
         }
@@ -215,7 +215,7 @@
             // {
             //  index_in_DOM: {element: DOMElement, setup: setupObject, container},..
             //  containerName: {setup: setupObject, items: , packer: packer}        
-            items: null,// {}, 
+            allItems: null,// {}, 
 
             duration: 0.5,
 
@@ -233,9 +233,9 @@
               // this.tiles["root"] = this.$.container;
               this.tiles["root"] = this.$.container;
               defaultSetup(
-                this.elements,
+                this.tiles,
                 this.setup.items,
-                this.items,
+                this.allItems,
                 this.defaultTileSetup
               );
             },
@@ -441,9 +441,9 @@
 
                 Package.call(this, this.setup);
                 defaultSetup(
-                  this.elements,
+                  this.tiles,
                   this.setup.items,
-                  this.items,
+                  this.allItems,
                   this.defaultTileSetup
                 );
                 var that = this;
