@@ -126,7 +126,9 @@
                 else {
                   itemSetup.priority = getMinimumPriority(setupItems) * (1-1/eLen);
                 }
-                itemSetup.id = elNo;
+                //scoping magic
+                  itemSetup.id = tile.id;
+                // itemSetup.id = elNo;
                 Object.defineProperty(itemSetup, "container", {value:allItems["root"], writable: true})
                 setupItems.push(itemSetup);
                 allItems[elNo] = itemSetup;
@@ -172,21 +174,38 @@
             element.$.container.innerHTML = "";
           }
           // console.log("updateWrappers", tileDecorator);
-          var tiles = [], frag, tile;
+          var tiles = [], frag, tile, child, id,
+            //scoping magic
+            scopePrefix = "", scopedIndex=0;
           var wrappers = document.createDocumentFragment();
           for (var i=0, len = elementsArray.length; i < len; i++) {
+            child = elementsArray[i];
+            //scoping magic
+            //  
+              if(child.tagName === "JUICY-TILE-GROUP"){
+                scopePrefix = child.getAttribute("name") || "";
+                scopePrefix += "/";
+                scopedIndex = 0;
+                continue;
+              }
+              id = scopePrefix + scopedIndex;
+              scopedIndex++;
+            //id = i;
+
+
+
             frag = document.importNode(tileDecorator, true);
             tile = frag.firstChild;
-            tile.id = i;
-            tile.firstChild.setAttribute("select", "[juicytile='"+i+"']");
+            tile.id = id;
+            tile.firstChild.setAttribute("select", "[juicytile='"+id+"']");
             wrappers.appendChild(frag);
 
             //if (elem.setAttribute) {
               // attach a selectable key to each light-dom node
-              elementsArray[i].setAttribute('juicytile', i);
+              child.setAttribute('juicytile', id);
               // specify a <content> with that key
               tiles.push(tile);
-              // tiles.push(elementsArray[i]);
+              // tiles.push(child);
             //}
           }
           element.$.container.appendChild(wrappers);
@@ -231,13 +250,13 @@
               this.elements = filterNodes(this.children);
               this.tiles = updateWrappers(this.elements, this);
               // this.tiles["root"] = this.$.container;
-              this.tiles["root"] = this.$.container;
               defaultSetup(
                 this.tiles,
                 this.setup.items,
                 this.allItems,
                 this.defaultTileSetup
               );
+              this.tiles["root"] = this.$.container;
             },
             parseDeclaration: function(elementElement) {
               var template = this.fetchTemplate(elementElement);
