@@ -7,17 +7,18 @@ describe('Package', function() {
 
     it('should create `#allItems` map from given setup', function() {
       var item0 = {
-        index: 0,
+        id: 0,
         width: 10,
         height: 10,
         priority: 1
       };
       var item1 = {
-        index: 1,
+        id: 1,
         width: 50,
         height: 100,
         priority: 0
       };
+      debugger
       var pkg = new Package({
         items: [item0, item1]
       });
@@ -33,22 +34,22 @@ describe('Package', function() {
       var setup = {
         width: 150,
         items: [{
-          index: 1,
+          id: 1,
           priority: 0.9, // 0.6,
           height: 50,
           width: 100
         }, {
-          index: 2,
+          id: 2,
           priority: 0.8, // 0.9,
           height: 50,
           width: 100
         }, {
-          index: 0,
+          id: 0,
           priority: 0.7, // 0.3,
           height: 100,
           width: 50
         }, {
-          index: 3,
+          id: 3,
           priority: 0.6,
           height: 50,
           width: 50
@@ -57,35 +58,35 @@ describe('Package', function() {
       var expected = {
         "width": 150,
         "items": [{
-          "index": 1,
+          "id": 1,
           "priority": 0.9,
           "height": 50,
           "width": 100,
           "x": 0,
           "y": 0
         }, {
-          "index": 2,
+          "id": 2,
           "priority": 0.8,
           "height": 50,
           "width": 100,
           "x": 0,
           "y": 50
         }, {
-          "index": 0,
+          "id": 0,
           "priority": 0.7,
           "height": 100,
           "width": 50,
           "x": 100,
           "y": 0
         }, {
-          "index": 3,
+          "id": 3,
           "priority": 0.6,
           "height": 50,
           "width": 50,
           "x": 0,
           "y": 100
         }],
-        "name": "root",
+        "id": "root",
         "height": null,
         "slots": [{
           "x": 50,
@@ -100,7 +101,7 @@ describe('Package', function() {
         }],
         "minWidth": 150,
         "minHeight": 150
-      }
+      };
       var pkg = new Package(setup);
       var packedTree = pkg.packItems();
       chai.assert.equal(JSON.stringify(packedTree), JSON.stringify(expected));
@@ -110,46 +111,46 @@ describe('Package', function() {
       var setup = {
         width: 150,
         items: [{
-          index: 1,
+          id: 1,
           priority: 0.9, // 0.6,
           height: 50,
           width: 100
         }, {
-          name: "group",
+          id: "group",
           priority: 0.8, // 0.9,
           height: 200,
           width: 200,
           gutter: 0,
           items: [{
-            index: 3,
+            id: 3,
             priority: 1,
             height: 50,
             width: 50
           }, {
-            name: "nestedgroup",
+            id: "nestedgroup",
             priority: 0.8, // 0.9,
             height: 200,
             width: 200,
             gutter: 0,
             items: [{
-              index: 2,
+              id: 2,
               priority: 0.4,
               height: 50,
               width: 50
             }, {
-              index: 5,
+              id: 5,
               priority: 0.8,
               height: 50,
               width: 50
             }]
           }, {
-            index: 4,
+            id: 4,
             priority: 0.8,
             height: 50,
             width: 50
           }]
         }, {
-          index: 0,
+          id: 0,
           priority: 0.7, // 0.3,
           height: 100,
           width: 50
@@ -160,40 +161,40 @@ describe('Package', function() {
       chai.assert.equal(JSON.stringify(packedTree), JSON.stringify({
         "width": 150,
         "items": [{
-          "index": 1,
+          "id": 1,
           "priority": 0.9,
           "height": 50,
           "width": 100,
           "x": 0,
           "y": 0
         }, {
-          "name": "group",
+          "id": "group",
           "priority": 0.8,
           "height": 200,
           "width": 150,
           "gutter": 0,
           "items": [{
-            "index": 3,
+            "id": 3,
             "priority": 1,
             "height": 50,
             "width": 50,
             "x": 0,
             "y": 0
           }, {
-            "name": "nestedgroup",
+            "id": "nestedgroup",
             "priority": 0.8,
             "height": 200,
             "width": 200,
             "gutter": 0,
             "items": [{
-              "index": 2,
+              "id": 2,
               "priority": 0.4,
               "height": 50,
               "width": 50,
               "x": 0,
               "y": 0
             }, {
-              "index": 5,
+              "id": 5,
               "priority": 0.8,
               "height": 50,
               "width": 50,
@@ -216,7 +217,7 @@ describe('Package', function() {
             "minWidth": 100,
             "minHeight": 50
           }, {
-            "index": 4,
+            "id": 4,
             "priority": 0.8,
             "height": 50,
             "width": 50,
@@ -239,14 +240,14 @@ describe('Package', function() {
           "minWidth": 200,
           "minHeight": 250
         }, {
-          "index": 0,
+          "id": 0,
           "priority": 0.7,
           "height": 100,
           "width": 50,
           "x": 0,
           "y": 250
         }],
-        "name": "root",
+        "id": "root",
         "height": null,
         "slots": [{
           "x": 100,
@@ -274,12 +275,12 @@ describe('Package', function() {
           width: 150,
           gutter: 10,
           items: [{
-            index: 0,
+            id: 0,
             priority: 0.9, // 0.6,
             height: 50,
             width: 100
           }, {
-            index: 1,
+            id: 1,
             priority: 0.7, // 0.3,
             height: 100,
             width: 50
@@ -299,31 +300,31 @@ describe('Package', function() {
           "items": [
 
             {
-              "index": 0,
+              "id": 0,
               "priority": 0.9,
               "height": 25,
               "width": 200,
             },
             {
-              "index": 1,
+              "id": 1,
               "priority": 0.8,
               "height": 75,
               "width": 100
             },
             {
-              "index": 2,
+              "id": 2,
               "priority": 0.7,
               "height": 25,
               "width": 100
             },
             {
-              "index": 3,
+              "id": 3,
               "priority": 0.6,
               "height": 25,
               "width": 100
             }
           ],
-          "name": "root",
+          "id": "root",
           "width": 350
         };
         var pkg = new Package(setup);
@@ -345,18 +346,18 @@ describe('Package', function() {
           width: 150,
           gutter: 10,
           items: [{
-            name: "group",
+            id: "group",
             gutter: 5,
             priority: 0.7, // 0.3,
             height: 100,
             width: 100,
             items: [{
-              index: 0,
+              id: 0,
               priority: 0.8,
               height: 25,
               width: 25
             }, {
-              index: 1,
+              id: 1,
               priority: 0.7,
               height: 25,
               width: 25
@@ -382,12 +383,12 @@ describe('Package', function() {
         height: 100,
         gutter: 0,
         items: [{
-          index: 0,
+          id: 0,
           priority: 0.9, // 0.6,
           height: "50%",
           width: 100
         }, {
-          index: 1,
+          id: 1,
           priority: 0.7, // 0.3,
           height: 50,
           width: "100%"
@@ -408,18 +409,18 @@ describe('Package', function() {
         width: 150,
         gutter: 10,
         items: [{
-          name: "group",
+          id: "group",
           gutter: 5,
           priority: 0.7, // 0.3,
           heightAuto: true,
           width: 100,
           items: [{
-            index: 0,
+            id: 0,
             priority: 0.8,
             height: 25,
             width: 100
           }, {
-            index: 1,
+            id: 1,
             priority: 0.7,
             height: 50,
             width: 25
@@ -435,19 +436,19 @@ describe('Package', function() {
         width: 150,
         gutter: 10,
         items: [{
-          name: "group",
+          id: "group",
           gutter: 5,
           priority: 0.7, // 0.3,
           height: 100,
           direction: "downRight",
           widthAuto: true,
           items: [{
-            index: 0,
+            id: 0,
             priority: 0.8,
             height: 75,
             width: 50
           }, {
-            index: 1,
+            id: 1,
             priority: 0.7,
             height: 25,
             width: 25
@@ -464,18 +465,18 @@ describe('Package', function() {
         width: 200,
         gutter: 0,
         items: [{
-          index: 0,
+          id: 0,
           priority: 1,
           height: 100,
           width: 100
         }, {
-          index: 1,
+          id: 1,
           priority: 0.7,
           height: 100,
           width: 100,
           hidden: true
         }, {
-          index: 2,
+          id: 2,
           priority: 0.5,
           height: 100,
           width: 100
@@ -493,23 +494,23 @@ describe('Package', function() {
         width: 200,
         gutter: 0,
         items: [{
-          index: 0,
+          id: 0,
           priority: 1,
           height: 100,
           width: 100
         }, {
-          name: 'group',
+          id: 'group',
           priority: 0.7,
           height: 100,
           width: 100,
           hidden: true,
           items:[{
-              index: 0,
+              id: 0,
               priority: 1,
               height: 100,
               width: 100
             }, {
-              index: 3,
+              id: 3,
               priority: 0.7,
               height: 100,
               width: 100,
@@ -517,7 +518,7 @@ describe('Package', function() {
             }
           ]
         }, {
-          index: 2,
+          id: 2,
           priority: 0.5,
           height: 100,
           width: 100
@@ -534,21 +535,21 @@ describe('Package', function() {
 
   describe('method generateUniqueName', function() {
 
-    it('should create a unique name with index 0 if this is a first child container in its parent', function() {
+    it('should create a unique id with parentId_0 if this is a first child container in its parent', function() {
       var pkg = new Package({
         items: []
       });
       chai.assert.equal(pkg.generatePackageName(pkg.allItems.root), 'root_0');
     });
 
-    it('should create a unique name with lowest possible integer suffix', function() {
+    it('should create a unique id with lowest possible integer suffix', function() {
       var pkg = new Package({
         items: [{
-            name: 'root_0',
+            id: 'root_0',
             items: []
-          }, //currently 2 properties 'name' and 'items' qualify an item to be considered as a container by Package
+          }, //currently 'items' property qualify an item to be considered as a container by Package
           {
-            name: 'root_2',
+            id: 'root_2',
             items: []
           }
         ]
@@ -569,7 +570,7 @@ describe('Package', function() {
       expect( pkg.allItems["root_0"] ).to.have.property("items");
     });
 
-    it('should create empty virtual container with given name', function() {
+    it('should create empty virtual container with given id', function() {
       var pkg = new Package({
         items: []
       });
@@ -589,17 +590,17 @@ describe('Package', function() {
       expect( pkg.allItems["givenContainer"] ).property("items").to.contain(createdContainer);
     });
 
-    it('should create new containers with unique names', function() {
+    it('should create new containers with unique ids', function() {
       var pkg = new Package({
         items: []
       });
       var first = pkg.createNewContainer();
       var second = pkg.createNewContainer();
       var third_nested = pkg.createNewContainer(undefined, second);
-      expect( first ).to.have.property("name");
-      expect( second ).to.have.property("name").not.equal(first.name);
-      expect( third_nested ).to.have.property("name").not.equal(first.name);
-      expect( third_nested ).to.have.property("name").not.equal(second.name);
+      expect( first ).to.have.property("id");
+      expect( second ).to.have.property("id").not.equal(first.id);
+      expect( third_nested ).to.have.property("id").not.equal(first.id);
+      expect( third_nested ).to.have.property("id").not.equal(second.id);
 
       expect( pkg.allItems ).to.have.property( "root_0", first );
       expect( pkg.allItems ).to.have.property( "root_1", second );

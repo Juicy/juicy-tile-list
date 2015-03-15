@@ -59,8 +59,7 @@ Attribute                    | Options             | Default      | Description
 `setup.items[?].priority`    | *Number* (0-1)      | `0`          | Importance of tile, used for sorting elements.
 `setup.items[?].width`       | *Number*            | `1`          | Tile width (number of columns)
 `setup.items[?].heigh`       | *Number*            | `1`          | Tile height (number of rows)
-`setup.items[?].index`       | *Number*            |              | DOM ChildElement index (not needed for virtual containers)
-`setup.items[?].name`        | *String*            |              | Group name (for virtual containers)
+`setup.items[?].id`          | *String*            |              | Element/group id by default order in DOM will be used
 `setup.items[?].innerHTML`   | *String*            |              | Inner HTML for (for virtual containers)
 `setup.items[?].oversize`    | *Number*            | `0`          | Make container's box & background bleed for this amount of pixels out of packed box. So, render box bigger, but pack with its original size (for virtual containers)
 `setup.items[?].items`       | *Array(Items)*      |              | Recursive setup (for virtual containers)
@@ -74,7 +73,7 @@ Name                 | Options        | Description
 `elements`           | *Array*        | Array of children which are going to be arranged.
 `duration`           | *Number*       | `0.5`        | Duration of repack animation (in seconds).
 `setup`              | *Object*       | Up to date tiles setup. Structure as in attributes.
-`items`              | *Object*       | Map of setup nodes. Ones reflecting real DOM elements are indexed with `0-n` as in HTML, virtual containers are mapped with names. Root container is available under `items['root']`.
+`allItems`           | *Object*       | Map of setup nodes. Root container is available under `allItems['root']`.
 `items[.].container` | *Object*       | Reference to container item. (non-enumerable property)
 
 ## Methods

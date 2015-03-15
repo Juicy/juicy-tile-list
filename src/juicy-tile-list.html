@@ -126,7 +126,7 @@
                 else {
                   itemSetup.priority = getMinimumPriority(setupItems) * (1-1/eLen);
                 }
-                itemSetup.index = elNo;
+                itemSetup.id = elNo;
                 Object.defineProperty(itemSetup, "container", {value:allItems["root"], writable: true})
                 setupItems.push(itemSetup);
                 allItems[elNo] = itemSetup;
@@ -213,8 +213,8 @@
               //   return this.shadowRoot.getElementById(id);
               // },
             // {
-            //  index_in_DOM: {element: DOMElement, setup: setupObject, container},..
-            //  containerName: {setup: setupObject, items: , packer: packer}        
+            //  id_of_element_in_DOM: {element: DOMElement, setup: setupObject, container},..
+            //  id_of_v_container: {setup: setupObject, items: , packer: packer}        
             allItems: null,// {}, 
 
             duration: 0.5,
@@ -314,14 +314,15 @@
            * Delete virtual container, move items (if any) to one above.
            * @extends Package#deleteContainer
            * Remove corresponding ShadowDOM element.
-           * @param  {Item | String} what        Reference to, or name of the container to delete.
+           * @//param  {Item | String} what        Reference to, or id of the container to delete.
+           * @param  {Item} what        Reference to the container to delete.
            * @param  {Boolean} [noRepacking=false]  `true` to prevent  re-packing after setup change.
            * @return {Object}             deleted item
            */
           deleteContainer: function( what, noRepacking ){
             var deletedItem = Package.prototype.deleteContainer.call(this, what, noRepacking);
-            var deletedElement = this.tiles[deletedItem.name];
-              // var deletedElement = this.getTile(deletedItem.name);
+            var deletedElement = this.tiles[deletedItem.id];
+              // var deletedElement = this.getTile(deletedItem.id);
             deletedElement.parentNode.removeChild(deletedElement);
             return deletedItem;
           },
@@ -362,14 +363,14 @@
               while( itemsLength--){
                   // TODO: do it more lightweight
                   itemSetup = setup.items[itemsLength];
-                  tile = tiles[ itemSetup.name || itemSetup.index ];
-                  // tile = this.getTile( itemSetup.name || itemSetup.index );
-                  if (itemSetup.name !== undefined) { // virtual group
+                  tile = tiles[ itemSetup.id ];
+                  // tile = this.getTile( itemSetup.id );
+                  if (itemSetup.items !== undefined) { // virtual group
                     if (!tile) {
                       tile = document.createElement('DIV');
                       tile.className = 'containerBackground';
-                      tiles[ itemSetup.name ] = tile;
-                        tile.id = itemSetup.name;
+                      tiles[ itemSetup.id ] = tile;
+                        tile.id = itemSetup.id;
                       this.$.container.appendChild(tile);
                     }
 
@@ -521,8 +522,8 @@
                 element, elementStyle, left, top, hidden;  
             while(childNodeNo--){
               child = node.items[childNodeNo]
-              element = tiles[ child.name || child.index ];
-                // element = this.getTile( child.name || child.index );
+              element = tiles[ child.id ];
+                // element = this.getTile( child.id );
               if(!element) {
                 continue; //if element is not found, perhaps DOM was not yet rendered? Skip gracefully
               }
