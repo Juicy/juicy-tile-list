@@ -118,7 +118,7 @@
         function defaultSetup( tiles, setupItems, allItems, defaultTileSetup ){
             for(var elNo = 0, eLen = tiles.length; elNo < eLen; elNo++) {
               var tile = tiles[elNo];
-              if( !allItems[elNo] ){
+              if( !allItems[tile.id] ){
                 var itemSetup = JSON.parse(JSON.stringify(defaultTileSetup));
                 if(setupItems.length == 0) {
                   itemSetup.priority = 0.5;
@@ -131,7 +131,7 @@
                 // itemSetup.id = elNo;
                 Object.defineProperty(itemSetup, "container", {value:allItems["root"], writable: true})
                 setupItems.push(itemSetup);
-                allItems[elNo] = itemSetup;
+                allItems[tile.id] = itemSetup;
               }
             }
         }
@@ -205,6 +205,8 @@
               child.setAttribute('juicytile', id);
               // specify a <content> with that key
               tiles.push(tile);
+              // add also key based
+              tiles[id] = tile;
               // tiles.push(child);
             //}
           }
