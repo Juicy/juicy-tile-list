@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>&lt;juicy-tile-list&gt; with innerHTML for virtual group</title>
+    <title>&lt;juicy-tile-list&gt; with HTML content for virtual containers</title>
 
     <!-- Importing Web Component's Polyfill -->
     <script src="../../webcomponentsjs/webcomponents.js"></script>
@@ -17,6 +17,9 @@
 <article class="markdown-body">
     <h1>&lt;juicy-tile-list&gt;</h1>
     <blockquote><p>Masonry-like Polymer Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only).</p></blockquote>
+    <p>
+        By setting <code>.content</code> property you can specify HTML content for virtual container.
+    </p>
 
     <!-- EXAMPLE STARTS HERE -->
     <template bind>
@@ -72,7 +75,7 @@
                                 id: "group2", //group id (optional?)
                                 gutter: 4,
                                 direction: "rightDown",
-                                innerHTML: "<div style=\"background: rgba(191, 81, 236, 0.5);width: calc(100% + 2 * 4px ); position:relative; top:-4px; left: -4px; height: calc(100% + 2 * 4px );\">test</div>",
+                                content: "<div style=\"background: rgba(191, 81, 236, 0.5);width: calc(100% + 2 * 4px ); position:relative; top:-4px; left: -4px; height: calc(100% + 2 * 4px ); text-align: right;\">test</div>",
                                 //items property indicates it is a group
                                 items: [
                                     {

@@ -60,7 +60,7 @@ Attribute                    | Options             | Default      | Description
 `setup.items[?].width`       | *Number*            | `1`          | Tile width (number of columns)
 `setup.items[?].heigh`       | *Number*            | `1`          | Tile height (number of rows)
 `setup.items[?].id`          | *String*            |              | Element/group id by default order in DOM will be used
-`setup.items[?].innerHTML`   | *String*            |              | Inner HTML for (for virtual containers)
+`setup.items[?].content`     | *String*            |              | HTML content for (for virtual containers)
 `setup.items[?].oversize`    | *Number*            | `0`          | Make container's box & background bleed for this amount of pixels out of packed box. So, render box bigger, but pack with its original size (for virtual containers)
 `setup.items[?].items`       | *Array(Items)*      |              | Recursive setup (for virtual containers)
 `setup.items[?].gutter`      | *Number*            | `0`          | Recursive setup (for virtual containers)
