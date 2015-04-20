@@ -107,6 +107,57 @@ Name                      | Data | Description
 ---                       | ---  | ---   
 `juicy-tile-list-refresh` |  -   | Triggered once layout is refreshed
 
+## Tile ids
+
+Every tile gets its id, it's used in ShadowDom (so it won't collide with your markup) to match Light DOM content with positioned tile (and its setup).
+In HTML ids get created automatically, from order in DOM, so in your setup JSON you simply need to match the index of child node.
+
+### :construction: Custom ids (experimental feature)
+
+If for some reason, consecutive numbers does not fit your needs, you can assign id manually, by setting `juicytile` attribute:
+```html
+<juicy-tile-list>
+ <div juicytile="myFancyTileId">smth</div>
+</juicy-tile-list>
+```
+```javascript
+juicytilelist.setup = {
+  items:[
+    {
+      id: "myFancyTileId",
+      priority: 0.2
+    }
+  ]
+}
+```
+### :construction: Scoped ids (experimental feature)
+
+You can also add name-space to your id in declarative way.
+```html
+<juicy-tile-list>
+  <juicy-tile-group name="fruits">
+    <div>apple</div>
+  </juicy-tile-group>
+  <juicy-tile-group name="veggies">
+    <div>carrot</div>
+  </juicy-tile-group>
+</juicy-tile-list>
+```
+```javascript
+juicytilelist.setup = {
+  items:[
+    {
+      id: "fruits/0",
+      priority: 0.2
+    },
+    {
+      id: "veggies/0",
+      priority: 0.4
+    }
+  ]
+}
+```
+
 ## Related components
 
 - [`<juicy-tile-editor>`](Juicy/juicy-tile-editor) - GUI for editing tiles JSON setup
