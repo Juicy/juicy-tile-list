@@ -68,6 +68,22 @@ module.exports = function(grunt) {
                 'dist/juicy-tile-list.html': 'src/juicy-tile-list.html'     // 'destination': 'source'
               }
             }
+        },
+        bump: {
+          options: {
+            files: ['package.json', 'bower.json', 'src/*', 'dist/*.html'],
+            commit: true,
+            commitMessage: '%VERSION%',
+            commitFiles: ['package.json', 'bower.json', 'src/*', 'dist/*'],
+            createTag: true,
+            tagName: '%VERSION%',
+            tagMessage: 'Version %VERSION%',
+            push: false,
+            // pushTo: 'origin',
+            globalReplace: false,
+            prereleaseName: false,
+            regExp: false
+          }
         }
     });
 
@@ -77,6 +93,7 @@ module.exports = function(grunt) {
   	grunt.loadNpmTasks('grunt-mocha');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
+    grunt.loadNpmTasks('grunt-bump');
 
     grunt.registerTask('default', ['watch']);
     grunt.registerTask('build', ['replace']);

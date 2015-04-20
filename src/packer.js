@@ -1,6 +1,7 @@
 /**
  * Packer
  * bin-packing algorithm
+ * version: 0.0.9
  */
 (function( scope ){
 "use strict";
