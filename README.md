@@ -6,6 +6,7 @@
 
 It gives you:
  - masonry-like, gap-less layout (bin-packing), 
+ - layout applied in Shadow DOM - so it doesn't mess with your styles,
  - prioritizing items, 
  - grouping into virtual, nested containers,
  - alignment in different orientations/directions,
