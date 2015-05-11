@@ -393,6 +393,8 @@ version: 0.1.0
                       tiles[ itemSetup.id ] = tile;
                         tile.id = itemSetup.id;
                       this.$.container.appendChild(tile);
+                    } else {
+                        this.$.container.appendChild(tile);
                     }
 
                     (itemSetup.content != undefined) && (tile.innerHTML = itemSetup.content);
@@ -564,10 +566,12 @@ version: 0.1.0
                 elementStyle.top = ( top - oversize ) + "px";
                 elementStyle.width = ( child.width + 2 * oversize ) + "px";
                 elementStyle.height = ( child.height + 2 * oversize ) + "px";
-                if(child.background !== undefined) {
-                  elementStyle.backgroundColor = child.background || "transparent";
+                if (child.background !== undefined) {
+                    elementStyle.backgroundColor = child.background || "transparent";
+                } else {
+                    elementStyle.backgroundColor = "";
                 }
-                elementStyle.border = child.border;
+                elementStyle.border = child.border || "";
               }
               
               if(child.items){// virtual container
