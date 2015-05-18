@@ -18,7 +18,6 @@ describe('Package', function() {
         height: 100,
         priority: 0
       };
-      debugger
       var pkg = new Package({
         items: [item0, item1]
       });
