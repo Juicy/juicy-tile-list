@@ -16,7 +16,7 @@ version: 0.1.0
 <template id="juicy-tile"><div class="juicy-tile"><content></content></div></template>
 
 <!-- Define your custom element -->
-<polymer-element name="juicy-tile-list" constructor="JuicyTileListElement" attributes="setup duration layersOrientation defaultTileSetup gutter">
+<polymer-element name="juicy-tile-list" constructor="JuicyTileListElement" attributes="setup duration layersOrientation defaultTileSetup gutter refreshOnMutation">
     <template>
     <style>
         :host {
@@ -239,10 +239,26 @@ version: 0.1.0
             allItems: null,// {}, 
 
             duration: 0.5,
+            refreshOnMutation: false,
 
             defaultTileSetup: defaultTileSetup,
             created: function(){
               this.setup = {}; // Polymer's type detection.
+              // Define mutation observer to observe changes
+              // TODO: Make it cleaner
+              // create an observer instance
+              var that = this;
+              this.observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                  // console.log("observation", mutation.type, arguments, mutations);
+                  if(mutation.addedNodes.length || mutation.removedNodes.length){
+                      //DRY, performance
+                      // console.log("something was added")
+                      that.createItemsList();
+                      that.refresh();
+                  }
+                });
+              });
             },
             sorter: function byPriority(itemA, itemB){
                 return itemB.priority - itemA.priority;
@@ -303,25 +319,11 @@ version: 0.1.0
 
                 that.refresh();
 
+              if(this.refreshOnMutation){
+                this.observer.observe(this, { childList: true });
+                // this.observer.observe(this, { childList: true });
+              }
 
-              // Observe changes
-              // TODO: Make it cleaner
-              // create an observer instance
-              var observer = new MutationObserver(function(mutations) {
-                mutations.forEach(function(mutation) {
-                  console.log("observation", mutation.type, arguments, mutations);
-                  if(mutation.addedNodes){
-                      //DRY, performance
-                      // console.log("something was added")
-                      that.createItemsList();
-                      that.refresh();
-                  }
-                });
-              });
-              // pass in the target node, as well as the observer options
-              observer.observe(that, { childList: true });
-              // end of: Observe changes
-              
               // console.timeEnd("attached");
               // console.profileEnd("attached");
               // This is ugly hack not to run attrChanged observers until domReady and our element is fully set up.(tomalec)
@@ -330,6 +332,7 @@ version: 0.1.0
                 that.isReady = true;
               });
             },
+
             //TODO: detached: function(){}, //clean .elements, etc. (tomalec)
           /**
            * Delete virtual container, move items (if any) to one above.
@@ -446,33 +449,32 @@ version: 0.1.0
             // trigger event
             this.dispatchEvent( new CustomEvent("juicy-tile-list-refresh") );
           },
+          attributeChanged: function(name, oldVal, newVal){
+            switch(name){
+              case "setup":
+                // do nothing before domReady
+                if(this.isReady){
+                  // console.info("setupChanged");
+                  this.cleanupDOM();
 
-          // attributeChanged: function (attr, oldVal, newVal){
-          //   if(attr =="setup"){
-          //     console.log("setupChanged", "\n",oldVal, newVal, this.setup, this.elements, this, arguments);
-          //     this.cleanupDOM();
-
-          //     Package.call(this, this.setup);
-          //     this.createItemsList();
-          //     this.refresh();
-          //   }
-          // },
-          setupChanged: function ( oldVal, newVal){
-              // do nothing before domReady
-              if(this.isReady){
-                // console.info("setupChanged");
-                this.cleanupDOM();
-
-                Package.call(this, this.setup);
-                defaultSetup(
-                  this.tiles,
-                  this.setup.items,
-                  this.allItems,
-                  this.defaultTileSetup
-                );
-                var that = this;
-                that.refresh();
-              }
+                  Package.call(this, this.setup);
+                  defaultSetup(
+                    this.tiles,
+                    this.setup.items,
+                    this.allItems,
+                    this.defaultTileSetup
+                  );
+                  this.refresh();
+                }
+                break;
+              case "refreshonmutation":
+                if(this.refreshOnMutation){
+                  this.observer.observe(this, { childList: true });
+                } else {
+                  this.observer.disconnect();
+                }
+                break;
+            }
           },
 
           /**

@@ -1,0 +1,169 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../../webcomponentsjs/webcomponents.js"></script>
+    <script src="../../../web-component-tester/browser.js"></script>
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="../../src/juicy-tile-list.html">
+  </head>
+  <body>
+
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <juicy-tile-list id="list1">
+      <div>0</div>
+      <span>1</span>
+      <p>3</p>
+    </juicy-tile-list>
+    <juicy-tile-list id="list2" refreshOnMutation>
+      <div>0</div>
+      <span>1</span>
+      <p>3</p>
+    </juicy-tile-list>
+
+    <script>
+/**
+ * JuicyTiles tests
+ */
+var juicyTileList = document.getElementById('list1');
+var juicyTileList2 = document.getElementById('list2');
+describe('juicy-tile-list', function() {
+  context('when onMutation attribute', function () {
+    afterEach(function(){
+      juicyTileList.refresh.restore && juicyTileList.refresh.restore();
+      juicyTileList2.refresh.restore && juicyTileList2.refresh.restore();
+    });
+
+    context('was not set', function () {
+      it('refresh method should not be called when some node is added', function (done) {
+        var refresh = sinon.spy(juicyTileList, "refresh");
+
+        var addedNode = document.createElement("div");
+        addedNode.innerHTML = "4";
+        juicyTileList.appendChild(addedNode);
+
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+          expect( juicyTileList.refresh.callCount ).to.equal(0);
+          juicyTileList.refresh.restore();
+          done();
+        });
+      });
+      it('refresh method should not be called when some node is removed', function (done) {
+        var refresh = sinon.spy(juicyTileList, "refresh");
+
+        juicyTileList.removeChild(juicyTileList.firstElementChild);
+
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+          expect( juicyTileList.refresh.callCount ).to.equal(0);
+          juicyTileList.refresh.restore();
+          done();
+        });
+      });
+
+    });
+    context('was set when element was created', function () {
+      it('refresh method should be called when some node is added', function (done) {
+        var refresh = sinon.spy(juicyTileList2, "refresh");
+
+        var addedNode = document.createElement("div");
+        addedNode.innerHTML = "4";
+        juicyTileList2.appendChild(addedNode);
+
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+          expect( juicyTileList2.refresh.callCount ).to.equal(1);
+          juicyTileList2.refresh.restore();
+          done();
+        });
+      });
+      it('refresh method should be called when some node is removed', function (done) {
+        var refresh = sinon.spy(juicyTileList2, "refresh");
+
+        juicyTileList2.removeChild(juicyTileList2.firstElementChild);
+
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+          expect( juicyTileList2.refresh.callCount ).to.equal(1);
+          juicyTileList2.refresh.restore();
+          done();
+        });
+      });
+
+    });
+    context('is set in runtime', function () {
+      beforeEach(function(){
+        juicyTileList.setAttribute("refreshOnMutation","");
+      });
+      it('refresh method should be called when some node is added', function (done) {
+        var refresh = sinon.spy(juicyTileList, "refresh");
+
+        var addedNode = document.createElement("div");
+        addedNode.innerHTML = "4";
+        juicyTileList.appendChild(addedNode);
+
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+          expect( juicyTileList.refresh.callCount ).to.equal(1);
+          juicyTileList.refresh.restore();
+          done();
+        });
+      });
+      it('refresh method should be called when some node is removed', function (done) {
+        var refresh = sinon.spy(juicyTileList, "refresh");
+
+        juicyTileList.removeChild(juicyTileList.firstElementChild);
+
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+          expect( juicyTileList.refresh.callCount ).to.equal(1);
+          juicyTileList.refresh.restore();
+          done();
+        });
+      });
+
+    });
+
+    context('is removed in runtime', function () {
+      beforeEach(function(){
+        juicyTileList2.removeAttribute("refreshOnMutation");
+      });
+      it('refresh method should not be called when some node is added', function (done) {
+        var refresh = sinon.spy(juicyTileList2, "refresh");
+
+        var addedNode = document.createElement("div");
+        addedNode.innerHTML = "4";
+        juicyTileList2.appendChild(addedNode);
+
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+          expect( juicyTileList2.refresh.callCount ).to.equal(0);
+          juicyTileList2.refresh.restore();
+          done();
+        });
+      });
+      it('refresh method should not be called when some node is removed', function (done) {
+        var refresh = sinon.spy(juicyTileList2, "refresh");
+
+        juicyTileList2.removeChild(juicyTileList2.firstElementChild);
+
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+          expect( juicyTileList2.refresh.callCount ).to.equal(0);
+          juicyTileList2.refresh.restore();
+          done();
+        });
+      });
+    });
+
+  });
+});
+
+    </script>
+
+  </body>
+</html>
