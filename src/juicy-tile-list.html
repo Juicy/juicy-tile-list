@@ -26,13 +26,12 @@ version: 0.1.0
             position: relative;
             z-index: 0;
         }
-        /*
-          polyfill-next-selector { content: ':host #container> *'; }
-          #container ::content>*,
-        */
+        
+        polyfill-next-selector { content: ':host #container> .juicy-tile'; }
         .juicy-tile{
             position: absolute;
         }
+        polyfill-next-selector { content: ':host #container> .containerBackground'; }
         .containerBackground{
             position: absolute;
             z-index: -1;
@@ -267,7 +266,8 @@ version: 0.1.0
               // stamp template
               var dom = document.importNode(template.content, true);
               this.$ = {
-                container: dom.getElementById("container")
+                // workaround for lack of getElementById in IE polyfilled templates
+                container: dom.getElementById && dom.getElementById("container") || dom.querySelector("#container")
               };
               // append to shadow dom
               root.appendChild(dom);
