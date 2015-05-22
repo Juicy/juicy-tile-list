@@ -287,6 +287,9 @@ Package.prototype.moveToContainer = function( what, where, noPacking ){
     return false;
   }
 
+  var whereInWhat = this.isInContainer(what, where);
+  var oldWhatContainer = what.container;
+
   from.splice( from.indexOf(what), 1);
   what.container = where;
   to.push(what);
@@ -296,6 +299,9 @@ Package.prototype.moveToContainer = function( what, where, noPacking ){
     this.packItems();
   }
 
+  if (whereInWhat) {
+      this.moveToContainer(where, oldWhatContainer, noPacking);
+  }
 };
 /**
  * Delete virtual container, move items (if any) to one above.
@@ -395,6 +401,19 @@ Package.prototype.createNewContainer = function( id, inContainer, rectangle, noR
   return setup;
 };
 
+Package.prototype.isInContainer = function (container, item) {
+    var c = item.container;
+
+    while (c) {
+        if (c == container) {
+            return true;
+        }
+
+        c = c.container;
+    }
+
+    return false;
+};
 
 // TODO: export
 scope.Package = Package;
