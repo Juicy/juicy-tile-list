@@ -571,16 +571,29 @@ version: 0.1.0
                 left = ( child.x || 0 ) + offsetX; 
                 top = ( child.y || 0 ) + offsetY;
                 var oversize = child.oversize || 0;
-                elementStyle.left = ( left - oversize ) + "px";
-                elementStyle.top = ( top - oversize ) + "px";
-                elementStyle.width = ( child.width + 2 * oversize ) + "px";
-                elementStyle.height = ( child.height + 2 * oversize ) + "px";
+                // Old way to apply oversize
+                //elementStyle.left = ( left - oversize ) + "px";
+                //elementStyle.top = ( top - oversize ) + "px";
+                //elementStyle.width = ( child.width + 2 * oversize ) + "px";
+                //elementStyle.height = ( child.height + 2 * oversize ) + "px";
+                elementStyle.left = left + "px";
+                elementStyle.top = top + "px";
+                elementStyle.width = child.width + "px";
+                elementStyle.height = child.height + "px";
                 if (child.background !== undefined) {
                     elementStyle.backgroundColor = child.background || "transparent";
                 } else {
                     elementStyle.backgroundColor = "";
                 }
                 elementStyle.outline = child.outline || "";
+
+                if (oversize) {
+                    elementStyle.padding = oversize + "px";
+                    elementStyle.margin = "-" + oversize + "px";
+                } else {
+                    elementStyle.padding = "";
+                    elementStyle.margin = "";
+                }
               }
               
               if(child.items){// virtual container
