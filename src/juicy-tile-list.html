@@ -402,6 +402,11 @@ version: 0.1.0
                   
 
                   if ( tile && !itemSetup.items ){ // single element
+                      // Disable padding to get real dimensions
+                      var p = tile.style.padding;
+                      tile.style.padding = "";
+
+
                     if(itemSetup.widthAuto){
                       // itemSetup.width = tile.clientWidth;
                       tile.style.width = ""; //slow, but I don't know another way to measure real width when tile's content has shrinked other than remove height property before measuring (Marcin)
@@ -415,10 +420,14 @@ version: 0.1.0
                             :
                             itemSetup.width + "px";
                       }
+
                       // itemSetup.height = tile.clientHeight;          
                       tile.style.height = ""; //slow, but I don't know another way to measure real height when tile's content has shrinked other than remove height property before measuring (Marcin)
                       itemSetup.height = tile.scrollHeight; //now we can measure scrollHeight because width is already set and height is not constrained
                     }
+
+                    // Return padding value back
+                    tile.style.padding = p;
                   }
                   //recursion is done in Package#packItems 
               }
