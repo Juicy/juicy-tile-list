@@ -16,7 +16,7 @@ version: 0.1.0
 <template id="juicy-tile"><div class="juicy-tile"><content></content></div></template>
 
 <!-- Define your custom element -->
-<polymer-element name="juicy-tile-list" constructor="JuicyTileListElement" attributes="setup duration layersOrientation defaultTileSetup gutter refreshOnMutation">
+<polymer-element name="juicy-tile-list" constructor="JuicyTileListElement" attributes="setup duration layersOrientation defaultTileSetup gutter refreshOnMutation refreshOnResize">
     <template>
     <style>
         :host {
@@ -153,12 +153,24 @@ version: 0.1.0
           }
           return min;
         }
-        function workaroundOnResizeEvent(node, fn){
+        function workaroundAddResizeListener(node, fn){
           var parent = node;
           parent = parent.parentNode;
           while( parent && parent.tagName != "BODY" ){
             if(parent.tagName == node.tagName){
               parent.addEventListener("juicy-tile-list-refresh", fn);
+              break;
+            }
+            parent = parent.parentNode;
+          }
+        }
+        // FIXME: DRY
+        function workaroundRemoveResizeListener(node, fn){
+          var parent = node;
+          parent = parent.parentNode;
+          while( parent && parent.tagName != "BODY" ){
+            if(parent.tagName == node.tagName){
+              parent.removeEventListener("juicy-tile-list-refresh", fn);
               break;
             }
             parent = parent.parentNode;
@@ -239,6 +251,7 @@ version: 0.1.0
 
             duration: 0.5,
             refreshOnMutation: false,
+            refreshOnResize: false,
 
             defaultTileSetup: defaultTileSetup,
             created: function(){
@@ -258,6 +271,8 @@ version: 0.1.0
                   }
                 });
               });
+              // bind this to #refresh for listeners
+              this.refresh = this.refresh.bind(this);
             },
             sorter: function byPriority(itemA, itemB){
                 return itemB.priority - itemA.priority;
@@ -307,21 +322,14 @@ version: 0.1.0
               this.createItemsList();
 
 
-              if(document.attachEvent){
-                this.attachEvent('onresize', this.refresh.bind(this, null, null));
-              } else {
-                //FIXME: async timeout look ugly (tomalec)
-                //we wait for transition, so innerHeight won't miss the planned size
-                workaroundOnResizeEvent( this, this.async.bind(this, "refresh", [null, null], this.duration*100 +1) );
+              if(this.refreshOnResize){
+                this.addResizeListeners();
               }
 
-              window.addEventListener('resize', this.refresh.bind(this, null, null), true);
-
-                that.refresh();
+              that.refresh();
 
               if(this.refreshOnMutation){
                 this.observer.observe(this, { childList: true });
-                // this.observer.observe(this, { childList: true });
               }
 
               // console.timeEnd("attached");
@@ -333,7 +341,33 @@ version: 0.1.0
               });
             },
 
-            //TODO: detached: function(){}, //clean .elements, etc. (tomalec)
+            detached: function(){
+              this.observer.disconnect();
+
+            }, //clean .elements, etc. (tomalec)
+            addResizeListeners: function(){
+              if(document.attachEvent){
+                this.attachEvent('onresize', this.refresh);
+              } else {
+                //FIXME: async timeout look ugly (tomalec)
+                //we wait for transition, so innerHeight won't miss the planned size
+                //FIXME: transition was disregarded to simplify removing listener
+                // workaroundAddResizeListener( this, this.async.bind(this, "refresh", undefined, this.duration*100 +1) );
+                workaroundAddResizeListener( this, this.refresh );
+              }
+
+              window.addEventListener('resize', this.refresh, true);
+            },
+            removeResizeListeners: function(){
+              if(document.attachEvent){
+                this.detachEvent('onresize', this.refresh);
+              } else {
+                //FIXME: transition was disregarded to simplify removing listener
+                workaroundRemoveResizeListener( this, this.refresh );
+              }
+
+              window.removeEventListener('resize', this.refresh, true);
+            },
           /**
            * Delete virtual container, move items (if any) to one above.
            * @extends Package#deleteContainer
@@ -481,6 +515,13 @@ version: 0.1.0
                   this.observer.observe(this, { childList: true });
                 } else {
                   this.observer.disconnect();
+                }
+                break;
+              case "refreshonresize":
+                if(this.refreshOnResize){
+                  this.addResizeListeners();
+                } else {
+                  this.removeResizeListeners();
                 }
                 break;
             }

@@ -67,7 +67,7 @@ Attribute                    | Options             | Default      | Description
 `setup.items[?].gutter`      | *Number*            | `0`          | Recursive setup (for virtual containers)
 `setup.items[?].direction`   | *String*            |              | Recursive setup (for virtual containers)
 `refreshOnMutation`          | *Boolean*           | `false`      | If set to `true`, tile-list will be repacked and re-rendered once nodes are added or removed.
-
+`refreshOnResize`            | *Boolean*           | `false`      | If set to `true`, tile-list will be repacked and re-rendered once window or container gets resized
 ## Properties
 
 Name                 | Options        | Description
