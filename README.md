@@ -111,6 +111,10 @@ Name                      | Data | Description
 ---                       | ---  | ---   
 `juicy-tile-list-refresh` |  -   | Triggered once layout is refreshed
 
+## Refresh/repack
+
+`<juicy-tile-list>` can refresh/repack your tiles interactively. You can set it by attributes: `refreshOnMutation`, `refreshOnResize`, `refreshOnAttached`.
+
 ## Tile ids
 
 Every tile gets its id, it's used in ShadowDom (so it won't collide with your markup) to match Light DOM content with positioned tile (and its setup).
