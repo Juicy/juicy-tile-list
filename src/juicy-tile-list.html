@@ -48,6 +48,8 @@ version: 0.2.1
         }
         /**/
     </style>
+    <style id="tilesCSS">
+    </style>
     <div id="container" class="animate"></div>
     </template>
     <script>
@@ -491,7 +493,9 @@ version: 0.2.1
             container.style.height = packedTree.height + "px";
 
             // console.log("render");
-            this.renderer( packedTree, this.tiles, 0, 0);
+            // this.renderer( packedTree, this.tiles, 0, 0);
+            this.css = this.stringRenderer( packedTree, this.tiles, 0, 0);
+            this.shadowRoot.getElementById('tilesCSS').innerText = this.css;
             // trigger event
             this.dispatchEvent( new CustomEvent("juicy-tile-list-refresh") );
           },
@@ -594,12 +598,12 @@ version: 0.2.1
           /**
            * Renderer method, used to render packed tree to DOM
            */
-          renderer: function positionAbsolute( node, tiles, offsetX, offsetY, hideAll ){
+          renderer: function positionAbsolute( node, tiles, offsetX, offsetY, hideAll, stringifyCSS ){
             var childNodeNo = node.items.length,
                 child,
                 element, elementStyle, left, top, hidden;  
             while(childNodeNo--){
-              child = node.items[childNodeNo]
+              child = node.items[childNodeNo];
               element = tiles[ child.id ];
                 // element = this.getTile( child.id );
               if(!element) {
@@ -647,6 +651,63 @@ version: 0.2.1
                 // this.renderer( child, elements, left, top, hidden);
               }
             }
+          },
+          /**
+           * Renderer method, used to render packed tree to DOM
+           */
+          stringRenderer: function positionAbsoluteCSS( node, tiles, offsetX, offsetY, hideAll, stringifyCSS ){
+            var childNodeNo = node.items.length,
+                child,
+                element, elementStyle, left, top, hidden; 
+            var leadingNum, stringifiedId; 
+            var cssString = "";
+            while(childNodeNo--){
+              child = node.items[childNodeNo];
+              
+              // escape leading number for elements
+              // http://stackoverflow.com/questions/18440730/css-cant-select-classes-ids-with-numbers-in-it/30669963#30669963
+              stringifiedId = String(child.id);
+              leadingNum = stringifiedId[0];
+              if(!isNaN(leadingNum) ){
+                cssString += "#\\3"+leadingNum+" "+ stringifiedId.substr(1) +"{";
+              } else{
+                cssString += "#"+stringifiedId+"{";                
+              }
+              // hide items marked as hidden ;)
+              hidden = hideAll || child.hidden;
+              if(hidden){
+                cssString += "display:none;";
+                //continue; // do not process children?
+              } else {
+                // force default - block 
+                //elementStyle.display = "";
+                left = ( child.x || 0 ) + offsetX; 
+                top = ( child.y || 0 ) + offsetY;
+                var oversize = child.oversize || 0;
+                cssString += "left:" + left + "px;";
+                cssString += "top:" + top + "px;";
+                cssString += "width:" + child.width + "px;";
+                cssString += "height:" + child.height + "px;";
+                if (child.background !== undefined) {
+                    cssString += "background-color:"+ (child.background || "transparent") + ";";
+                }
+                if(child.outline){
+                  cssString += "outline:" + child.outline +";";
+                }
+
+                if (oversize) {
+                    cssString += "padding:" + oversize + "px;";
+                    cssString += "margin:" + "-" + oversize + "px;";
+                }
+              }
+              cssString += "}";
+
+              if(child.items){// virtual container
+                cssString += positionAbsoluteCSS( child, tiles, left, top, hidden);
+                // cssString += this.stringRenderer( child, elements, left, top, hidden);
+              }
+            }
+            return cssString;
           }
          }) 
         );
