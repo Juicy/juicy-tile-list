@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../../webcomponentsjs/webcomponents.js"></script>
+    <script src="../../../web-component-tester/browser.js"></script>
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="../../src/juicy-tile-list.html">
+  </head>
+  <body>
+
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <juicy-tile-list id="list2">
+      <div>0</div>
+      <span>1</span>
+      <p>3</p>
+    </juicy-tile-list>
+
+    <script>
+/**
+ * JuicyTiles tests
+ */
+var juicyTileListCreated;
+var juicyTileList2 = document.getElementById('list2');
+
+describe('juicy-tile-list', function() {
+  context('when refreshOnAttached attribute', function () {
+    context('was set to `false` when element was created', function () {
+      var refresh;
+      beforeEach(function(){
+        juicyTileListCreated = document.createElement('juicy-tile-list');
+        refresh = sinon.spy(juicyTileListCreated, "refresh");
+        juicyTileListCreated.innerHTML = "<div>0</div><span>1</span><p>3</p>";
+        juicyTileListCreated.setAttribute("refreshOnAttached","false");
+      });
+      afterEach(function(){
+        juicyTileListCreated.parentElement && juicyTileListCreated.parentElement.removeChild(juicyTileListCreated);
+        juicyTileListCreated.refresh.restore && juicyTileListCreated.refresh.restore();
+      });
+      it('refresh method should not be called', function (done) {
+        expect( juicyTileListCreated.refresh.callCount ).to.equal(0);
+        done();
+      });
+      it('refresh method should not be called when element get attached to DOM', function (done) {
+
+        document.body.appendChild(juicyTileListCreated);
+
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+          expect( juicyTileListCreated.refresh.callCount ).to.equal(0);
+          done();
+        });
+      });
+    });
+
+    context('was set to `false` in runtime', function () {
+      var refresh;
+      before(function(){
+        juicyTileList2.setAttribute("refreshOnAttached", false);
+      });
+      beforeEach(function(){
+        refresh = sinon.spy(juicyTileList2, "refresh");
+      });
+      afterEach(function(){
+        juicyTileList2.refresh.restore && juicyTileList2.refresh.restore();
+      });
+      it('refresh method should not be called', function (done) {
+        expect( juicyTileList2.refresh.callCount ).to.equal(0);
+        done();
+      });
+      it('refresh method should not be called when element get re-attached to DOM', function (done) {
+
+        juicyTileList2.parentElement.removeChild(juicyTileList2);
+        document.body.appendChild(juicyTileList2);
+
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+          expect( juicyTileList2.refresh.callCount ).to.equal(0);
+          done();
+        });
+      });
+    });
+
+  });
+});
+
+    </script>
+
+  </body>
+</html>

@@ -16,7 +16,7 @@ version: 0.1.0
 <template id="juicy-tile"><div class="juicy-tile"><content></content></div></template>
 
 <!-- Define your custom element -->
-<polymer-element name="juicy-tile-list" constructor="JuicyTileListElement" attributes="setup duration layersOrientation defaultTileSetup gutter refreshOnMutation refreshOnResize">
+<polymer-element name="juicy-tile-list" constructor="JuicyTileListElement" attributes="setup duration layersOrientation defaultTileSetup gutter refreshOnMutation refreshOnResize refreshOnAttached">
     <template>
     <style>
         :host {
@@ -252,6 +252,7 @@ version: 0.1.0
             duration: 0.5,
             refreshOnMutation: false,
             refreshOnResize: false,
+            refreshOnAttached: true,
 
             defaultTileSetup: defaultTileSetup,
             created: function(){
@@ -326,7 +327,9 @@ version: 0.1.0
                 this.addResizeListeners();
               }
 
-              that.refresh();
+              if(this.refreshOnAttached){
+                that.refresh();
+              }
 
               if(this.refreshOnMutation){
                 this.observer.observe(this, { childList: true });

@@ -68,6 +68,8 @@ Attribute                    | Options             | Default      | Description
 `setup.items[?].direction`   | *String*            |              | Recursive setup (for virtual containers)
 `refreshOnMutation`          | *Boolean*           | `false`      | If set to `true`, tile-list will be repacked and re-rendered once nodes are added or removed.
 `refreshOnResize`            | *Boolean*           | `false`      | If set to `true`, tile-list will be repacked and re-rendered once window or container gets resized
+`refreshOnAttached`          | *Boolean*           | `true`       | If set to `true`, tile-list will be repacked and re-rendered once (re-)attached to DOM
+
 ## Properties
 
 Name                 | Options        | Description
