@@ -26,8 +26,10 @@ juicy-tile-list{
     padding:1em;
     box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
 }
-juicy-tile-list #container>*, /** <-- oh, our `beloved` IE does not get concept of Shadow DOM */
-juicy-tile-list>*{
+/* juicy-tile-list>*{ */
+/** <-- oh, our `beloved` IE does not get concept of Shadow DOM */
+juicy-tile-list #container>*, 
+juicy-tile-list > *:not(#container){
     box-shadow:     0px 0px 10px 0px rgba(50, 50, 50, 0.75);
     text-align: center;
     border-radius: 2px;
