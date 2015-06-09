@@ -3,7 +3,7 @@
 
 /**
  * [Rectangle description]
- * version: 0.2.1
+ * version: 0.2.2
  * @param {Object} [props] rectangle properties
  * @param {Number} [props.x=0] rectangle position
  * @param {Number} [props.y=0] rectangle position
