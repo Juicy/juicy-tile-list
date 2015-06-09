@@ -262,15 +262,19 @@ version: 0.2.1
               // create an observer instance
               var that = this;
               this.observer = new MutationObserver(function(mutations) {
+                var doRefresh = false;
                 mutations.forEach(function(mutation) {
                   // console.log("observation", mutation.type, arguments, mutations);
                   if(mutation.addedNodes.length || mutation.removedNodes.length){
-                      //DRY, performance
-                      // console.log("something was added")
-                      that.createItemsList();
-                      that.refresh();
+                      // console.log("something was added or removed")
+                      doRefresh = true;
                   }
                 });
+                if(doRefresh){
+                  //DRY, performance
+                  that.createItemsList();
+                  that.refresh();
+                }
               });
               // bind this to #refresh for listeners
               this.refresh = this.refresh.bind(this);
