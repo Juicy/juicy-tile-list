@@ -282,8 +282,15 @@ version: 0.2.2
             sorter: function byPriority(itemA, itemB){
                 return itemB.priority - itemA.priority;
             },
-            createItemsList: function(){
-              // console.log("createItemsList");
+            createItemsList: function () {
+                // console.log("createItemsList");
+                for (var i = 0; i < this.childNodes.length; i++) {
+                    var node = this.childNodes[i];
+
+                    if (node instanceof Text && node.data.trim()) {
+                        console.error("juicy-tile-list can only render DOM element nodes. Provided input contains a text node which cannot be rendered. Wrap it in a <div> to fix the problem. Problematic text node: ", node, " (", this.getAttribute("name"), ")");
+                    }
+                }
               this.elements = filterNodes(this.children);
               this.tiles = updateWrappers(this.elements, this);
               // this.tiles["root"] = this.$.container;
