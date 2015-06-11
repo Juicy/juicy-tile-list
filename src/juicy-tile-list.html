@@ -95,9 +95,13 @@ version: 0.2.2
          * @param  {NodesList} nodesList nodes list to filter
          * @return {Array}           array of sortable children.
          */
-        function filterNodes( nodesList ){
+        function filterNodes( list, nodesList ){
             return nodesList.array()
                         .filter(function filterOutText(child){
+                            if (child instanceof Text && child.data.trim()) {
+                                console.error("juicy-tile-list can only render DOM element nodes. Provided input contains a text node which cannot be rendered. Wrap it in a <div> to fix the problem. Problematic text node: ", child, " (", list.getAttribute("name"), ")");
+                            }
+
                             return !(child instanceof Text) &&
                                     !(child instanceof HTMLLinkElement) &&
                                     !(child instanceof HTMLStyleElement) &&
@@ -283,15 +287,8 @@ version: 0.2.2
                 return itemB.priority - itemA.priority;
             },
             createItemsList: function () {
-                // console.log("createItemsList");
-                for (var i = 0; i < this.childNodes.length; i++) {
-                    var node = this.childNodes[i];
-
-                    if (node instanceof Text && node.data.trim()) {
-                        console.error("juicy-tile-list can only render DOM element nodes. Provided input contains a text node which cannot be rendered. Wrap it in a <div> to fix the problem. Problematic text node: ", node, " (", this.getAttribute("name"), ")");
-                    }
-                }
-              this.elements = filterNodes(this.children);
+              // console.log("createItemsList");
+              this.elements = filterNodes(this, this.childNodes);
               this.tiles = updateWrappers(this.elements, this);
               // this.tiles["root"] = this.$.container;
               defaultSetup(
