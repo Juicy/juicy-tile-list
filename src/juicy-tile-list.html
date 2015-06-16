@@ -107,7 +107,8 @@ version: 0.2.2
                                     !(child instanceof HTMLStyleElement) &&
                                     !(child instanceof HTMLTemplateElement) &&
                                     !(child.nodeName == "PUPPET-MORPHURL") && //ok, this is too much. ideas?
-                                    !(child instanceof HTMLScriptElement);
+                                    !(child instanceof HTMLScriptElement) &&
+                                    !(child instanceof Comment);
                         });
         }
 
