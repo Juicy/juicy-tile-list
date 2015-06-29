@@ -230,6 +230,61 @@ version: 0.2.2
           return tiles;
         }
 
+        function positionAbsolute( node, tiles, offsetX, offsetY, hideAll ){
+          var childNodeNo = node.items.length,
+              child,
+              element, elementStyle, left, top, hidden;  
+          while(childNodeNo--){
+            child = node.items[childNodeNo]
+            element = tiles[ child.id ];
+              // element = this.getTile( child.id );
+            if(!element) {
+              continue; //if element is not found, perhaps DOM was not yet rendered? Skip gracefully
+            }
+            elementStyle = element.style;
+            // hide items marked as hidden ;)
+            hidden = hideAll || child.hidden;
+            if(hidden){
+              elementStyle.display = "none";
+              //continue; // do not process children?
+            } else {
+              // force default - block 
+              elementStyle.display = "";
+              left = ( child.x || 0 ) + offsetX; 
+              top = ( child.y || 0 ) + offsetY;
+              var oversize = child.oversize || 0;
+              // Old way to apply oversize
+              //elementStyle.left = ( left - oversize ) + "px";
+              //elementStyle.top = ( top - oversize ) + "px";
+              //elementStyle.width = ( child.width + 2 * oversize ) + "px";
+              //elementStyle.height = ( child.height + 2 * oversize ) + "px";
+              elementStyle.left = left + "px";
+              elementStyle.top = top + "px";
+              elementStyle.width = child.width + "px";
+              elementStyle.height = child.height + "px";
+              if (child.background !== undefined) {
+                  elementStyle.backgroundColor = child.background || "transparent";
+              } else {
+                  elementStyle.backgroundColor = "";
+              }
+              elementStyle.outline = child.outline || "";
+
+              if (oversize) {
+                  elementStyle.padding = oversize + "px";
+                  elementStyle.margin = "-" + oversize + "px";
+              } else {
+                  elementStyle.padding = "";
+                  elementStyle.margin = "";
+              }
+            }
+            
+            if(child.items){// virtual container
+              positionAbsolute( child, tiles, left, top, hidden);
+              // this.renderer( child, elements, left, top, hidden);
+            }
+          }
+        }
+
 
         Polymer('juicy-tile-list', Platform.mixin( {}, Package.prototype, {
             // setup: {}, // set in `created` 'constructor'
@@ -491,14 +546,10 @@ version: 0.2.2
              */
           refresh: function( ) {
             // console.log("refresh");
-            var container = this.$.container;
             //unfortunatelly, this needs refreshed ShadowDOM wrappers too
             // https://www.w3.org/Bugs/Public/show_bug.cgi?id=18429 
             var packedTree = this.packItems();
             
-            container.style.width = packedTree.width + "px";
-            container.style.height = packedTree.height + "px";
-
             // console.log("render");
             this.renderer( packedTree, this.tiles, 0, 0);
             // trigger event
@@ -598,64 +649,16 @@ version: 0.2.2
             return {
               width: this._getMinimumDimension(elements, 'offsetLeft', 'offsetWidth'),
               height: this._getMinimumDimension(elements, 'offsetTop', 'offsetHeight')
-            }
+            };
           },
           /**
            * Renderer method, used to render packed tree to DOM
            */
-          renderer: function positionAbsolute( node, tiles, offsetX, offsetY, hideAll ){
-            var childNodeNo = node.items.length,
-                child,
-                element, elementStyle, left, top, hidden;  
-            while(childNodeNo--){
-              child = node.items[childNodeNo]
-              element = tiles[ child.id ];
-                // element = this.getTile( child.id );
-              if(!element) {
-                continue; //if element is not found, perhaps DOM was not yet rendered? Skip gracefully
-              }
-              elementStyle = element.style;
-              // hide items marked as hidden ;)
-              hidden = hideAll || child.hidden;
-              if(hidden){
-                elementStyle.display = "none";
-                //continue; // do not process children?
-              } else {
-                // force default - block 
-                elementStyle.display = "";
-                left = ( child.x || 0 ) + offsetX; 
-                top = ( child.y || 0 ) + offsetY;
-                var oversize = child.oversize || 0;
-                // Old way to apply oversize
-                //elementStyle.left = ( left - oversize ) + "px";
-                //elementStyle.top = ( top - oversize ) + "px";
-                //elementStyle.width = ( child.width + 2 * oversize ) + "px";
-                //elementStyle.height = ( child.height + 2 * oversize ) + "px";
-                elementStyle.left = left + "px";
-                elementStyle.top = top + "px";
-                elementStyle.width = child.width + "px";
-                elementStyle.height = child.height + "px";
-                if (child.background !== undefined) {
-                    elementStyle.backgroundColor = child.background || "transparent";
-                } else {
-                    elementStyle.backgroundColor = "";
-                }
-                elementStyle.outline = child.outline || "";
-
-                if (oversize) {
-                    elementStyle.padding = oversize + "px";
-                    elementStyle.margin = "-" + oversize + "px";
-                } else {
-                    elementStyle.padding = "";
-                    elementStyle.margin = "";
-                }
-              }
-              
-              if(child.items){// virtual container
-                positionAbsolute( child, tiles, left, top, hidden);
-                // this.renderer( child, elements, left, top, hidden);
-              }
-            }
+          renderer: function renderAbsolute( node, tiles, offsetX, offsetY ){
+            // debugger
+            this.$.container.style.width = node.width + "px";
+            this.$.container.style.height = node.height + "px";
+            positionAbsolute( node, tiles, offsetX, offsetY );
           }
          }) 
         );
