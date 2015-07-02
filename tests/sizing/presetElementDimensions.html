@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../../webcomponentsjs/webcomponents.js"></script>
+    <script src="../../../web-component-tester/browser.js"></script>
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="../../src/juicy-tile-list.html">
+    <style>
+    html,body{
+      min-width: 0;
+      font-size: 10px;
+    }
+    juicy-tile-list > *{
+      background-color: rgba(99,99,99,0.3);
+      height: 100%;
+      margin: 0;
+    }
+    juicy-tile-list /deep/ #container{
+      background-color: lightgrey;
+    }
+    juicy-tile-list /deep/ .juicy-tile{
+      background-color: lightgreen;
+      /*border: 1px solid black;*/
+      /*box-sizing: border-box;*/
+    }
+    juicy-tile-list .fixed{
+      background-color: lightpink;
+      /*border: 1px solid black;*/
+      /*box-sizing: border-box;*/
+    }
+    juicy-tile-list /deep/ .juicy-tile:nth-child(2n){
+      /*background-color: darkblue;*/
+      /*border: 1px solid black;*/
+      /*box-sizing: border-box;*/
+    }
+    </style>
+  </head>
+  <body>
+
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <juicy-tile-list id="horizontal_list" setup="{
+      &quot;width&quot;: 1000,
+      &quot;items&quot;:[
+        {
+          &quot;id&quot;:0,
+          &quot;priority&quot;:1,
+          &quot;width&quot;: 500,
+          &quot;height&quot;: 100
+        },{
+          &quot;id&quot;:1,
+          &quot;priority&quot;:0.5,
+          &quot;width&quot;: 500,
+          &quot;height&quot;: 100},
+        {
+          &quot;id&quot;:2,
+          &quot;priority&quot;:0.1,
+          &quot;width&quot;: 500,
+          &quot;height&quot;: 100
+        }
+      ]}">
+      <div>0</div>
+      <div>1</div>
+      <div>3</div>
+    </juicy-tile-list>
+
+    <script>
+/**
+ * JuicyTiles tests
+ */
+var juicyTileList = document.getElementById('horizontal_list');
+
+describe('juicy-tile-list', function() {
+  context('when get width/height in setup', function () {
+      it('should pack items into a package of given size', function () {
+        expect(horizontal_list.tiles[0].offsetLeft).to.equal(0);
+        expect(horizontal_list.tiles[0].offsetTop).to.equal(0);
+
+        expect(horizontal_list.tiles[1].offsetLeft).to.equal(500);
+        expect(horizontal_list.tiles[1].offsetTop).to.equal(0);
+
+        expect(horizontal_list.tiles[2].offsetLeft).to.equal(0);
+        expect(horizontal_list.tiles[2].offsetTop).to.equal(100);
+      });
+      it('should resize the element to given size', function () {
+        expect(horizontal_list.shadowRoot.getElementById("container").offsetWidth).to.equal(1000);
+      });
+
+  });
+});
+
+    </script>
+
+  </body>
+</html>
