@@ -85,24 +85,24 @@ Name                 | Options        | Description
 Name               | Param name | Type               | Default | Description
 ---                | ---        | ---                | ---     | ---
 `resizeItem`       |            |                    |         | Resize any item (real element or virtual container)
-                   | item       | *Item*, *Number* or *String* |         | Item, item index or item name.
+                   | item       | *Item*             |         | Reference to the setup item
                    | width      | *Number*           | `0`     | new width
                    | height     | *Number*           | `0`     | new height
 `reprioritizeItem` |            |                    |         | Change priority/weight of any item
-                   | item       | *Item*, *Number* or *String* |         | Item, item index or item name.
+                   | item       | *Item*             |         | Reference to the setup item
                    | increase   | *Boolean*          | `false` | `true` - increases, `false` decreases priority
                    | end        | *Boolean*          | `false` | `true` to move to the end of list
 `moveToContainer`  |            |                    |         | Move any item to given container, or wrap it with new one
-                   | what       | *Item*, *Number* or *String* |         | Item, item index or item name.
-                   | where      | *String* or *Item* |         | Reference to, or name of destination container.    If name given in *string* is not found in existing containers list, new one will be created and wrapped around given item.
+                   | what       | *Item*             |         | Reference to the setup item
+                   | where      | *Item*             |         | Reference to the destination container item.
                    | noPacking  | *Boolean*          | `false` | `true` to prevent  re-packing after setup change.
 `createNewContainer`|           |                    |         | Create new empty virtual container.
                    | name       | *String*           |         | Name for the container
-                   | where      | *String* or *Item* | `"root"`| Container name or item
+                   | where      | *Item*             | `"root"`| Reference to the container setup item
                    | rectangle  | *Rectangle*        |         | Rectangle setup (width, height, priority)
                    | noPacking  | *Boolean*          | `false` | `true` to prevent  re-packing after setup change.
 `deleteContainer`  |            |                    |         | Delete virtual container, move items (if any) to one above.
-                   | what       | *Item* or *String* |         | Reference to, or name of the container to delete.
+                   | what       | *Item*             |         | Reference to the container setup item to delete.
                    | noPacking  | *Boolean*          | `false` | `true` to prevent  re-packing after setup change.
 
 ## Events
