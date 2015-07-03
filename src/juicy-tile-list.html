@@ -473,14 +473,6 @@ version: 0.2.2
             setup || (setup = this.setup);
             // var elements = this.elements;
             var tiles = this.tiles;
-            // TODO: support LTR
-            if( this.setup.direction != "downRight"){
-               this.setup.width = this.setup.width || innerWidth(this);
-               this.setup.heightAuto = true;
-            } else {
-              this.setup.height = this.setup.height || innerHeight(this);
-              this.setup.widthAuto = true;
-            }
             if (tiles) {
               var itemSetup,
                   tile,
@@ -546,8 +538,16 @@ version: 0.2.2
              */
           refresh: function( ) {
             // console.log("refresh");
-            //unfortunatelly, this needs refreshed ShadowDOM wrappers too
-            // https://www.w3.org/Bugs/Public/show_bug.cgi?id=18429
+
+            // TODO: support LTR
+            if( this.setup.direction != "downRight"){
+               this.setup.width = this.setup.width || innerWidth(this);
+               this.setup.heightAuto = true;
+            } else {
+              this.setup.height = this.setup.height || innerHeight(this);
+              this.setup.widthAuto = true;
+            }
+
             var packedTree = this.packItems();
 
             // console.log("render");
