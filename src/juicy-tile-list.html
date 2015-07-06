@@ -555,22 +555,19 @@ version: 0.2.2
             // trigger event
             this.dispatchEvent( new CustomEvent("juicy-tile-list-refresh") );
           },
+          onSetupChanged: function () {
+              this.cleanupDOM();
+
+              Package.call(this, this.setup);
+              defaultSetup(this.tiles, this.setup.items, this.allItems, this.defaultTileSetup);
+              this.refresh();
+          },
           attributeChanged: function(name, oldVal, newVal){
             switch(name){
               case "setup":
                 // do nothing before domReady
                 if(this.isReady){
-                  // console.info("setupChanged");
-                  this.cleanupDOM();
-
-                  Package.call(this, this.setup);
-                  defaultSetup(
-                    this.tiles,
-                    this.setup.items,
-                    this.allItems,
-                    this.defaultTileSetup
-                  );
-                  this.refresh();
+                    this.onSetupChanged();
                 }
                 break;
               case "refreshonmutation":
