@@ -555,7 +555,11 @@ version: 0.2.2
             // trigger event
             this.dispatchEvent( new CustomEvent("juicy-tile-list-refresh") );
           },
-          onSetupChanged: function () {
+          setupChanged: function () {
+              if (!this.isReady) {
+                  return;
+              }
+
               this.cleanupDOM();
 
               Package.call(this, this.setup);
@@ -564,12 +568,6 @@ version: 0.2.2
           },
           attributeChanged: function(name, oldVal, newVal){
             switch(name){
-              case "setup":
-                // do nothing before domReady
-                if(this.isReady){
-                    this.onSetupChanged();
-                }
-                break;
               case "refreshonmutation":
                 if(this.refreshOnMutation){
                   this.observer.observe(this, { childList: true });
