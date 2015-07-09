@@ -11,6 +11,7 @@ module.exports = function(grunt) {
                     'src/*.html',
                     'examples/**/*.html',
                     'tests/*.js',
+                    'tests/*.html',
                     'tests/**/*.html'
                 ],
                 // tasks: ['jshint'],

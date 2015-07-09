@@ -293,10 +293,11 @@ describe('Package', function() {
           }]
         };
         var pkg = new Package(setup);
+        debugger
         var packedTree = pkg.packItems();
         // first absolute child
-        expect(packedTree.items[0].items[1]).to.have.property("x").equal(0, "should be packed first");
-        expect(packedTree.items[0].items[1]).to.have.property("y").equal(0, "should be packed first");
+        expect(packedTree.items[0].items[0]).to.have.property("x").equal(0, "should be packed first");
+        expect(packedTree.items[0].items[0]).to.have.property("y").equal(0, "should be packed first");
         // second relative child
         expect(packedTree.items[0].items[1]).to.have.property("x").equal(100, "should be packed after first one");
         expect(packedTree.items[0].items[1]).to.have.property("y").equal(0, "in the first row");

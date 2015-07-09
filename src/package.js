@@ -7,7 +7,7 @@
 
 /**
  * Extend JSON setup, with circular references to items' containers.
- * Creates an array of all items and virtual containers, 
+ * Creates an array of all items and virtual containers,
  * that maps to nodes in setup tree.
  * Applies default container id.
  * @param {Object} setup packer setup
@@ -102,7 +102,8 @@ Package.prototype.direction = "rightDown";
 Package.prototype.packItems = function packItems( setup ) {
   setup || (setup = this.setup);
   var that = this,
-      packer = new Packer(setup);
+      packer = new Packer(setup),
+      gutter = setup.gutter || 0;
 
   //pack rectangles, and calculate container size
   packer.items = setup.items
@@ -116,19 +117,19 @@ Package.prototype.packItems = function packItems( setup ) {
 
       //first calculate rect width because it cannot be auto TODO: fix for downRight mode
       if( !rect.widthAuto && typeof rect.width == "string" && rect.width.indexOf("%") > 0 ){
-        rect.width = ( (setup.width + setup.gutter) * parseFloat(rect.width) /100  - setup.gutter);
+        rect.width = ( (setup.width + gutter) * parseFloat(rect.width) /100  - gutter);
       } else {
         rect.width = parseFloat( rect.width );
       }
       // caluclate relative size
       // we cannot use calc(xx% - gutter px) as it can be in virtual container which is a sibling
       if( !rect.heightAuto && typeof rect.height == "string" && rect.height.indexOf("%") > 0 ){
-        rect.height = ( (setup.height + setup.gutter) * parseFloat(rect.height) /100 - setup.gutter );
+        rect.height = ( (setup.height + gutter) * parseFloat(rect.height) /100 - gutter );
       } else {
         rect.height = parseFloat( rect.height );
       }
 
-      
+
       if (itemSetup.items ) { // container
         // pack its items first, to figureout minSize
         rect = that.packItems(
@@ -256,7 +257,7 @@ Package.prototype.resizeItem = function(item, width, height){
   return this;
 };
 /**
- * 
+ *
  * @//param  {SetupItemRef | String} what item reference or id
  * @param  {SetupItemRef} what item reference
  * @//param  {SetupItemRef} [where]    Reference to, or id of destination container.    If id given in *string* is not found in existing containers list, new one will be created and wrapped around given item.
@@ -277,7 +278,7 @@ Package.prototype.moveToContainer = function( what, where, noPacking ){
   var to;
   // if( typeof where === "string" ){
   //   // container given by key
-  //   where = this.items[where] || 
+  //   where = this.items[where] ||
   //   // or new one
   //           this.createNewContainer(where, from, what, true);
   // }
@@ -388,7 +389,7 @@ Package.prototype.createNewContainer = function( id, inContainer, rectangle, noR
       height: rectangle && rectangle.height || 0 // consider use of this.defaultTileSetup
   };
   this.allItems[ id ] = setup;
-  // 
+  //
   // XXX: setter?
   Object.defineProperty(setup, "container", { value: inContainer, writable: true });
 
