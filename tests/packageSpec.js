@@ -106,94 +106,118 @@ describe('Package', function() {
       chai.assert.equal(JSON.stringify(packedTree), JSON.stringify(expected));
     });
 
-    it('should support containers', function() {
-      var setup = {
-        width: 150,
-        items: [{
-          id: 1,
-          priority: 0.9, // 0.6,
-          height: 50,
-          width: 100
-        }, {
-          id: "group",
-          priority: 0.8, // 0.9,
-          height: 200,
-          width: 200,
-          gutter: 0,
+    describe('should support groups', function() {
+      it('absolute nested', function() {
+        var setup = {
+          width: 150,
           items: [{
-            id: 3,
-            priority: 1,
+            id: 1,
+            priority: 0.9, // 0.6,
             height: 50,
-            width: 50
+            width: 100
           }, {
-            id: "nestedgroup",
+            id: "group",
             priority: 0.8, // 0.9,
             height: 200,
             width: 200,
             gutter: 0,
             items: [{
-              id: 2,
-              priority: 0.4,
+              id: 3,
+              priority: 1,
               height: 50,
               width: 50
             }, {
-              id: 5,
+              id: "nestedgroup",
+              priority: 0.8, // 0.9,
+              height: 200,
+              width: 200,
+              gutter: 0,
+              items: [{
+                id: 2,
+                priority: 0.4,
+                height: 50,
+                width: 50
+              }, {
+                id: 5,
+                priority: 0.8,
+                height: 50,
+                width: 50
+              }]
+            }, {
+              id: 4,
               priority: 0.8,
               height: 50,
               width: 50
             }]
           }, {
-            id: 4,
-            priority: 0.8,
-            height: 50,
+            id: 0,
+            priority: 0.7, // 0.3,
+            height: 100,
             width: 50
           }]
-        }, {
-          id: 0,
-          priority: 0.7, // 0.3,
-          height: 100,
-          width: 50
-        }]
-      };
-      var pkg = new Package(setup);
-      var packedTree = pkg.packItems();
-      chai.assert.equal(JSON.stringify(packedTree), JSON.stringify({
-        "width": 150,
-        "items": [{
-          "id": 1,
-          "priority": 0.9,
-          "height": 50,
-          "width": 100,
-          "x": 0,
-          "y": 0
-        }, {
-          "id": "group",
-          "priority": 0.8,
-          "height": 200,
+        };
+        var pkg = new Package(setup);
+        var packedTree = pkg.packItems();
+        chai.assert.equal(JSON.stringify(packedTree), JSON.stringify({
           "width": 150,
-          "gutter": 0,
           "items": [{
-            "id": 3,
-            "priority": 1,
+            "id": 1,
+            "priority": 0.9,
             "height": 50,
-            "width": 50,
+            "width": 100,
             "x": 0,
             "y": 0
           }, {
-            "id": "nestedgroup",
+            "id": "group",
             "priority": 0.8,
             "height": 200,
-            "width": 200,
+            "width": 150,
             "gutter": 0,
             "items": [{
-              "id": 2,
-              "priority": 0.4,
+              "id": 3,
+              "priority": 1,
               "height": 50,
               "width": 50,
               "x": 0,
               "y": 0
             }, {
-              "id": 5,
+              "id": "nestedgroup",
+              "priority": 0.8,
+              "height": 200,
+              "width": 200,
+              "gutter": 0,
+              "items": [{
+                "id": 2,
+                "priority": 0.4,
+                "height": 50,
+                "width": 50,
+                "x": 0,
+                "y": 0
+              }, {
+                "id": 5,
+                "priority": 0.8,
+                "height": 50,
+                "width": 50,
+                "x": 50,
+                "y": 0
+              }],
+              "x": 0,
+              "y": 50,
+              "slots": [{
+                "x": 100,
+                "y": 0,
+                "width": 100,
+                "height": null
+              }, {
+                "x": 0,
+                "y": 50,
+                "width": 200,
+                "height": null
+              }],
+              "minWidth": 100,
+              "minHeight": 50
+            }, {
+              "id": 4,
               "priority": 0.8,
               "height": 50,
               "width": 50,
@@ -206,68 +230,80 @@ describe('Package', function() {
               "x": 100,
               "y": 0,
               "width": 100,
-              "height": null
+              "height": 50
             }, {
               "x": 0,
-              "y": 50,
+              "y": 250,
               "width": 200,
               "height": null
             }],
-            "minWidth": 100,
-            "minHeight": 50
+            "minWidth": 200,
+            "minHeight": 250
           }, {
-            "id": 4,
-            "priority": 0.8,
-            "height": 50,
+            "id": 0,
+            "priority": 0.7,
+            "height": 100,
             "width": 50,
-            "x": 50,
-            "y": 0
+            "x": 0,
+            "y": 250
           }],
-          "x": 0,
-          "y": 50,
+          "id": "root",
+          "height": null,
           "slots": [{
             "x": 100,
             "y": 0,
-            "width": 100,
+            "width": 50,
             "height": 50
           }, {
-            "x": 0,
+            "x": 50,
             "y": 250,
-            "width": 200,
+            "width": 100,
+            "height": null
+          }, {
+            "x": 0,
+            "y": 350,
+            "width": 150,
             "height": null
           }],
-          "minWidth": 200,
-          "minHeight": 250
-        }, {
-          "id": 0,
-          "priority": 0.7,
-          "height": 100,
-          "width": 50,
-          "x": 0,
-          "y": 250
-        }],
-        "id": "root",
-        "height": null,
-        "slots": [{
-          "x": 100,
-          "y": 0,
-          "width": 50,
-          "height": 50
-        }, {
-          "x": 50,
-          "y": 250,
-          "width": 100,
-          "height": null
-        }, {
-          "x": 0,
-          "y": 350,
-          "width": 150,
-          "height": null
-        }],
-        "minWidth": 150,
-        "minHeight": 350
-      }));
+          "minWidth": 150,
+          "minHeight": 350
+        }));
+      });
+      it("with items in relative sizes", function(){
+        var setup = {
+          width: 200,
+          items: [{
+            id: "group",
+            items:[
+              {
+                id: 0,
+                priority: 0.9,
+                height: 50,
+                width: 100
+              },{
+                id: 1,
+                priority: 0.7,
+                height: 50,
+                width: "50%"
+              }
+            ],
+            priority: 0.9,
+            height: 50,
+            width: 200
+          }]
+        };
+        var pkg = new Package(setup);
+        var packedTree = pkg.packItems();
+        // first absolute child
+        expect(packedTree.items[0].items[1]).to.have.property("x").equal(0, "should be packed first");
+        expect(packedTree.items[0].items[1]).to.have.property("y").equal(0, "should be packed first");
+        // second relative child
+        expect(packedTree.items[0].items[1]).to.have.property("x").equal(100, "should be packed after first one");
+        expect(packedTree.items[0].items[1]).to.have.property("y").equal(0, "in the first row");
+        expect(packedTree.items[0].items[1]).to.have.property("width").equal(100, "should be 100 == 200 * 50% wide");
+      });
     });
+
     describe('should support gutter', function() {
       it('in root', function() {
         var setup = {
