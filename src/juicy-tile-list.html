@@ -181,6 +181,13 @@ version: 0.2.2
             parent = parent.parentNode;
           }
         }
+
+        /**
+         * Updates ShadowDOM wrappers for tiles.
+         * Workaround lack of imperative content distribution API.
+         * @param  {Array of child elements to cover} elementsArray [description]
+         * @return {Array<HTMLElement>}               array and map of tiles in ShadowDOM
+         */
         function updateWrappers(elementsArray, element) {
           //TODO: improve performance
           //TODO: decide how to handle setup when something was removed/added in the middle
@@ -342,10 +349,11 @@ version: 0.2.2
             sorter: function byPriority(itemA, itemB){
                 return itemB.priority - itemA.priority;
             },
+            updateWrappers: updateWrappers,
             createItemsList: function () {
               // console.log("createItemsList");
               this.elements = filterNodes(this, this.childNodes);
-              this.tiles = updateWrappers(this.elements, this);
+              this.tiles = this.updateWrappers(this.elements, this);
               // this.tiles["root"] = this.$.container;
               defaultSetup(
                 this.tiles,
