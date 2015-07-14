@@ -542,10 +542,14 @@ version: 0.2.2
             /**
              * Refresh everything
              * Asynchronous due to https://www.w3.org/Bugs/Public/show_bug.cgi?id=18429 workaround
+             * @param {Boolean} [hard=false] refresh also shadowDOM structure
              */
-          refresh: function( ) {
+          refresh: function(hard) {
             // console.log("refresh");
 
+            if(hard){
+              this.tiles = this.updateWrappers(this.elements, this);
+            }
             // TODO: support LTR
             if( this.setup.direction != "downRight"){
                this.setup.width = this.setup.width || innerWidth(this);
@@ -562,16 +566,23 @@ version: 0.2.2
             // trigger event
             this.dispatchEvent( new CustomEvent("juicy-tile-list-refresh") );
           },
-          setupChanged: function () {
+          /**
+           * Perform action when setup get changed
+           * @param {Object} [oldVal] old value
+           * @param {Object} [newVal] new value
+           * @param {Object} [changes] changes
+           * @param {Boolean} [hard=false] Set to true if ShadowDOM structure is also changed
+           */
+          setupChanged: function (oldVal, newVal, changes, hard) {
               if (!this.isReady) {
                   return;
               }
 
               this.cleanupDOM();
-
+              // console.log("setup changed")
               Package.call(this, this.setup);
               defaultSetup(this.tiles, this.setup.items, this.allItems, this.defaultTileSetup);
-              this.refresh();
+              this.refresh(hard);
           },
           attributeChanged: function(name, oldVal, newVal){
             switch(name){
