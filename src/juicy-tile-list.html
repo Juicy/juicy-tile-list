@@ -234,6 +234,7 @@ version: 0.2.2
             //}
           }
           element.$.container.appendChild(wrappers);
+          tiles["root"] = element.$.container;
           return tiles;
         }
 
@@ -354,14 +355,12 @@ version: 0.2.2
               // console.log("createItemsList");
               this.elements = filterNodes(this, this.childNodes);
               this.tiles = this.updateWrappers(this.elements, this);
-              // this.tiles["root"] = this.$.container;
               defaultSetup(
                 this.tiles,
                 this.setup.items,
                 this.allItems,
                 this.defaultTileSetup
               );
-              this.tiles["root"] = this.$.container;
             },
             parseDeclaration: function(elementElement) {
               var template = this.fetchTemplate(elementElement);
