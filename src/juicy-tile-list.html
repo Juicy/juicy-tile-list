@@ -258,8 +258,10 @@ version: 0.2.2
             } else {
               // force default - block
               elementStyle.display = "";
-              left = ( child.x || 0 ) + offsetX;
-              top = ( child.y || 0 ) + offsetY;
+              left = node.leftToRight ?  node.width - child.width - child.x : child.x || 0 ;//( child.x || 0 ) + offsetX;
+              left += offsetX;
+              top = node.bottomUp ?  node.height - child.height - child.y : child.y || 0 ;//( child.y || 0 ) + offsetY;
+              top += offsetY;
               var oversize = child.oversize || 0;
               // Old way to apply oversize
               //elementStyle.left = ( left - oversize ) + "px";
