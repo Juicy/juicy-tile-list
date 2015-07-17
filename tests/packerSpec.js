@@ -9,18 +9,18 @@ describe('Packer', function() {
 
 
     describe("when created", function() {
-      it("with default (`rightDown`) direction, makes itself infinitely tall, regardless of `height` given", function(){
+      it("with default (`horizontal`) direction, makes itself infinitely tall, regardless of `height` given", function(){
         var pkr = new Packer({
           width: 3,
           height: 10
         });
         assert.strictEqual( pkr.height, Number.POSITIVE_INFINITY);
       });
-      it("with `downRight` direction, makes itself infinitely wide, regardless of `width` given", function(){
+      it("with `vertical` direction, makes itself infinitely wide, regardless of `width` given", function(){
         var pkr = new Packer({
           width: 3,
           height: 10,
-          direction: "downRight"
+          direction: "vertical"
         });
         assert.strictEqual( pkr.width, Number.POSITIVE_INFINITY);
       });
@@ -153,10 +153,10 @@ describe('Packer', function() {
 
         });
       });
-      describe("with `direction: 'downRight'`", function() {
+      describe("with `direction: 'vertical'`", function() {
         var pkr = new Packer({
           height: 3,
-          direction: 'downRight'
+          direction: 'vertical'
         });
 
         // 153xx

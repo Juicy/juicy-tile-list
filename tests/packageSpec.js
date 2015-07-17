@@ -476,7 +476,7 @@ describe('Package', function() {
           gutter: 5,
           priority: 0.7, // 0.3,
           height: 100,
-          direction: "downRight",
+          direction: "vertical",
           widthAuto: true,
           items: [{
             id: 0,

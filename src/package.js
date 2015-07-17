@@ -82,7 +82,7 @@ function Package( setup ){
   }else{
     this.setup = {
       id: "root",
-      direction: "rightDown",
+      direction: "horizontal",
       gutter: 0,
       items: []
     };
@@ -93,7 +93,7 @@ Package.prototype.allItems = null;
 Package.prototype.setup = null;
 
 
-Package.prototype.direction = "rightDown";
+Package.prototype.direction = "horizontal";
 
 /**
  * [packItems description]
@@ -115,7 +115,7 @@ Package.prototype.packItems = function packItems( setup ) {
       // TODO: do it more lightweight
       var rect = new Rectangle(itemSetup);
 
-      //first calculate rect width because it cannot be auto TODO: fix for downRight mode
+      //first calculate rect width because it cannot be auto TODO: fix for vertical mode
       if( !rect.widthAuto && typeof rect.width == "string" && rect.width.indexOf("%") > 0 ){
         rect.width = ( (setup.width + gutter) * parseFloat(rect.width) /100  - gutter);
       } else {

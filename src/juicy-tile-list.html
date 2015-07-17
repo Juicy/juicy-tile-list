@@ -299,7 +299,7 @@ version: 0.2.2
         Polymer('juicy-tile-list', Platform.mixin( {}, Package.prototype, {
             // setup: {}, // set in `created` 'constructor'
             // {
-            //   direction: "rightDown",
+            //   direction: "horizontal",
             //   gutter: 8,
             //   items: []
             // },
@@ -553,7 +553,7 @@ version: 0.2.2
               this.tiles = this.updateWrappers(this.elements, this);
             }
             // TODO: support LTR
-            if( this.setup.direction != "downRight"){
+            if( this.setup.direction != "vertical"){
                this.setup.width = this.setup.width || innerWidth(this);
                this.setup.heightAuto = true;
             } else {

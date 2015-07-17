@@ -2,12 +2,12 @@
 
 > `<juicy-tile-list>` is masonry-like Polymer Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only).
 
-## Features 
+## Features
 
 It gives you:
- - masonry-like, gap-less layout (bin-packing), 
+ - masonry-like, gap-less layout (bin-packing),
  - layout applied in Shadow DOM - so it doesn't mess with your styles,
- - prioritizing items, 
+ - prioritizing items,
  - grouping into virtual, nested containers,
  - alignment in different orientations/directions,
  - dynamically changing size,
@@ -55,7 +55,7 @@ Attribute                    | Options             | Default      | Description
 `duration`                   | *Number*            | `0.5`        | Duration of repack animation (in seconds).
 `setup`                      | *Object*            |              | Tiles setup
 `setup.gutter`               | *Number*            | `0`          | Gutter/cell-spacing size in px
-`setup.direction`            | *String*            | `rightDown`  | How to align our package (horizontal layers `rightDown`, or vertiaval layers: `downRight`)
+`setup.direction`            | *String*            | `horizontal` | How to align our package (horizontal layers `horizontal`, or vertiacal layers: `vertical`)
 `setup.items`                | *Array*             | `[]`         | Tiles setup
 `setup.items[?].priority`    | *Number* (0-1)      | `0`          | Importance of tile, used for sorting elements.
 `setup.items[?].width`       | *Number*            | `1`          | Tile width (number of columns)
@@ -108,7 +108,7 @@ Name               | Param name | Type               | Default | Description
 ## Events
 
 Name                      | Data | Description
----                       | ---  | ---   
+---                       | ---  | ---
 `juicy-tile-list-refresh` |  -   | Triggered once layout is refreshed
 
 ## Refresh/repack

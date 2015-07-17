@@ -7,13 +7,13 @@
 "use strict";
 
 /**
- * Packs Rectangles to infinite rectangle (\infty × 
+ * Packs Rectangles to infinite rectangle (\infty ×
  * infty, width × \infty, or height × \infty)
  * @param {Object} [props] packer properties
  * @param {Number} [props.width=0] packer width (in px)
  * @param {Number} [props.height=0] packer height (in px)
  * @param {Number} [props.gutter=0] gutter between items (in px)
- * @param {String} [props.direction="rightDown"] packing direction `"rightDown"|"downRight"`
+ * @param {String} [props.direction="horizontal"] packing direction `"horizontal"|"vertical"`
  * @TODO write tests for `#gutter` (tomalec)
  * @IDEA make it single dimentional, merge width and hegith into single constraint
  */
@@ -21,7 +21,7 @@ function Packer( props /*width, height, direction*/ ){
   for ( var prop in props ) {
     this[ prop ] = props[ prop ];
   }
-  if(this.direction == "rightDown"){
+  if(this.direction == "horizontal"){
     this.height = Number.POSITIVE_INFINITY;
   } else {
     this.width = Number.POSITIVE_INFINITY;
@@ -31,7 +31,7 @@ function Packer( props /*width, height, direction*/ ){
 Packer.prototype.width = Number.POSITIVE_INFINITY;
 Packer.prototype.height = Number.POSITIVE_INFINITY;
 Packer.prototype.gutter = 0;
-Packer.prototype.direction = "rightDown";
+Packer.prototype.direction = "horizontal";
 Packer.prototype.minWidth = 0;
 Packer.prototype.minHeight = 0;
 
@@ -50,7 +50,7 @@ Packer.prototype.reset = function() {
   this.slots.push( initialSlot );
 
   // set sorter
-  this.sorter = sorters[ this.direction ] || sorters.rightDown;
+  this.sorter = sorters[ this.direction ] || sorters.horizontal;
 };
 
 /**
@@ -77,7 +77,7 @@ Packer.prototype.add = function( rectangle ) {
   }
   return this;
 };
-/** 
+/**
  * Place element at specyfic slot
  * @param  {Rectangle} rectangle  [description]
  * @param  {Rectangle | Object} slot slot to place, or at least object with position
@@ -112,10 +112,10 @@ Packer.prototype.placed = function( rectangle ) {
   for ( var i=0, len = this.slots.length; i < len; i++ ) {
     var slot = this.slots[i];
     var newSlots = slot.getSlotsAround( rectangle );
-    if ( newSlots ) { 
+    if ( newSlots ) {
       // slot intersects with rectangle, add all slots around
       revisedSlots.push.apply( revisedSlots, newSlots );
-    } else { 
+    } else {
       // this slot does not intersect with one to add
       revisedSlots.push( slot );
     }
@@ -171,11 +171,11 @@ Packer.cleanRedundant = function( rectangles ) {
 
 var sorters = {
   // align in horizontal layers RTL
-  rightDown: function( a, b ) {
+  horizontal: function( a, b ) {
     return a.y - b.y || a.x - b.x;
   },
   // align in vertical layers UTB
-  downRight: function( a, b ) {
+  vertical: function( a, b ) {
     return a.x - b.x || a.y - b.y;
   }
 };
