@@ -471,12 +471,12 @@ version: 0.2.2
           },
           /**
            * Extend `Package.prototype.packItems` with DOM features:
-           * `heightAuto`, `widthAuto`,
+           * `precalculateHeight`, `precalculateWidth`,
            * map virtual containers to real elements in ShadowDOM.
            * @param  {Object} [setup=this.setup] setup to pack
            * @return {Object} packed setup as in Package.prototype.packItems
            * @see Package.prototype.packItems
-           * @TODO: refactor widthAuto, heightAuto, etc for ShadowDOM tiles
+           * @TODO: refactor precalculateWidth, precalculateHeight, etc for ShadowDOM tiles
            */
           packItems: function packDOMItems( setup ){
             setup || (setup = this.setup);
@@ -512,14 +512,14 @@ version: 0.2.2
                       tile.style.padding = "";
 
 
-                    if(itemSetup.widthAuto){
+                    if(itemSetup.precalculateWidth){
                       // itemSetup.width = tile.clientWidth;
                       tile.style.width = ""; //slow, but I don't know another way to measure real width when tile's content has shrinked other than remove height property before measuring (Marcin)
                       itemSetup.width = tile.scrollWidth; //now we can measure scrollHeight because width is already set and height is not constrained
                     }
-                    if(itemSetup.heightAuto){
+                    if(itemSetup.precalculateHeight){
                       // use width constraint first, if given.
-                      if( !itemSetup.widthAuto ){
+                      if( !itemSetup.precalculateWidth ){
                         tile.style.width = (typeof itemSetup.width == "string") ?
                             itemSetup.width
                             :
@@ -555,10 +555,10 @@ version: 0.2.2
             // TODO: support LTR
             if( this.setup.direction != "vertical"){
                this.setup.width = this.setup.width || innerWidth(this);
-               this.setup.heightAuto = true;
+               this.setup.precalculateHeight = true;
             } else {
               this.setup.height = this.setup.height || innerHeight(this);
-              this.setup.widthAuto = true;
+              this.setup.precalculateWidth = true;
             }
 
             var packedTree = this.packItems();

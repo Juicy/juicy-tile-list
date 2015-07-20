@@ -116,14 +116,14 @@ Package.prototype.packItems = function packItems( setup ) {
       var rect = new Rectangle(itemSetup);
 
       //first calculate rect width because it cannot be auto TODO: fix for vertical mode
-      if( !rect.widthAuto && typeof rect.width == "string" && rect.width.indexOf("%") > 0 ){
+      if( !rect.precalculateWidth && typeof rect.width == "string" && rect.width.indexOf("%") > 0 ){
         rect.width = ( (setup.width + gutter) * parseFloat(rect.width) /100  - gutter);
       } else {
         rect.width = parseFloat( rect.width );
       }
       // caluclate relative size
       // we cannot use calc(xx% - gutter px) as it can be in virtual container which is a sibling
-      if( !rect.heightAuto && typeof rect.height == "string" && rect.height.indexOf("%") > 0 ){
+      if( !rect.precalculateHeight && typeof rect.height == "string" && rect.height.indexOf("%") > 0 ){
         rect.height = ( (setup.height + gutter) * parseFloat(rect.height) /100 - gutter );
       } else {
         rect.height = parseFloat( rect.height );
@@ -145,8 +145,8 @@ Package.prototype.packItems = function packItems( setup ) {
   });
 
   //change Infinity back to real size:
-  packer.height = setup.heightAuto ? packer.minHeight : parseFloat( setup.height );
-  packer.width = setup.widthAuto ? packer.minWidth : parseFloat( setup.width );
+  packer.height = setup.precalculateHeight ? packer.minHeight : parseFloat( setup.height );
+  packer.width = setup.precalculateWidth ? packer.minWidth : parseFloat( setup.width );
   return packer;
 };
 

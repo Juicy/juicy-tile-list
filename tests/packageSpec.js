@@ -439,7 +439,7 @@ describe('Package', function() {
       expect(packedTree.items[1]).to.have.property("y").equal(50, "should be in second row");
       expect(packedTree.items[1]).to.have.property("width").equal(setup.width, "packed tree should have height calculated to "+setup.width+"*100%");
     });
-    it('should support heightAuto for containers', function() {
+    it('should support precalculateHeight for containers', function() {
       var setup = {
         width: 150,
         gutter: 10,
@@ -447,7 +447,7 @@ describe('Package', function() {
           id: "group",
           gutter: 5,
           priority: 0.7, // 0.3,
-          heightAuto: true,
+          precalculateHeight: true,
           width: 100,
           items: [{
             id: 0,
@@ -466,7 +466,7 @@ describe('Package', function() {
       var packedTree = pkg.packItems();
       expect(packedTree.items[0]).to.have.property("height").equal(80, "packed tree should have height calculated to minHeight that covers all items");
     });
-    it('should support widthAuto for containers (with vertical orientation)', function() {
+    it('should support precalculateWidth for containers (with vertical orientation)', function() {
       var setup = {
         width: 150,
         gutter: 10,
@@ -476,7 +476,7 @@ describe('Package', function() {
           priority: 0.7, // 0.3,
           height: 100,
           direction: "vertical",
-          widthAuto: true,
+          precalculateWidth: true,
           items: [{
             id: 0,
             priority: 0.8,
