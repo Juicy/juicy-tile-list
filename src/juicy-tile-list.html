@@ -41,11 +41,11 @@ version: 0.2.2
           #container.animate ::content>*,
           #container.animate >*,
         */
-        .animate > .juicy-tile,
+        /*.animate > .juicy-tile,
         .animate > .containerBackground  {
             -webkit-transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s, -webkit-transform 0.5s;
             transition: width 0.5s ease-out, height 0.5s ease-out, top 0.5s ease-out, left 0.5s ease-out, transform 0.5s ease-out;
-        }
+        }*/
         /**/
     </style>
     <div id="container" class="animate"></div>
@@ -258,7 +258,7 @@ version: 0.2.2
             } else {
               // force default - block
               elementStyle.display = "";
-              left = node.leftToRight ?  node.width - child.width - child.x : child.x || 0 ;//( child.x || 0 ) + offsetX;
+              left = node.rightToLeft ?  node.width - child.width - child.x : child.x || 0 ;//( child.x || 0 ) + offsetX;
               left += offsetX;
               top = node.bottomUp ?  node.height - child.height - child.y : child.y || 0 ;//( child.y || 0 ) + offsetY;
               top += offsetY;

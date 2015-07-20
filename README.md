@@ -9,7 +9,7 @@ It gives you:
  - layout applied in Shadow DOM - so it doesn't mess with your styles,
  - prioritizing items,
  - grouping into virtual, nested containers,
- - alignment in different orientations/directions,
+ - alignment in different orientations and directions,
  - dynamically changing size,
  - auto adjusting container sizes,
  - gutter/cell-spacing between tiles,
@@ -56,6 +56,8 @@ Attribute                    | Options             | Default      | Description
 `setup`                      | *Object*            |              | Tiles setup
 `setup.gutter`               | *Number*            | `0`          | Gutter/cell-spacing size in px
 `setup.direction`            | *String*            | `horizontal` | How to align our package (horizontal layers `horizontal`, or vertiacal layers: `vertical`)
+`setup.rightToLeft`          | *Boolean*           | `false`      | If set to `true`, tiles within this container will be arranged from the right to the left.
+`setup.bottomUp`             | *Boolean*           | `false`      | If set to `true`, tiles within this container will be arranged from the bottom to the top.
 `setup.items`                | *Array*             | `[]`         | Tiles setup
 `setup.items[?].priority`    | *Number* (0-1)      | `0`          | Importance of tile, used for sorting elements.
 `setup.items[?].width`       | *Number*            | `1`          | Tile width (number of columns)
@@ -66,6 +68,8 @@ Attribute                    | Options             | Default      | Description
 `setup.items[?].items`       | *Array(Items)*      |              | Recursive setup (for virtual containers)
 `setup.items[?].gutter`      | *Number*            | `0`          | Recursive setup (for virtual containers)
 `setup.items[?].direction`   | *String*            |              | Recursive setup (for virtual containers)
+`setup.items[?].rightToLeft` | *Boolean*            |              | Recursive setup (for virtual containers)
+`setup.items[?].bottomUp`    | *Boolean*            |              | Recursive setup (for virtual containers)
 `refreshOnMutation`          | *Boolean*           | `false`      | If set to `true`, tile-list will be repacked and re-rendered once nodes are added or removed.
 `refreshOnResize`            | *Boolean*           | `false`      | If set to `true`, tile-list will be repacked and re-rendered once window or container gets resized
 `refreshOnAttached`          | *Boolean*           | `true`       | If set to `true`, tile-list will be repacked and re-rendered once (re-)attached to DOM

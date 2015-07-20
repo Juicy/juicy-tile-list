@@ -293,7 +293,6 @@ describe('Package', function() {
           }]
         };
         var pkg = new Package(setup);
-        debugger
         var packedTree = pkg.packItems();
         // first absolute child
         expect(packedTree.items[0].items[0]).to.have.property("x").equal(0, "should be packed first");
