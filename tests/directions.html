@@ -55,8 +55,6 @@ describe('juicy-tile-list', function() {
         var initialSetup
         before(function(){
           initialSetup = {
-            width: 250,
-            height: 250,
             direction: direction,
             items:[
               {
@@ -101,6 +99,13 @@ describe('juicy-tile-list', function() {
               }
             ]
           };
+          if(direction == "vertical"){
+            initialSetup.height = 250;
+            initialSetup.width = 450;
+          } else {
+            initialSetup.width = 250;
+            initialSetup.height = 450;
+          }
           juicyTileList.setup = JSON.parse(JSON.stringify(initialSetup));
           juicyTileList.style.width = initialSetup.width + "px";
           juicyTileList.refresh();
