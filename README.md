@@ -54,8 +54,8 @@ Attribute                    | Options             | Default      | Description
 `gutter`                     | *Number*            | `0`          | Overwrites default value of `setup.gutter`
 `duration`                   | *Number*            | `0.5`        | Duration of repack animation (in seconds).
 `setup`                      | *Object*            |              | Tiles setup
-`setup.width`                | *Number*            |              | Container width to be used for packing in horizontal direction, if not given  `innerWidth(this)` will be used.
-`setup.heigh`                | *Number*            |              | Container height to be used for packing in horizontal direction, if not given  `innerWidth(this)` will be used.
+`setup.width`                | *Number*            |              | Container width to be used for packing in `horizontal` direction, if not given  `innerWidth(this)` will be used.
+`setup.heigh`                | *Number*            |              | Container height to be used for packing in `vertical` direction, if not given  `innerWidth(this)` will be used.
 `setup.gutter`               | *Number*            | `0`          | Gutter/cell-spacing size in px
 `setup.direction`            | *String*            | `horizontal` | How to align our package (horizontal layers `horizontal`, or vertiacal layers: `vertical`)
 `setup.rightToLeft`          | *Boolean*           | `false`      | If set to `true`, tiles within this container will be arranged from the right to the left.
@@ -63,7 +63,9 @@ Attribute                    | Options             | Default      | Description
 `setup.items`                | *Array*             | `[]`         | Tiles setup
 `setup.items[?].priority`    | *Number* (0-1)      | `0`          | Importance of tile, used for sorting elements.
 `setup.items[?].width`       | *Number*            | `1`          | Tile width
+`setup.items[?].precalculateWidth` | *Boolean*     | `false`      | Set to `true` to automatically pre-calculate width before every (re-)packing.
 `setup.items[?].heigh`       | *Number*            | `1`          | Tile height
+`setup.items[?].precalculateHeight`| *Boolean*     | `false`      | Set to `true` to automatically pre-calculate height before every (re-)packing.
 `setup.items[?].id`          | *String*            |              | Element/group id by default order in DOM will be used
 `setup.items[?].content`     | *String*            |              | HTML content for (for virtual containers)
 `setup.items[?].oversize`    | *Number*            | `0`          | Make container's box & background bleed for this amount of pixels out of packed box. So, render box bigger, but pack with its original size (for virtual containers)
