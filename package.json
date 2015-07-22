@@ -1,6 +1,6 @@
 {
   "name": "juicy-tile-list",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "<juicy-tile-list> is a Polymer Element with sortable tiles that packs efficiently without changing HTML structure (changes CSS only).",
   "main": "src/juicy-tile-list.html",
   "directories": {
