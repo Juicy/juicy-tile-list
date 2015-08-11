@@ -499,8 +499,8 @@ version: 0.3.1
                       tiles[ itemSetup.id ] = tile;
                         tile.id = itemSetup.id;
                       this.$.container.appendChild(tile);
-                    } else {
-                        this.$.container.appendChild(tile);
+                    } else if(!tile.parentElement){
+                      this.$.container.appendChild(tile);
                     }
 
                     (itemSetup.content != undefined) && (tile.innerHTML = itemSetup.content);
