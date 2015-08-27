@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -6,6 +6,9 @@
 
     <!-- Importing Web Component's Polyfill -->
     <script src="../webcomponentsjs/webcomponents.js"></script>
+    
+    <link rel="import" href="../../polymer/polymer.html">
+    
     <!-- Importing Custom Elements -->
     <link rel="import" href="src/juicy-tile-list.html">
 
@@ -149,14 +152,9 @@ section input{
                 ]
             }
         };
-        document.addEventListener("polymer-ready", function(){
+        document.addEventListener("polymer-ready", function () {
             document.querySelector("template").model = model;
-            
-        })
-
-
-
-
+        });
     </script>
     <!--
     <section>

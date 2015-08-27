@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -6,6 +6,9 @@
 
     <!-- Importing Web Component's Polyfill -->
     <script src="../../webcomponentsjs/webcomponents.js"></script>
+
+    <link rel="import" href="../../polymer/polymer.html">
+
     <!-- Importing Custom Elements -->
     <link rel="import" href="../src/juicy-tile-list.html">
 <style>
@@ -51,7 +54,7 @@ juicy-tile-list>:nth-child(5) {
     overflow:auto;
 }
 </style>
-
+</head>
 <body>
     <template bind>
         <juicy-tile-list setup="{{setup}}">
@@ -232,3 +235,4 @@ juicy-tile-list>:nth-child(5) {
 
 
 </body>
+</html>

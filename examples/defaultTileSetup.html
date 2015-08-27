@@ -6,6 +6,9 @@
 
     <!-- Importing Web Component's Polyfill -->
     <script src="../../webcomponentsjs/webcomponents.js"></script>
+
+    <link rel="import" href="../../polymer/polymer.html">
+
     <!-- Importing Custom Elements -->
     <link rel="import" href="../src/juicy-tile-list.html">
 
@@ -19,11 +22,11 @@
     <blockquote><p>Masonry-like Polymer Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only).</p></blockquote>
 
     <!-- EXAMPLE STARTS HERE -->
-    <juicy-tile-list defaultTileSetup="
+    <juicy-tile-list defaultTileSetup='
         {
-            'precalculateHeight': true,
-            'width': '25%'
-        }">
+            "precalculateHeight": true,
+            "width": "25%"
+        }'>
         <div>Item 0</div>
         <div>
             <button>Item 1</button>
@@ -36,11 +39,11 @@
     </juicy-tile-list>
     <!-- EXAMPLE ENDS HERE -->
     <pre>
-&lt;juicy-tile-list defaultTileSetup="
+&lt;juicy-tile-list defaultTileSetup='
     {
-        'precalculateHeight': true,
-        'width': '25%'
-    }"&gt;</pre>
+        "precalculateHeight": true,
+        "width": "25%"
+    }'&gt;</pre>
     <!-- <section>
         <h3><a href="https://github.com/Juicy/juicy-tile-list#juicy-tile-list-">API</a></h3>
         <ul>
@@ -52,3 +55,4 @@
     </section> -->
 </article>
 </body>
+</html>

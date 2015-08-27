@@ -20,6 +20,7 @@ juicy-tile-list > *:not(#container){
     text-align: center;
     border-radius: 2px;
     width: 100%;
+    height: 100%;
 }
 section input{
     width: 4em;

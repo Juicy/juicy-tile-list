@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -6,6 +6,9 @@
 
     <!-- Importing Web Component's Polyfill -->
     <script src="../../webcomponentsjs/webcomponents.js"></script>
+    
+    <link rel="import" href="../../polymer/polymer.html">
+    
     <!-- Importing Custom Elements -->
     <link rel="import" href="../src/juicy-tile-list.html">
 
@@ -26,9 +29,9 @@
                 <button>Item 1, priority 0.9</button>
             </div>
             <div>
-                <input value="Input2, priority 0.6">
+                <input value="Input 2, priority 0.6">
             </div>
-            <section>Item3, priority 0.3</section>
+            <section>Item 3, priority 0.3</section>
         </juicy-tile-list>
     </template>
     <script type="text/javascript">
@@ -82,7 +85,6 @@
         };
         document.addEventListener("polymer-ready", function(){
             document.querySelector("template").model = model;
-            
         });
     </script>
     <!-- EXAMPLE ENDS HERE -->
