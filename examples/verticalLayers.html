@@ -7,8 +7,6 @@
     <!-- Importing Web Component's Polyfill -->
     <script src="../../webcomponentsjs/webcomponents.js"></script>
 
-    <link rel="import" href="../../polymer/polymer.html">
-
     <!-- Importing Custom Elements -->
     <link rel="import" href="../src/juicy-tile-list.html">
 
@@ -16,19 +14,18 @@
     <link rel="stylesheet" href="examples.css">
 </head>
 <body>
-<a href="https://github.com/Juicy/juicy-tile-list"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
-<article class="markdown-body">
-    <h1>&lt;juicy-tile-list&gt;</h1>
-    <blockquote><p>Masonry-like Polymer Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only).</p></blockquote>
+    <a href="https://github.com/Juicy/juicy-tile-list"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+    <article class="markdown-body">
+        <h1>&lt;juicy-tile-list&gt;</h1>
+        <blockquote><p>Masonry-like Polymer Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only).</p></blockquote>
 
-    <!-- EXAMPLE STARTS HERE -->
-    <style>
-    juicy-tile-list{
-        height: 320px;
-    }
-    </style>
-    <template bind>
-        <juicy-tile-list setup="{{setup}}">
+        <!-- EXAMPLE STARTS HERE -->
+        <style>
+            juicy-tile-list {
+                height: 320px;
+            }
+        </style>
+        <juicy-tile-list>
             <div>Item 0 , priority 0.6</div>
             <div class="ple">
                 <button>Item 1, priority 0.9</button>
@@ -38,93 +35,43 @@
             </div>
             <section>Item3, priority 0.4</section>
         </juicy-tile-list>
-    </template>
-    <script type="text/javascript">
-        // 011
-        // 233
-        // 2
-        // 
-        // prioritized
-        // 
-        // 110
-        // 233
-        // 2
-        model = {
-            setup: {
-                gutter: 8,
-                direction: "vertical",
-                items: [
-                    // 011
-                    // 233
-                    // 2
-                    // prioritized
-                    // 
-                    // 110
-                    // 233
-                    // 2
-                    {
-                        id:0,
-                        priority:0.6,
-                        height: 100,
-                        width: 200
-                    },
-                    {
-                        id:1,
-                        priority:0.9,
-                        height: 100,
-                        width: 400
-                    },
-                    {
-                        id:2,
-                        priority:0.3,
-                        height: 100,
-                        width: 400
-                    },
-                    {
-                        id:3,
-                        priority:0.4,
-                        height: 200,
-                        width: 200
-                    }
-                    // 
-                    // 122
-                    // 145
-                    // 333
-                    // 
-                    // {
-                    //   width: 200,
-                    //   height: 200
-                    // }, {
-                    //   width: 400,
-                    //   height: 100
-                    // }, {
-                    //   width: 600,
-                    //   height: 100
-                    // }, {
-                    //   width: 200,
-                    //   height: 100
-                    // }, {
-                    //   width: 200,
-                    //   height: 100
-                    // }
-                ]
-            }
-        };
-        document.addEventListener("polymer-ready", function(){
-            document.querySelector("template").model = model;
-            
-        });
-    </script>
-    <!-- EXAMPLE ENDS HERE -->
-    <!-- <section>
-        <h3><a href="https://github.com/Juicy/juicy-tile-list#juicy-tile-list-">API</a></h3>
-        <ul>
-            <li><code>juicytilelist.resizeItem</code>(<input placeholder="itemIndex">, <input placeholder="width">, <input placeholder="height">) <button id="callResize">call</button></li>
-                
-            <li><code>juicytilelist.reprioritizeItem</code>(<input placeholder="itemIndex">, <input placeholder="increase" title="Boolean (0|1)">, <input placeholder="end" title="Boolean (0|1)">) <button id="callReprioritize">call</button></li>
-        </ul>
-        <script type="text/javascript" src="examples-api.js"></script>
-    </section> -->
-</article>
-</body>
+        <script type="text/javascript">
+            model = {
+                setup: {
+                    gutter: 8,
+                    direction: "vertical",
+                    items: [
+                        {
+                            id: 0,
+                            priority: 0.6,
+                            height: 100,
+                            width: 200
+                        },
+                        {
+                            id: 1,
+                            priority: 0.9,
+                            height: 100,
+                            width: 400
+                        },
+                        {
+                            id: 2,
+                            priority: 0.3,
+                            height: 100,
+                            width: 400
+                        },
+                        {
+                            id: 3,
+                            priority: 0.4,
+                            height: 200,
+                            width: 200
+                        }
+                    ]
+                }
+            };
 
+            document.querySelector("juicy-tile-list").setAttribute("setup", JSON.stringify(model.setup));
+        </script>
+        <!-- EXAMPLE ENDS HERE -->
+    </article>
+</body>
+</html>

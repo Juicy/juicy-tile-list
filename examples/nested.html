@@ -7,232 +7,145 @@
     <!-- Importing Web Component's Polyfill -->
     <script src="../../webcomponentsjs/webcomponents.js"></script>
 
-    <link rel="import" href="../../polymer/polymer.html">
-
     <!-- Importing Custom Elements -->
     <link rel="import" href="../src/juicy-tile-list.html">
-<style>
-* {
-  margin:0px;
-  padding:0px;
-}
-body>juicy-tile-list{
-    /*width: 300px;
-    height: 150px;*/
-    width: 616px;
-    padding:1em;
-    box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
-}
-/* juicy-tile-list>*{ */
-/** <-- oh, our `beloved` IE does not get concept of Shadow DOM */
-juicy-tile-list #container>*, 
-juicy-tile-list > *:not(#container){
-    box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
-    height: 100%;
-}
-juicy-tile-list>:first-child:not(#container) {
-    background:lightgreen;
-}
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
 
-juicy-tile-list>:nth-child(2) {
-    background:lightblue;
-}
+        body > juicy-tile-list {
+            /*width: 300px;
+            height: 150px;*/
+            width: 616px;
+            padding: 1em;
+            box-shadow: inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
+        }
 
-juicy-tile-list>:nth-child(3) {
-    background:yellow;
-    overflow:auto;
-}
+        /* juicy-tile-list>*{ */
+        /** <-- oh, our `beloved` IE does not get concept of Shadow DOM */
+        juicy-tile-list #container > *,
+        juicy-tile-list > *:not(#container) {
+            box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);
+            height: 100%;
+        }
 
-juicy-tile-list>:nth-child(4) {
-    background:gray;
-    overflow:auto;
-}
+        juicy-tile-list > :first-child:not(#container) {
+            background: lightgreen;
+        }
 
-juicy-tile-list>:nth-child(5) {
-    background:orange;
-    max-height: 100px;
-    overflow:auto;
-}
-</style>
+        juicy-tile-list > :nth-child(2) {
+            background: lightblue;
+        }
+
+        juicy-tile-list > :nth-child(3) {
+            background: yellow;
+            overflow: auto;
+        }
+
+        juicy-tile-list > :nth-child(4) {
+            background: gray;
+            overflow: auto;
+        }
+
+        juicy-tile-list > :nth-child(5) {
+            background: orange;
+            max-height: 100px;
+            overflow: auto;
+        }
+    </style>
 </head>
 <body>
-    <template bind>
-        <juicy-tile-list setup="{{setup}}">
+    <juicy-tile-list id="parent-list">
+        <div>Item 0 </div>
+        <juicy-tile-list id="child-list">
             <div>Item 0 </div>
-            <juicy-tile-list setup="{{setup2}}">
-                <div>Item 0 </div>
-                <div>
-                    <button>Item 1</button>
-                </div>
-                <div>
-                    <input value="Input2">
-                </div>
-                <section>Item3</section>
-            </juicy-tile-list>
+            <div>
+                <button>Item 1</button>
+            </div>
             <div>
                 <input value="Input2">
-            </div>            
-            <section>Item3</section>            
+            </div>
+            <section>Item3</section>
         </juicy-tile-list>
-    </template>
+        <div>
+            <input value="Input2">
+        </div>
+        <section>Item3</section>
+    </juicy-tile-list>
     <script type="text/javascript">
-        // 011
-        // 233
-        // 2
-        // 
-        // prioritized
-        // 
-        // 110
-        // 233
-        // 2
         model = {
             setup: {
                 gutter: 8,
-                items:[
-                    // 011
-                    // 233
-                    // 2
-                    // prioritized
-                    // 
-                    // 110
-                    // 233
-                    // 2
+                items: [
                     {
-                        id:0,
-                        priority:0.9,// 0.6,
+                        id: 0,
+                        priority: 0.9,
                         height: 100,
                         width: 200
                     },
                     {
-                        id:1,
-                        priority:0.8,// 0.9,
-                        height: 100,
-                        width:400
-                    },
-                    {
-                        id:2,
-                        priority:0.6,// 0.3,
+                        id: 1,
+                        priority: 0.8,
                         height: 100,
                         width: 400
                     },
                     {
-                        id:3,
-                        priority:0.4,
+                        id: 2,
+                        priority: 0.6,
+                        height: 100,
+                        width: 400
+                    },
+                    {
+                        id: 3,
+                        priority: 0.4,
                         height: 200,
                         width: 200
                     }
-                    // 
-                    // 122
-                    // 145
-                    // 333
-                    // 
-                    // {
-                    //   width: 200,
-                    //   height: 2
-                    // }, {
-                    //   width: 400,
-                    //   height:  100
-                    // }, {
-                    //   width: 600,
-                    //   height:  100
-                    // }, {
-                    //   width: 200,
-                    //   height:  100
-                    // }, {
-                    //   width: 200,
-                    //   height:  100
-                    // }
                 ]
             },
             setup2: {
                 gutter: 4,
                 items: [
-                    // 011
-                    // 233
-                    // 2
-                    // prioritized
-                    // 
-                    // 110
-                    // 233
-                    // 2
                     {
-                        id:0,
-                        priority:0.9,// 0.6,
+                        id: 0,
+                        priority: 0.9,
                         height: 20,
                         width: 100
                     },
                     {
-                        id:1,
-                        priority:0.8,// 0.9,
+                        id: 1,
+                        priority: 0.8,
                         height: 20,
                         width: 100
                     },
                     {
-                        id:2,
-                        priority:0.6,// 0.3,
+                        id: 2,
+                        priority: 0.6,
                         height: 40,
                         width: 180
                     },
                     {
-                        id:3,
-                        priority:0.4,
+                        id: 3,
+                        priority: 0.4,
                         height: 20,
                         width: 150
                     }
                 ]
             }
         };
-        document.addEventListener("polymer-ready", function(){
-            document.querySelector("template").model = model;
-            
-        })
-
-
-
-
+        
+        document.querySelector("#parent-list").setAttribute("setup", JSON.stringify(model.setup));
+        document.querySelector("#child-list").setAttribute("setup", JSON.stringify(model.setup2));
     </script>
-    <!-- <section>
-        <h3>API</h3>
-        <ul>
-            <li><code>pjSortableTiles.resizeItem</code>(<input placeholder="itemIndex">, <input placeholder="width">, <input placeholder="height">) <button id="callResize">call</button></li>
-                
-            <li><code>pjSortableTiles.reprioritizeItem</code>(<input placeholder="itemIndex">, <input placeholder="increase" title="Boolean (0|1)">, <input placeholder="end" title="Boolean (0|1)">) <button id="callReprioritize">call</button></li>
-
-            <li><code>nestedPjSortableTiles.resizeItem</code>(<input placeholder="itemIndex">, <input placeholder="width">, <input placeholder="height">) <button id="callNestedResize">call</button></li>
-                
-            <li><code>nestedPjSortableTiles.reprioritizeItem</code>(<input placeholder="itemIndex">, <input placeholder="increase" title="Boolean (0|1)">, <input placeholder="end" title="Boolean (0|1)">) <button id="callNestedReprioritize">call</button></li>
-        </ul>
-        <script type="text/javascript">
-        document.addEventListener("polymer-ready", function(){
-            function callMethod(element, method, event){
-                var args = event.target.parentElement.querySelectorAll("input")
-                            .array().map(function(e){return parseInt(e.value)});
-                element[method].apply(element, args);
-            }
-            document.getElementById("callResize").addEventListener("click", function (event){
-                callMethod( document.querySelector("juicy-tile-list"), "resizeItem", event );
-            });
-            document.getElementById("callReprioritize").addEventListener("click", function (event){
-                callMethod( document.querySelector("juicy-tile-list"), "reprioritizeItem", event );
-            });
-            document.getElementById("callNestedResize").addEventListener("click", function (event){
-                callMethod( document.querySelector("juicy-tile-list juicy-tile-list"), "resizeItem", event );
-            });
-            document.getElementById("callNestedReprioritize").addEventListener("click", function (event){
-                callMethod( document.querySelector("juicy-tile-list juicy-tile-list"), "reprioritizeItem", event );
-            });
-        });
-        </script>
-    </section> -->
     <footer>
         <h4>Other examples</h4>
         <ul>
-            <li><a href="examples/prioritized.html">Prioritized/weighted tiles</a></li>
-            <li><a href="examples/verticalLayers.html">Vertical layers</a></li>
-            <li><a href="examples/fullWidth.html">Full width package</a></li>
+            <li><a href="prioritized.html">Prioritized/weighted tiles</a></li>
+            <li><a href="verticalLayers.html">Vertical layers</a></li>
+            <li><a href="fullWidth.html">Full width package</a></li>
         </ul>
     </footer>
-
-
 </body>
 </html>

@@ -7,8 +7,6 @@
     <!-- Importing Web Component's Polyfill -->
     <script src="../../webcomponentsjs/webcomponents.js"></script>
 
-    <link rel="import" href="../../polymer/polymer.html">
-
     <!-- Importing Custom Elements -->
     <link rel="import" href="../src/juicy-tile-list.html">
 
@@ -16,70 +14,57 @@
     <link rel="stylesheet" href="examples.css">
 </head>
 <body>
-<a href="https://github.com/Juicy/juicy-tile-list"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
-<article class="markdown-body">
-    <h1>&lt;juicy-tile-list&gt;</h1>
-    <blockquote><p>Masonry-like Polymer Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only).</p></blockquote>
-    <p>&lt;juicy-tile-list&gt; can adapt to screen/container width.</p>
-    <!-- EXAMPLE STARTS HERE -->
-    <template bind>
-        <juicy-tile-list setup="{{setup}}">
+    <a href="https://github.com/Juicy/juicy-tile-list"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+    <article class="markdown-body">
+        <h1>&lt;juicy-tile-list&gt;</h1>
+        <blockquote><p>Masonry-like Polymer Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only).</p></blockquote>
+        <p>&lt;juicy-tile-list&gt; can adapt to screen/container width.</p>
+        <!-- EXAMPLE STARTS HERE -->
+        <juicy-tile-list>
             <div>Try</div>
             <button>to</button>
             <input value="resize">
             <section>browser window</section>
         </juicy-tile-list>
-    </template>
-    <script type="text/javascript">
-        model = {
-            setup: {
-                gutter: 8,
-                items:[
-                    {
-                        id:0,
-                        priority:0.9,
-                        height: 100,
-                        precalculateWidth: true
-                    },
-                    {
-                        id:1,
-                        priority:0.6,
-                        height: 100,
-                        width:200
-                    },
-                    {
-                        id:2,
-                        priority:0.4,
-                        height: 200,
-                        precalculateWidth: true,
-                        width:200
-                    },
-                    {
-                        id:3,
-                        priority:0.3,
-                        height: 100,
-                        precalculateHeight: true,
-                        width:400,
-                        precalculateWidth: true
-                    }
-                ]
-            }
-        };
-        document.addEventListener("polymer-ready", function(){
-            document.querySelector("template").model = model;
-            
-        });
-    </script>
-    <!-- EXAMPLE ENDS HERE -->
-    <!-- <section>
-        <h3><a href="https://github.com/Juicy/juicy-tile-list#juicy-tile-list-">API</a></h3>
-        <ul>
-            <li><code>juicytilelist.resizeItem</code>(<input placeholder="itemIndex">, <input placeholder="width">, <input placeholder="height">) <button id="callResize">call</button></li>
-                
-            <li><code>juicytilelist.reprioritizeItem</code>(<input placeholder="itemIndex">, <input placeholder="increase" title="Boolean (0|1)">, <input placeholder="end" title="Boolean (0|1)">) <button id="callReprioritize">call</button></li>
-        </ul>
-        <script type="text/javascript" src="examples-api.js"></script>
-    </section> -->
-</article>
+        <script type="text/javascript">
+            model = {
+                setup: {
+                    gutter: 8,
+                    items: [
+                        {
+                            id: 0,
+                            priority: 0.9,
+                            height: 100,
+                            precalculateWidth: true
+                        },
+                        {
+                            id: 1,
+                            priority: 0.6,
+                            height: 100,
+                            width: 200
+                        },
+                        {
+                            id: 2,
+                            priority: 0.4,
+                            height: 200,
+                            precalculateWidth: true,
+                            width: 200
+                        },
+                        {
+                            id: 3,
+                            priority: 0.3,
+                            height: 100,
+                            precalculateHeight: true,
+                            width: 400,
+                            precalculateWidth: true
+                        }
+                    ]
+                }
+            };
+
+            document.querySelector("juicy-tile-list").setAttribute("setup", JSON.stringify(model.setup));
+        </script>
+        <!-- EXAMPLE ENDS HERE -->
+    </article>
 </body>
 </html>

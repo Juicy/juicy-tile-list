@@ -6,50 +6,48 @@
 
     <!-- Importing Web Component's Polyfill -->
     <script src="../webcomponentsjs/webcomponents.js"></script>
-    
-    <link rel="import" href="../../polymer/polymer.html">
-    
+
     <!-- Importing Custom Elements -->
     <link rel="import" href="src/juicy-tile-list.html">
 
     <link rel="stylesheet" href="examples/github-markdown.css">
-<style shim-shadowdom>
-body {
-    font-family: sans-serif;
-    min-width: 200px;
-    width: 50%;
-    margin: 0 auto;
-    padding: 30px;
-}
-juicy-tile-list{
-    /*width: 300px;
-    height: 150px;*/
-    display: block;
-    width: 100%;
-    padding:1em;
-    box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
-}
-/* juicy-tile-list>*{ */
-/** <-- oh, our `beloved` IE does not get concept of Shadow DOM */
-juicy-tile-list #container>*, 
-juicy-tile-list > *:not(#container){
-    box-shadow:     0px 0px 10px 0px rgba(50, 50, 50, 0.75);
-    text-align: center;
-    border-radius: 2px;
-    height: 100%;
-}
-section input{
-    width: 4em;
-}
-</style>
+    <style shim-shadowdom>
+            body {
+                font-family: sans-serif;
+                min-width: 200px;
+                width: 50%;
+                margin: 0 auto;
+                padding: 30px;
+            }
 
+            juicy-tile-list {
+                display: block;
+                width: 100%;
+                padding: 1em;
+                box-shadow: inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
+            }
+
+            /* juicy-tile-list>*{ */
+            /** <-- oh, our `beloved` IE does not get concept of Shadow DOM */
+            juicy-tile-list #container > *,
+            juicy-tile-list > *:not(#container) {
+                box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);
+                text-align: center;
+                border-radius: 2px;
+                height: 100%;
+            }
+
+            section input {
+                width: 4em;
+            }
+    </style>
+</head>
 <body>
-<a href="https://github.com/Juicy/juicy-tile-list"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
-<article class="markdown-body">
-    <h1>&lt;juicy-tile-list&gt;</h1>
-    <blockquote><p>Masonry-like Polymer Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only).</p></blockquote>
-    <template bind>
-        <juicy-tile-list setup="{{setup}}" gutter="10" refreshOnResize>
+    <a href="https://github.com/Juicy/juicy-tile-list"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+    <article class="markdown-body">
+        <h1>&lt;juicy-tile-list&gt;</h1>
+        <blockquote><p>Masonry-like Polymer Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only).</p></blockquote>
+        <juicy-tile-list gutter="10" refreshonresize>
             <div>0</div>
             <div>
                 <button>1</button>
@@ -69,151 +67,123 @@ section input{
             <div>10</div>
             <div>11</div>
         </juicy-tile-list>
-    </template>
-    <script type="text/javascript">
-        model = {
-            setup: {
-                gutter: 8,
-                items:[
-                    {
-                        id:0,
-                        priority:0.9,// 0.6,
-                        height: 50,
-                        width: 50
-                    },
-                    {
-                        id:1,
-                        priority:0.8,// 0.9,
-                        height: 100,
-                        width:50,
-                        hidden: false
-                    },
-                    {
-                        id:2,
-                        priority:0.7,// 0.3,
-                        height: 50,
-                        width: 200
-                    },
-                    {
-                        id:3,
-                        priority:0.6,
-                        height: 50,
-                        width: 150
-                    },
-                    {
-                        id:4,
-                        priority:0.5,
-                        height: 50,
-                        width: 200
-                    },
-                    {
-                        id:5,
-                        priority:0.4,
-                        height: 100,
-                        width: 50
-                    },
-                    {
-                        id:6,
-                        priority:0.3,
-                        height: 150,
-                        width: 100
-                    },
-                    {
-                        id:7,
-                        priority:0.2,
-                        height: 50,
-                        width: 50
-                    },
-                    {
-                        id:8,
-                        priority:0.1,
-                        height: 50,
-                        width: 50
-                    },
-                    {
-                        id:9,
-                        priority:0.09,
-                        height: 150,
-                        width: 50
-                    },
-                    {
-                        id:10,
-                        priority:0.08,
-                        height: 50,
-                        width: 100
-                    },
-                    {
-                        id:11,
-                        priority:0.07,
-                        height: 50,
-                        width: 200
-                    }
-                   
-                ]
-            }
-        };
-        document.addEventListener("polymer-ready", function () {
-            document.querySelector("template").model = model;
-        });
-    </script>
-    <!--
-    <section>
-        <h3><a href="https://github.com/Juicy/juicy-tile-list#juicy-tile-list-">API</a></h3>
-        <ul>
-            <li><code>juicytilelist.resizeItem</code>(<input placeholder="itemIndex">, <input placeholder="width">, <input placeholder="height">) <button id="callResize">call</button></li>
-                
-            <li><code>juicytilelist.reprioritizeItem</code>(<input placeholder="itemIndex">, <input placeholder="increase" title="Boolean (0|1)">, <input placeholder="end" title="Boolean (0|1)">) <button id="callReprioritize">call</button></li>
-        </ul>
         <script type="text/javascript">
-        document.addEventListener("polymer-ready", function(){
-            function callMethod(element, method, event){
-                var args = event.target.parentElement.querySelectorAll("input")
-                            .array().map(function(e){return parseInt(e.value)});
-                args[0] = element.items[args[0]];
-                element[method].apply(element, args);
-                element.refresh();
-            }
-            document.getElementById("callResize").addEventListener("click", function (event){
-                callMethod( document.querySelector("juicy-tile-list"), "resizeItem", event );
-            });
-            document.getElementById("callReprioritize").addEventListener("click", function (event){
-                callMethod( document.querySelector("juicy-tile-list"), "reprioritizeItem", event );
-            });
-        });
+            model = {
+                setup: {
+                    gutter: 8,
+                    items: [
+                        {
+                            id: 0,
+                            priority: 0.9,// 0.6,
+                            height: 50,
+                            width: 50
+                        },
+                        {
+                            id: 1,
+                            priority: 0.8,// 0.9,
+                            height: 100,
+                            width: 50,
+                            hidden: false
+                        },
+                        {
+                            id: 2,
+                            priority: 0.7,// 0.3,
+                            height: 50,
+                            width: 200
+                        },
+                        {
+                            id: 3,
+                            priority: 0.6,
+                            height: 50,
+                            width: 150
+                        },
+                        {
+                            id: 4,
+                            priority: 0.5,
+                            height: 50,
+                            width: 200
+                        },
+                        {
+                            id: 5,
+                            priority: 0.4,
+                            height: 100,
+                            width: 50
+                        },
+                        {
+                            id: 6,
+                            priority: 0.3,
+                            height: 150,
+                            width: 100
+                        },
+                        {
+                            id: 7,
+                            priority: 0.2,
+                            height: 50,
+                            width: 50
+                        },
+                        {
+                            id: 8,
+                            priority: 0.1,
+                            height: 50,
+                            width: 50
+                        },
+                        {
+                            id: 9,
+                            priority: 0.09,
+                            height: 150,
+                            width: 50
+                        },
+                        {
+                            id: 10,
+                            priority: 0.08,
+                            height: 50,
+                            width: 100
+                        },
+                        {
+                            id: 11,
+                            priority: 0.07,
+                            height: 50,
+                            width: 200
+                        }
+
+                    ]
+                }
+            };
+
+            document.querySelector("juicy-tile-list").setAttribute("setup", JSON.stringify(model.setup));
         </script>
-    </section>
-    -->
-    <section>
-        <h3>Features</h3>
-        <ul>
-            <li>masonry-like, gap-less layout (bin-packing), </li>
-            <li>prioritizing items, </li>
-            <li>grouping into virtual, nested containers,</li>
-            <li>alignment in different orientations/directions,</li>
-            <li>dynamically changing size,</li>
-            <li>auto adjusting container sizes,</li>
-            <li>gutter/cell-spacing between tiles,</li>
-            <li>adapting to window size changes.</li>
-        </ul>
-    </section>
-    <footer>
-        <h4>Other examples</h4>
-        <ul>
-            <li><a href="examples/prioritized.html">Prioritized/weighted tiles</a></li>
-            <li><a href="examples/verticalLayers.html">Vertical layers</a></li>
-            <li><a href="examples/fullWidth.html">Full width package</a></li>
-            <li><a href="examples/relativeSize.html">Relative dimensions</a></li>
-            <li><a href="examples/defaultTileSetup.html">Default tile setup</a></li>
-            <li><a href="examples/nested.html">Nested packages</a></li>
-            <li><a href="examples/recursiveGroups.html">Virtual nested groups</a></li>
-            <li><a href="examples/recursiveGroupsHeightAuto.html">Virtual groups with automatically adjusted height</a></li>
-            <li><a href="examples/oversize.html">Oversize background of virtual container</a></li>
-            <li><a href="examples/innerHTML.html">HTML/CSS content for virtual group</a></li>
+        <section>
+            <h3>Features</h3>
+            <ul>
+                <li>masonry-like, gap-less layout (bin-packing), </li>
+                <li>prioritizing items, </li>
+                <li>grouping into virtual, nested containers,</li>
+                <li>alignment in different orientations/directions,</li>
+                <li>dynamically changing size,</li>
+                <li>auto adjusting container sizes,</li>
+                <li>gutter/cell-spacing between tiles,</li>
+                <li>adapting to window size changes.</li>
+            </ul>
+        </section>
+        <footer>
+            <h4>Other examples</h4>
+            <ul>
+                <li><a href="examples/prioritized.html">Prioritized/weighted tiles</a></li>
+                <li><a href="examples/verticalLayers.html">Vertical layers</a></li>
+                <li><a href="examples/fullWidth.html">Full width package</a></li>
+                <li><a href="examples/relativeSize.html">Relative dimensions</a></li>
+                <li><a href="examples/defaultTileSetup.html">Default tile setup</a></li>
+                <li><a href="examples/nested.html">Nested packages</a></li>
+                <li><a href="examples/recursiveGroups.html">Virtual nested groups</a></li>
+                <li><a href="examples/recursiveGroupsHeightAuto.html">Virtual groups with automatically adjusted height</a></li>
+                <li><a href="examples/oversize.html">Oversize background of virtual container</a></li>
+                <li><a href="examples/innerHTML.html">HTML/CSS content for virtual group</a></li>
 
-            <li><a href="http://juicy.github.io/juicy-tile-grid/">Adaptive CSS Grid Layout <code>&lt;juicy-tile-grid&gt;</code></a></li>
-            <li><a href="http://juicy.github.io/juicy-tile-editor/">Editing the list with <code>&lt;juicy-tile-editor&gt;</code></a></li>
-        </ul>
-    </footer>
+                <li><a href="http://juicy.github.io/juicy-tile-grid/">Adaptive CSS Grid Layout <code>&lt;juicy-tile-grid&gt;</code></a></li>
+                <li><a href="http://juicy.github.io/juicy-tile-editor/">Editing the list with <code>&lt;juicy-tile-editor&gt;</code></a></li>
+            </ul>
+        </footer>
 
-</article>
+    </article>
 </body>
+</html>
