@@ -5,7 +5,6 @@
 @demo https://Juicy.github.io/juicy-tile-list/
 version: 0.3.2
 -->
-<!-- Import Polymer -->
 
 <script src="rectangle.js"></script>
 <script src="packer.js"></script>
@@ -422,9 +421,11 @@ version: 0.3.2
             // console.profileEnd("attached");
             // This is ugly hack not to run attrChanged observers until domReady and our element is fully set up.(tomalec)
             // TODO: check if it can be sync after we made template native
-            setTimeout(function () {
-                this.isReady = true;
-            }.bind(this));
+            //setTimeout(function () {
+                //this.isReady = true;
+            //}.bind(this));
+
+            this.isReady = true;
         };
 
         proto.detachedCallback = function () {
@@ -605,7 +606,7 @@ version: 0.3.2
         proto.getBooleanAttribute = function (name, defaultValue) {
             var v = this.getAttribute(name);
 
-            if (v === "false" || v === "False") {
+            if (v && v.toLowerCase() === "false") {
                 return false;
             }
 
@@ -748,6 +749,13 @@ version: 0.3.2
             positionAbsolute(node, tiles, offsetX, offsetY);
         };
 
+        /**
+         * Support for Polymer 0.5 object to attribute binding
+         * @param  {String} name       [description]
+         * @param  {Object} observable [description]
+         * @param  {Boolean} oneTime   [description]
+         * @return {Object}            observer
+         */
         proto.bind = function (name, observable, oneTime) {
             if (name === "setup" || name === "defaultTileSetup") {
                 var updateValueFunction = function (value) {
