@@ -291,6 +291,7 @@ version: 0.3.2
             }
         }
 
+        // juicy-tile-list is no longer inherit from Package.prototype
         var JuicyTileListPrototype = Object.create(HTMLElement.prototype);
         var proto = JuicyTileListPrototype;
 
@@ -783,6 +784,27 @@ version: 0.3.2
             }
         };
 
+        proto.reprioritizeItem = function (item, increase, end) {
+            return Package.prototype.reprioritizeItem.call(this, item, increase, end);
+        };
+
+        proto.createNewContainer = function (id, inContainer, rectangle, noRepacking) {
+            return Package.prototype.createNewContainer.call(this, id, inContainer, rectangle, noRepacking);
+        };
+
+        proto.generatePackageName = function (container) {
+            return Package.prototype.generatePackageName.call(this, container);
+        };
+
+        proto.moveToContainer = function (what, where, noPacking) {
+            return Package.prototype.moveToContainer.call(this, what, where, noPacking);
+        };
+
+        proto.isInContainer = function (container, item) {
+            return Package.prototype.isInContainer.call(this, container, item);
+        };
+
+        // juicy-tile-list is no longer inherit from Package.prototype
         window.JuicyTileList = document.registerElement("juicy-tile-list", {
             prototype: JuicyTileListPrototype
         });
