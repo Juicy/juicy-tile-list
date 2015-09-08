@@ -291,8 +291,29 @@ version: 0.3.2
             }
         }
 
-        // juicy-tile-list is no longer inherit from Package.prototype
-        var JuicyTileListPrototype = Object.create(HTMLElement.prototype);
+        // Polymer 0.5 inheritance method to inherit Package.prototype
+        function extend(prototype, api) {
+            if (prototype && api) {
+                // use only own properties of 'api'
+                Object.getOwnPropertyNames(api).forEach(function (n) {
+                    // acquire property descriptor
+                    var pd = Object.getOwnPropertyDescriptor(api, n);
+                    if (pd) {
+                        // clone property via descriptor
+                        Object.defineProperty(prototype, n, pd);
+                        // cache name-of-method for 'super' engine
+                        if (typeof pd.value == 'function') {
+                            // hint the 'super' engine
+                            pd.value.nom = n;
+                        }
+                    }
+                });
+            }
+            return prototype;
+        }
+
+        var parentPrototype = extend(HTMLElement.prototype, Package.prototype);
+        var JuicyTileListPrototype = Object.create(parentPrototype);
         var proto = JuicyTileListPrototype;
 
         proto.elements = null;
@@ -784,36 +805,8 @@ version: 0.3.2
             }
         };
 
-        proto.reprioritizeItem = function (item, increase, end) {
-            return Package.prototype.reprioritizeItem.call(this, item, increase, end);
-        };
-
-        proto.createNewContainer = function (id, inContainer, rectangle, noRepacking) {
-            return Package.prototype.createNewContainer.call(this, id, inContainer, rectangle, noRepacking);
-        };
-
-        proto.generatePackageName = function (container) {
-            return Package.prototype.generatePackageName.call(this, container);
-        };
-
-        proto.moveToContainer = function (what, where, noPacking) {
-            return Package.prototype.moveToContainer.call(this, what, where, noPacking);
-        };
-
-        proto.isInContainer = function (container, item) {
-            return Package.prototype.isInContainer.call(this, container, item);
-        };
-
-        // juicy-tile-list is no longer inherit from Package.prototype
         window.JuicyTileList = document.registerElement("juicy-tile-list", {
             prototype: JuicyTileListPrototype
         });
     }(document.currentScript.ownerDocument));
 </script>
-
-<!-- Define your custom element
-<polymer-element name="juicy-tile-list" constructor="JuicyTileListElement" attributes="setup duration layersOrientation defaultTileSetup gutter refreshOnMutation refreshOnResize refreshOnAttached">
-
-
-</polymer-element>
-     -->
