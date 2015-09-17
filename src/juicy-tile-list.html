@@ -591,6 +591,13 @@ version: 0.3.2
             if (hard) {
                 this.tiles = this.updateWrappers(this.elements, this);
             }
+
+            if (!this.setup) {
+                this.setup = {
+                    items: []
+                };
+            }
+
             // TODO: support LTR
             if (this.setup.direction != "vertical") {
                 this.setup.width = this.setup.width || innerWidth(this);
