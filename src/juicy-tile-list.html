@@ -117,6 +117,7 @@ version: 0.3.2
         function defaultSetup(tiles, setupItems, allItems, defaultTileSetup) {
             for (var elNo = 0, eLen = tiles.length; elNo < eLen; elNo++) {
                 var tile = tiles[elNo];
+
                 if (!allItems[tile.id]) {
                     var itemSetup = JSON.parse(JSON.stringify(defaultTileSetup));
                     if (setupItems.length == 0) {
@@ -353,10 +354,13 @@ version: 0.3.2
                         doRefresh = true;
                     }
                 });
+
                 if (doRefresh) {
                     //DRY, performance
+                    that.allItems = null;
+                    Package.call(that, that.setup);
                     that.createItemsList();
-                    that.refresh();
+                    that.refresh(true);
                 }
             });
             // bind this to #refresh for listeners
