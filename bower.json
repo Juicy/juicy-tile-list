@@ -1,6 +1,6 @@
 {
   "name": "juicy-tile-list",
-  "version": "0.3.2",
+  "version": "1.0.0",
   "homepage": "https://github.com/Juicy/juicy-tile-list",
   "description": "<juicy-tile-list> is a Custom Element with sortable tiles that packs efficiently without changing HTML structure (changes CSS only).",
   "license": "MIT",
