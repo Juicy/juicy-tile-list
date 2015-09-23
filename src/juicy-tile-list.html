@@ -507,8 +507,9 @@ version: 1.0.0
         */
         proto.cleanupDOM = function () {
             var containerBackgrounds = this.$.container.querySelectorAll('.containerBackground');
+
             for (var i = 0, ilen = containerBackgrounds.length; i < ilen; i++) {
-                this.$.container.removeChild(containerBackgrounds[i]);
+                containerBackgrounds[i].parentNode.removeChild(containerBackgrounds[i]);
             }
         };
 
