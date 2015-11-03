@@ -46,9 +46,10 @@ version: 1.0.0
 </template>
 
 <script>
-    (function (scriptDocument) {
-        var tileDecorator = (document._currentScript || document.currentScript).ownerDocument
-                      .getElementById("juicy-tile").content;
+    (function () {
+        var ownerDocument = (document._currentScript || document.currentScript).ownerDocument;
+        var tileDecorator = ownerDocument.getElementById("juicy-tile").content;
+        var tileListTemplate = ownerDocument.getElementById("juicy-tile-list");
         /**
          * For a given element, returns the available width excluding margin, border and padding
          * @param {Element} elem
@@ -405,7 +406,7 @@ version: 1.0.0
 
         proto.attachedCallback = function gridAttached() {
             var root = this.createShadowRoot();
-            var template = scriptDocument.querySelector("#juicy-tile-list");
+            var template = tileListTemplate;
             var clone = document.importNode(template.content, true);
 
             root.appendChild(clone);
@@ -820,5 +821,5 @@ version: 1.0.0
         window.JuicyTileList = document.registerElement("juicy-tile-list", {
             prototype: JuicyTileListPrototype
         });
-    }(document.currentScript.ownerDocument));
+    }());
 </script>
