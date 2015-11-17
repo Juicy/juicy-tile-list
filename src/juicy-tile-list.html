@@ -347,6 +347,10 @@ version: 1.0.0
             // create an observer instance
             var that = this;
             this.observer = new MutationObserver(function (mutations) {
+                // do nothing if it's not yet attached
+                if(!that.isReady){
+                  return;
+                }
                 var doRefresh = false;
                 mutations.forEach(function (mutation) {
                     // console.log("observation", mutation.type, arguments, mutations);
@@ -459,6 +463,7 @@ version: 1.0.0
 
         proto.detachedCallback = function () {
             this.observer.disconnect();
+            this.isReady = false;
         };
 
         proto.addResizeListeners = function () {

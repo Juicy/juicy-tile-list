@@ -93,6 +93,28 @@ describe('juicy-tile-list', function() {
           done();
         });
       });
+      describe('after node was detached from DOM', function(){
+
+        afterEach(function(){
+          document.body.insertBefore(juicyTileList2, document.body.firstElementChild);
+        });
+        it('refresh method should not be called', function (done) {
+          var refresh = sinon.spy(juicyTileList2, "refresh");
+          juicyTileList2.parentElement.removeChild(juicyTileList2);
+
+          juicyTileList2.removeChild(juicyTileList2.firstElementChild);
+          var addedNode = document.createElement("div");
+          addedNode.innerHTML = "4";
+          juicyTileList2.appendChild(addedNode);
+
+          // wait for mutation observer callback
+          setTimeout(function whenMutated(){
+            expect( juicyTileList2.refresh.callCount ).to.equal(0);
+            juicyTileList2.refresh.restore();
+            done();
+          });
+        });
+      });
 
     });
     context('is set in runtime', function () {
@@ -123,6 +145,28 @@ describe('juicy-tile-list', function() {
           expect( juicyTileList.refresh.callCount ).to.equal(1);
           juicyTileList.refresh.restore();
           done();
+        });
+      });
+      describe('after node was detached from DOM', function(){
+
+        afterEach(function(){
+          document.body.appendChild(juicyTileList);
+        });
+        it('refresh method should not be called', function (done) {
+          var refresh = sinon.spy(juicyTileList, "refresh");
+          juicyTileList.parentElement.removeChild(juicyTileList);
+
+          juicyTileList.removeChild(juicyTileList.firstElementChild);
+          var addedNode = document.createElement("div");
+          addedNode.innerHTML = "4";
+          juicyTileList.appendChild(addedNode);
+
+          // wait for mutation observer callback
+          setTimeout(function whenMutated(){
+            expect( juicyTileList.refresh.callCount ).to.equal(0);
+            juicyTileList.refresh.restore();
+            done();
+          });
         });
       });
 
@@ -156,6 +200,35 @@ describe('juicy-tile-list', function() {
           expect( juicyTileList2.refresh.callCount ).to.equal(0);
           juicyTileList2.refresh.restore();
           done();
+        });
+      });
+    });
+
+    context('is set for element created outside of DOM',function(){
+      var juicyTileList;
+      beforeEach(function(){
+        juicyTileList = document.createElement('juicy-tile-list');
+        var addedNode = document.createElement("div");
+        addedNode.innerHTML = "1";
+        juicyTileList.appendChild(addedNode);
+        juicyTileList.setAttribute("refreshOnMutation", '');
+      });
+      describe('when some nodes are added or moved', function(){
+
+        it('refresh method should not be called', function (done) {
+          var refresh = sinon.spy(juicyTileList, "refresh");
+
+          juicyTileList.removeChild(juicyTileList.firstElementChild);
+          var addedNode = document.createElement("div");
+          addedNode.innerHTML = "2";
+          juicyTileList.appendChild(addedNode);
+
+          // wait for mutation observer callback
+          setTimeout(function whenMutated(){
+            expect( juicyTileList.refresh.callCount ).to.equal(0);
+            juicyTileList.refresh.restore();
+            done();
+          });
         });
       });
     });
