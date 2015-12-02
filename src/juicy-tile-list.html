@@ -390,24 +390,6 @@ version: 1.0.0
             );
         };
 
-        proto.parseDeclaration = function (elementElement) {
-            var template = this.fetchTemplate(elementElement);
-            // make a shadow root
-            var root = this.createShadowRoot();
-            // stamp template
-            var dom = document.importNode(template.content, true);
-            this.$ = {
-                // workaround for lack of getElementById in IE polyfilled templates
-                container: dom.getElementById && dom.getElementById("container") || dom.querySelector("#container")
-            };
-            // append to shadow dom
-            root.appendChild(dom);
-            // perform post-construction initialization tasks on shadow root
-            //this.shadowRootReady(root, template);
-            // return the created shadow root
-            this.shadowRoots[elementElement.name] = root;
-        };
-
         proto.attachedCallback = function gridAttached() {
             var root = this.createShadowRoot();
             var template = tileListTemplate;
