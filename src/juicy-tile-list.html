@@ -190,8 +190,8 @@ version: 1.0.1
             //TODO: decide how to handle setup when something was removed/added in the middle
             // to shift or not to shift indexes?
             //when something added/ removed clear all first
-            if (element.$.container.children.length) {
-                element.$.container.innerHTML = "";
+            if (element.shadowContainer.children.length) {
+                element.shadowContainer.innerHTML = "";
             }
             // console.log("updateWrappers", tileDecorator);
             var tiles = [], frag, tile, child, id,
@@ -231,8 +231,8 @@ version: 1.0.1
                 // tiles.push(child);
                 //}
             }
-            element.$.container.appendChild(wrappers);
-            tiles["root"] = element.$.container;
+            element.shadowContainer.appendChild(wrappers);
+            tiles["root"] = element.shadowContainer;
             return tiles;
         }
 
@@ -322,6 +322,7 @@ version: 1.0.1
         // tiles in ShadowDOM
         proto.tiles = null;
         // unfortunately due to https://www.w3.org/Bugs/Public/show_bug.cgi?id=18429
+        // https://github.com/w3c/webcomponents/issues/60
         // we cannot do it nicely, and we need to workaround it
         // with classes, ids, and this.$.id
         //tiles: null,
@@ -396,9 +397,7 @@ version: 1.0.1
             var clone = document.importNode(template.content, true);
 
             root.appendChild(clone);
-            this.$ = {
-                container: root.querySelector("#container")
-            };
+            this.shadowContainer = root.querySelector("#container");
 
             this.attributeChangedCallback("refreshonresize", false, this.getBooleanAttribute("refreshonresize", false));
             this.attributeChangedCallback("refreshonmutation", false, this.getBooleanAttribute("refreshonmutation", false));
@@ -494,7 +493,7 @@ version: 1.0.1
         Deletes fake containers from DOM
         */
         proto.cleanupDOM = function () {
-            var containerBackgrounds = this.$.container.querySelectorAll('.containerBackground');
+            var containerBackgrounds = this.shadowContainer.querySelectorAll('.containerBackground');
 
             for (var i = 0, ilen = containerBackgrounds.length; i < ilen; i++) {
                 containerBackgrounds[i].parentNode.removeChild(containerBackgrounds[i]);
@@ -529,9 +528,9 @@ version: 1.0.1
                             tile.className = 'containerBackground';
                             tiles[itemSetup.id] = tile;
                             tile.id = itemSetup.id;
-                            this.$.container.appendChild(tile);
+                            this.shadowContainer.appendChild(tile);
                         } else if (!tile.parentElement) {
-                            this.$.container.appendChild(tile);
+                            this.shadowContainer.appendChild(tile);
                         }
 
                         (itemSetup.content != undefined) && (tile.innerHTML = itemSetup.content);
@@ -768,8 +767,8 @@ version: 1.0.1
         */
         proto.renderer = function renderAbsolute(node, tiles, offsetX, offsetY) {
             // debugger
-            this.$.container.style.width = node.width + "px";
-            this.$.container.style.height = node.height + "px";
+            this.shadowContainer.style.width = node.width + "px";
+            this.shadowContainer.style.height = node.height + "px";
             positionAbsolute(node, tiles, offsetX, offsetY);
         };
 
