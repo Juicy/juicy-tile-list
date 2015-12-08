@@ -409,7 +409,7 @@ version: 1.1.0
             // console.profile("attached");
             // console.time('attached');
             // pass setup if contains something (not `{}`-used for Polymer type detection)
-            // IDEA: consider merging with createItemsList, and re-flow setup, to fix Polyjuice glitches (tomalec)
+            // IDEA: consider merging with createItemsList, and re-flow setup, to fix Starcounter merged partials glitches (tomalec)
             Package.call(this, this.setup && this.setup.items !== undefined ? this.setup : undefined);
             if (this.gutter != undefined) {
                 this.setup.gutter = parseInt(this.gutter, 10);
