@@ -4,6 +4,8 @@
 @element juicy-tile-list
 @demo https://Juicy.github.io/juicy-tile-list/
 version: 1.1.1
+
+@TODO: (tomalec) Create setup listener, to work better with Polymer tempalte binding, editor, and inline changes
 -->
 
 <script src="rectangle.js"></script>
@@ -120,7 +122,7 @@ version: 1.1.1
                 var tile = tiles[elNo];
 
                 if (!allItems[tile.id]) {
-                    var itemSetup = JSON.parse(JSON.stringify(defaultTileSetup));
+                    var itemSetup = tile.defaultSetup ||  JSON.parse(JSON.stringify(defaultTileSetup));
                     if (setupItems.length == 0) {
                         itemSetup.priority = 0.5;
                     }
@@ -195,6 +197,7 @@ version: 1.1.1
             }
             // console.log("updateWrappers", tileDecorator);
             var tiles = [], frag, tile, child, id,
+              perItemSetup,
               //scoping magic
               scopePrefix = "", scopedIndex = 0;
             var wrappers = document.createDocumentFragment();
@@ -217,6 +220,10 @@ version: 1.1.1
                 frag = document.importNode(tileDecorator, true);
                 //tile = frag.firstChild;
                 tile = frag.children[0];
+                // parse declarative per-item setup
+                if(child.hasAttribute('juicy-style')){
+                    tile.defaultSetup = this.parseRules(child.getAttribute("juicy-style"));
+                }
                 tile.id = id;
                 tile.firstChild.setAttribute("select", "[juicytile='" + id + "']");
                 wrappers.appendChild(frag);
@@ -802,6 +809,49 @@ version: 1.1.1
             } else {
                 return HTMLElement.prototype.bind.call(this, name, observable, oneTime);
             }
+        };
+        /*
+          parses given string containing css directives
+          and returns a map ruleName: ruleValue
+          @param {String} rules, css directive string example
+              \n\ncolor:white;\n    font-size:18px;\n
+          Modified ver
+        */
+        proto.parseRules = function(rules) {
+          var map = {};
+          rules = rules.split(';');
+
+          //proccess rules
+          for (var i = 0; i < rules.length; i++) {
+            var declaration = rules[i];
+
+            //determine if declaration is a valid css declaration, ie `property S* ':' S* value;``
+            declaration = declaration.trim();
+            if (declaration.indexOf(':') !== -1) {
+              //declaration contains :
+              declaration = declaration.split(':');
+              var cssProperty = declaration[0].trim();
+              var cssValue = declaration.slice(1).join(':').trim();
+
+              // TODO (tomalec): parse some values according to
+              // https://drafts.csswg.org/css2/syndata.html#tokenization
+              // but optimze to avoid regexps as much as possible
+              if(cssValue === '0'){
+                  cssValue = 0;
+              }
+
+              // silently ignore unknown values https://drafts.csswg.org/css2/syndata.html#unsupported-values
+              //   if (cssProperty.length < 1 || cssValue.length < 1) {
+              //     continue; //there is no css directive or value
+              //   }
+              //save rule
+              map[cssProperty] = cssValue;
+          } else if(declaration !== ''){
+               console.warn("juicy-style for ", this," contains defective declaration: ", declaration);
+            }
+          }
+
+          return map;
         };
 
         window.JuicyTileList = document.registerElement("juicy-tile-list", {

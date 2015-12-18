@@ -28,7 +28,7 @@ It gives you:
     $ bower install juicy-tile-list --save
     ```
 
-2. Import Web Components' polyfill:
+2. Import Web Components' polyfill, if needed:
 
     ```html
     <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
@@ -123,6 +123,35 @@ Name                      | Data | Description
 
 `<juicy-tile-list>` can refresh/repack your tiles interactively. You can set it by attributes: `refreshOnMutation`, `refreshOnResize`, `refreshOnAttached`.
 
+## :space_invader: :construction: Per-item declarative setup (experimental feature)
+
+If you would like to provide more declaratively setup for each element of `<juicy-tile-list>`, you can do so by adding custom attribute `juicy-style` on child element, and provide setup in CSS-like syntax:
+```html
+<juicy-tile-list>
+ <div juicy-style="width: 50%; height: 20;">smth</div>
+</juicy-tile-list>
+```
+instead of setting it via setup:
+```javascript
+juicytilelist.setup = {
+  // ...    
+  items:[
+    {
+      id: 0,
+      priority: 0.2,
+      width: "50%",
+      height: 20
+    }
+  ]
+}
+```
+The importance of setups, looks as follows:
+1. `juicy-tile-list`'s `setup` attribute/property,
+2. `juicy-tile-list`'s child `juicy-style` attribute,
+3. `juicy-tile-list`'s `defaultTileSetup` attribute,
+3. `juicy-tile-list`'s build in default tile setup.
+Meaning, that a setup higher on the list overwrites previous values
+
 ## Tile ids
 
 Every tile gets its id, it's used in ShadowDom (so it won't collide with your markup) to match Light DOM content with positioned tile (and its setup).
@@ -146,7 +175,7 @@ juicytilelist.setup = {
   ]
 }
 ```
-### :construction: Scoped ids (experimental feature)
+### Scoped ids (experimental feature)
 
 You can also add name-space to your id in declarative way.
 ```html
