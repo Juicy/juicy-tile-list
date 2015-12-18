@@ -102,4 +102,13 @@ module.exports = function(grunt) {
   	grunt.registerTask('test', ['mocha']);
     grunt.registerTask('minify', ['uglify','htmlmin']);
 
+    grunt.registerTask(
+        'release',
+        "Minify and bump the version",
+        function(versionType, incOrCommitOnly) {
+           grunt.task.run('minify', "bump" + (versionType ? ":"+versionType : ""));
+
+       }
+     );
+
 };
