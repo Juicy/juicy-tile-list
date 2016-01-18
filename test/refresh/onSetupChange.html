@@ -61,7 +61,6 @@
                     beforeEach(function() {
                         noSetup = document.createElement('juicy-tile-list');
                         noSetup_refresh = sinon.spy(noSetup, "refresh");
-                        document.body.appendChild(noSetup);
                     });
                     afterEach(function() {
                         document.body.removeChild(noSetup);
@@ -71,6 +70,7 @@
 
                     it('refresh method should be called only once, after attached', function(done) {
                         noSetup.setAttribute('setup', JSON.stringify(newSetup()));
+                        document.body.appendChild(noSetup);
                         // wait for mutation observer callback
                         setTimeout(function whenMutated() {
                             expect(noSetup_refresh.callCount).to.equal(1);
@@ -141,7 +141,6 @@
                     beforeEach(function() {
                         noSetup = document.createElement('juicy-tile-list');
                         noSetup_refresh = sinon.spy(noSetup, "refresh");
-                        document.body.appendChild(noSetup);
                     });
                     afterEach(function() {
                         document.body.removeChild(noSetup);
@@ -151,6 +150,7 @@
 
                     it('refresh method should be called only once, after attached', function(done) {
                         noSetup.setup = JSON.stringify(newSetup());
+                        document.body.appendChild(noSetup);
                         // wait for mutation observer callback
                         setTimeout(function whenMutated() {
                             expect(noSetup_refresh.callCount).to.equal(1);
@@ -175,8 +175,8 @@
                     });
 
                     it('refresh method should be called', function(done) {
-                        noSetup.setup = JSON.stringify(newSetup());
-                        inlineSetup.setup = JSON.stringify(newSetup());
+                        noSetup.setup = newSetup();
+                        inlineSetup.setup = newSetup();
                         // wait for mutation observer callback
                         setTimeout(function whenMutated() {
                             expect(noSetup_refresh.callCount).to.equal(1);
