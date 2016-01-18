@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../../webcomponentsjs/webcomponents.js"></script>
+    <script src="../../../web-component-tester/browser.js"></script>
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="../../src/juicy-tile-list.html">
+</head>
+
+<body>
+
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <test-fixture id="no-setup">
+        <template>
+            <juicy-tile-list>
+                <div>0</div>
+                <span>1</span>
+                <p>3</p>
+            </juicy-tile-list>
+        </template>
+    </test-fixture>
+    <test-fixture id="inline-setup">
+        <template>
+            <juicy-tile-list setup='{"items":[{"id":0, "priority": 0.9, "width": 50, "height": 50},{"id":1, "priority": 0.7, "width": 50, "height": 50}]}'>
+                <div>0</div>
+                <span>1</span>
+            </juicy-tile-list>
+        </template>
+    </test-fixture>
+
+    <script>
+        /**
+         * JuicyTiles tests
+         */
+        describe('juicy-tile-list', function() {
+            var noSetup, inlineSetup;
+            var newSetup = function() {
+                return {
+                    "items": [{
+                        "id": 0,
+                        "priority": 0.9,
+                        "width": 50,
+                        "height": 50
+                    }, {
+                        "id": 1,
+                        "priority": 0.7,
+                        "width": 50,
+                        "height": 50
+                    }]
+                };
+            };
+
+            context('when setup attribute gets changed or set', function() {
+                context('before element was attached', function() {
+
+                    beforeEach(function() {
+                        noSetup = document.createElement('juicy-tile-list');
+                        noSetup_refresh = sinon.spy(noSetup, "refresh");
+                        document.body.appendChild(noSetup);
+                    });
+                    afterEach(function() {
+                        document.body.removeChild(noSetup);
+                        // noSetup_refresh.refresh.restore && noSetup_refresh.refresh.restore();
+                        // inlineSetup_refresh.refresh.restore && inlineSetup_refresh.refresh.restore();
+                    });
+
+                    it('refresh method should be called only once, after attached', function(done) {
+                        noSetup.setAttribute('setup', JSON.stringify(newSetup()));
+                        // wait for mutation observer callback
+                        setTimeout(function whenMutated() {
+                            expect(noSetup_refresh.callCount).to.equal(1);
+                            done();
+                        });
+                    });
+                });
+                context('after element was attached', function() {
+
+                    beforeEach(function(done) {
+                        noSetup = fixture('no-setup');
+                        inlineSetup = fixture('inline-setup');
+                        setTimeout(function waitForAttached(){
+                            noSetup_refresh = sinon.spy(noSetup, "refresh");
+                            inlineSetup_refresh = sinon.spy(inlineSetup, "refresh");
+                            done();
+                        });
+                    });
+                    afterEach(function() {
+                        // noSetup_refresh.refresh.restore && noSetup_refresh.refresh.restore();
+                        // inlineSetup_refresh.refresh.restore && inlineSetup_refresh.refresh.restore();
+                    });
+
+                    it('refresh method should be called', function(done) {
+                        noSetup.setAttribute('setup', JSON.stringify(newSetup()));
+                        inlineSetup.setAttribute('setup', JSON.stringify(newSetup()));
+                        // wait for mutation observer callback
+                        setTimeout(function whenMutated() {
+                            expect(noSetup_refresh.callCount).to.equal(1);
+                            done();
+                        });
+                    });
+                });
+                context('after element was detached', function() {
+
+                    beforeEach(function(done) {
+                        noSetup = fixture('no-setup');
+                        inlineSetup = fixture('inline-setup');
+
+                        setTimeout(function waitForAttached(){
+                            noSetup_refresh = sinon.spy(noSetup, "refresh");
+                            inlineSetup_refresh = sinon.spy(inlineSetup, "refresh");
+
+                            noSetup.parentNode.removeChild(noSetup);
+                            inlineSetup.parentNode.removeChild(inlineSetup);
+                            done();
+                        });
+                    });
+                    afterEach(function() {
+                        // noSetup_refresh.refresh.restore && noSetup_refresh.refresh.restore();
+                        // inlineSetup_refresh.refresh.restore && inlineSetup_refresh.refresh.restore();
+                    });
+
+                    it('refresh method should not be called', function(done) {
+                        noSetup.setAttribute('setup', JSON.stringify(newSetup()));
+                        inlineSetup.setAttribute('setup', JSON.stringify(newSetup()));
+                        // wait for mutation observer callback
+                        setTimeout(function whenMutated() {
+                            expect(noSetup_refresh.callCount).to.equal(0);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
