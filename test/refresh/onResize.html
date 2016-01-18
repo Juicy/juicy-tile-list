@@ -13,32 +13,45 @@
   <body>
 
     <!-- You can use the document as a place to set up your fixtures. -->
-    <juicy-tile-list id="parent">
-      <div>
-        <juicy-tile-list id="list1" >
-          <div>0</div>
-          <span>1</span>
-          <p>3</p>
-        </juicy-tile-list>
-      </div>
-      <div>
-        <juicy-tile-list id="list2" refreshOnResize>
-          <div>0</div>
-          <div>1</div>
-          <p>3</p>
-        </juicy-tile-list>
-      </div>
-      <p>3</p>
-    </juicy-tile-list>
+    <test-fixture id="parent">
+        <template>
+            <juicy-tile-list id="parent">
+              <div>
+                <juicy-tile-list id="list1" >
+                  <div>0</div>
+                  <span>1</span>
+                  <p>3</p>
+                </juicy-tile-list>
+              </div>
+              <div>
+                <juicy-tile-list id="list2" refreshOnResize>
+                  <div>0</div>
+                  <div>1</div>
+                  <p>3</p>
+                </juicy-tile-list>
+              </div>
+              <p>3</p>
+            </juicy-tile-list>
+        </template>
+    </test-fixture>
 
     <script>
 /**
  * JuicyTiles tests
  */
-var juicyTileParent = document.getElementById('parent');
-var juicyTileList = document.getElementById('list1');
-var juicyTileList2 = document.getElementById('list2');
 describe('juicy-tile-list', function() {
+  var juicyTileParent, juicyTileList, juicyTileList2,
+    refresh, refresh2;
+  beforeEach(function(done){
+    juicyTileParent = fixture('parent');
+    juicyTileList = juicyTileParent.querySelector('#list1');
+    juicyTileList2 = juicyTileParent.querySelector('#list2');
+    setTimeout(function waitForAttached(){
+      refresh = sinon.spy(juicyTileList, "refresh");
+      refresh2 = sinon.spy(juicyTileList2, "refresh");
+      done();
+    });
+  })
   context('when refreshOnResize attribute', function () {
     afterEach(function(){
       juicyTileList.refresh.restore && juicyTileList.refresh.restore();
@@ -47,7 +60,6 @@ describe('juicy-tile-list', function() {
 
     context('was not set', function () {
       it('refresh method should not be called when parent &lt;juicy-tile-list&gt; is refreshed', function (done) {
-        var refresh = sinon.spy(juicyTileList, "refresh");
 
         juicyTileParent.refresh();
 
@@ -59,7 +71,6 @@ describe('juicy-tile-list', function() {
         });
       });
       xit('refresh method should not be called window is resized', function (done) {
-        var refresh = sinon.spy(juicyTileList, "refresh");
 
         // resize window
 
@@ -73,9 +84,8 @@ describe('juicy-tile-list', function() {
 
     });
     context('was set when element was created', function () {
-      it('refresh method should be called when parent &lt;juicy-tile-list&gt; is refreshed (sinon spy seems buggy)', function (done) {
-        var refresh = sinon.spy(juicyTileList2, "refresh");
-        
+      it('refresh method should be called when parent &lt;juicy-tile-list&gt; is refreshed', function (done) {
+
         juicyTileParent.refresh();
 
         // wait for mutation observer callback
@@ -86,7 +96,6 @@ describe('juicy-tile-list', function() {
         });
       });
       xit('refresh method should be called when window is resized', function (done) {
-        var refresh = sinon.spy(juicyTileList2, "refresh");
 
         // resize window
 
@@ -103,8 +112,7 @@ describe('juicy-tile-list', function() {
       beforeEach(function(){
         juicyTileList.setAttribute("refreshOnResize","");
       });
-      it('refresh method should be called when parent &lt;juicy-tile-list&gt; is refreshed (sinon spy seems buggy)', function (done) {
-        var refresh = sinon.spy(juicyTileList, "refresh");
+      it('refresh method should be called when parent &lt;juicy-tile-list&gt; is refreshed', function (done) {
 
         juicyTileParent.refresh();
 
@@ -116,7 +124,6 @@ describe('juicy-tile-list', function() {
         });
       });
       xit('refresh method should be called when window is resized', function (done) {
-        var refresh = sinon.spy(juicyTileList, "refresh");
 
         // resize window
 
@@ -135,7 +142,6 @@ describe('juicy-tile-list', function() {
         juicyTileList2.removeAttribute("refreshOnResize");
       });
       it('refresh method should not be called when parent &lt;juicy-tile-list&gt; is refreshed', function (done) {
-        var refresh = sinon.spy(juicyTileList2, "refresh");
 
         juicyTileParent.refresh();
 
@@ -147,7 +153,6 @@ describe('juicy-tile-list', function() {
         });
       });
       xit('refresh method should not be called when window is resized', function (done) {
-        var refresh = sinon.spy(juicyTileList2, "refresh");
 
         // resize window
 
