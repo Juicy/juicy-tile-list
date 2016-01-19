@@ -1,6 +1,6 @@
 /**
  * Package
- * version: 1.1.2
+ * version: 1.2.0
  */
 (function( scope, Packer ){
 "use strict";
