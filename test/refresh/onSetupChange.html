@@ -20,7 +20,6 @@
             <juicy-tile-list>
                 <div>0</div>
                 <span>1</span>
-                <p>3</p>
             </juicy-tile-list>
         </template>
     </test-fixture>
@@ -135,6 +134,39 @@
                     });
                 });
             });
+
+            context('when setup attribute is removed, after element was attached', function() {
+
+                beforeEach(function(done) {
+                    noSetup = fixture('no-setup');
+                    inlineSetup = fixture('inline-setup');
+                    setTimeout(function waitForAttached(){
+                        inlineSetup_refresh = sinon.spy(inlineSetup, "refresh");
+                        done();
+                    });
+                });
+                afterEach(function() {
+                    // noSetup_refresh.refresh.restore && noSetup_refresh.refresh.restore();
+                    // inlineSetup_refresh.refresh.restore && inlineSetup_refresh.refresh.restore();
+                });
+
+                it('refresh method should be called', function(done) {
+                    inlineSetup.removeAttribute('setup');
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expect(inlineSetup_refresh.callCount).to.equal(1);
+                        done();
+                    });
+                });
+                it('setup should be reset to default one - the one that is created for plain element', function(done) {
+                    inlineSetup.removeAttribute('setup');
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expect(JSON.stringify(inlineSetup.setup)).to.equal(JSON.stringify(noSetup.setup));
+                        done();
+                    });
+                });
+            });
             context('when setup property gets changed or set', function() {
                 context('before element was attached', function() {
 
@@ -212,6 +244,39 @@
                             expect(noSetup_refresh.callCount).to.equal(0);
                             done();
                         });
+                    });
+                });
+            });
+
+            context('when setup property is set to null, after element was attached', function() {
+
+                beforeEach(function(done) {
+                    noSetup = fixture('no-setup');
+                    inlineSetup = fixture('inline-setup');
+                    setTimeout(function waitForAttached(){
+                        inlineSetup_refresh = sinon.spy(inlineSetup, "refresh");
+                        done();
+                    });
+                });
+                afterEach(function() {
+                    // noSetup_refresh.refresh.restore && noSetup_refresh.refresh.restore();
+                    // inlineSetup_refresh.refresh.restore && inlineSetup_refresh.refresh.restore();
+                });
+
+                it('refresh method should be called', function(done) {
+                    inlineSetup.setup = null;
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expect(inlineSetup_refresh.callCount).to.equal(1);
+                        done();
+                    });
+                });
+                it('setup should be reset to default one - the one that is created for plain element', function(done) {
+                    inlineSetup.setup = null;
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expect(JSON.stringify(inlineSetup.setup)).to.equal(JSON.stringify(noSetup.setup));
+                        done();
                     });
                 });
             });
