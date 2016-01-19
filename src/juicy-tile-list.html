@@ -426,18 +426,10 @@ version: 1.1.2
 
             this.createItemsList();
 
-            if (this.refreshOnResize) {
-                this.addResizeListeners();
-            }
-
             if (this.refreshOnAttached) {
                 setTimeout(function () {
                     this.refresh();
                 }.bind(this));
-            }
-
-            if (this.refreshOnMutation) {
-                this.observer.observe(this, { childList: true });
             }
 
             // console.timeEnd("attached");
