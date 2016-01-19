@@ -420,9 +420,9 @@ version: 1.1.2
 
             this.createItemsList();
 
-            this.attributeChangedCallback("refreshonresize", false, this.getBooleanAttribute("refreshonresize", false));
-            this.attributeChangedCallback("refreshonmutation", false, this.getBooleanAttribute("refreshonmutation", false));
-            this.attributeChangedCallback("refreshonattached", true, this.getBooleanAttribute("refreshonattached", true));
+            this.attributeChangedCallback("refreshonresize", this.refreshOnResize, this.getBooleanAttribute("refreshonresize", false));
+            this.attributeChangedCallback("refreshonmutation", this.refreshOnMutation, this.getBooleanAttribute("refreshonmutation", false));
+            this.attributeChangedCallback("refreshonattached", this.refreshOnAttached, this.getBooleanAttribute("refreshonattached", true));
             this.attributeChangedCallback("defaulttilesetup", null, this.getAttribute("defaulttilesetup"));
             this.attributeChangedCallback("setup", null, this.getAttribute("setup"));
 
