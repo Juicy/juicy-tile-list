@@ -378,6 +378,7 @@ version: 1.1.2
             });
             // read if we already got something
             this.attributeChangedCallback("setup", undefined, this.getAttribute("setup"));
+            this.attributeChangedCallback("defaulttilesetup", undefined, this.getAttribute("defaulttilesetup"));
 
             // Polymer 0.5 legacy? this.setup = {}; // Polymer's type detection.
             // Define mutation observer to observe changes
@@ -452,20 +453,13 @@ version: 1.1.2
             this.attributeChangedCallback("refreshonresize", this.refreshOnResize);
             this.attributeChangedCallback("refreshonmutation", this.refreshOnMutation);
             this.attributeChangedCallback("refreshonattached", this.refreshOnAttached);
-            this.attributeChangedCallback("defaulttilesetup", this.defaultTileSetup, this.getAttribute("defaulttilesetup"));
 
 
             // console.timeEnd("attached");
             // console.profileEnd("attached");
-            // This is ugly hack not to run attrChanged observers until domReady and our element is fully set up.(tomalec)
-            // TODO: check if it can be sync after we made template native
-            // if (this.refreshOnAttached) {
-            //setTimeout(function () {
-            //         this.refresh();
-            //}.bind(this));
-            // }
+            // This is ugly hack to wait for most probably asynchronous content distribution (tomalec)
             if (this.refreshOnAttached) {
-                this.refresh();
+                setTimeout(this.refresh);
             }
 
             this.isReady = true;
