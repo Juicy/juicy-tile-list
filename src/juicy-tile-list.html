@@ -242,7 +242,7 @@ version: 1.1.2
             }
             element.shadowContainer.appendChild(wrappers);
             tiles["root"] = element.shadowContainer;
-            this._isShadomDOMOutdated = false;
+            this._isShadomDOMOutdated = undefined;
             return tiles;
         }
 
@@ -457,8 +457,8 @@ version: 1.1.2
 
             // console.timeEnd("attached");
             // console.profileEnd("attached");
-            // This is ugly hack to wait for most probably asynchronous content distribution (tomalec)
-            if (this.refreshOnAttached) {
+            if (this.refreshOnAttached){
+                // This is ugly hack to wait for most probably asynchronous content distribution (tomalec)
                 setTimeout(this.refresh);
             }
 
