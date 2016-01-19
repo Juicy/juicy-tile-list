@@ -408,12 +408,6 @@ version: 1.1.2
             root.appendChild(clone);
             this.shadowContainer = root.querySelector("#container");
 
-            this.attributeChangedCallback("refreshonresize", false, this.getBooleanAttribute("refreshonresize", false));
-            this.attributeChangedCallback("refreshonmutation", false, this.getBooleanAttribute("refreshonmutation", false));
-            this.attributeChangedCallback("refreshonattached", true, this.getBooleanAttribute("refreshonattached", true));
-            this.attributeChangedCallback("defaulttilesetup", null, this.getAttribute("defaulttilesetup"));
-            this.attributeChangedCallback("setup", null, this.getAttribute("setup"));
-
             // console.log("domReady");
             // console.profile("attached");
             // console.time('attached');
@@ -425,6 +419,12 @@ version: 1.1.2
             }
 
             this.createItemsList();
+
+            this.attributeChangedCallback("refreshonresize", false, this.getBooleanAttribute("refreshonresize", false));
+            this.attributeChangedCallback("refreshonmutation", false, this.getBooleanAttribute("refreshonmutation", false));
+            this.attributeChangedCallback("refreshonattached", true, this.getBooleanAttribute("refreshonattached", true));
+            this.attributeChangedCallback("defaulttilesetup", null, this.getAttribute("defaulttilesetup"));
+            this.attributeChangedCallback("setup", null, this.getAttribute("setup"));
 
             if (this.refreshOnAttached) {
                 setTimeout(function () {
