@@ -49,6 +49,7 @@ describe('juicy-tile-list', function() {
     setTimeout(function waitForAttached(){
       refresh = sinon.spy(juicyTileList, "refresh");
       refresh2 = sinon.spy(juicyTileList2, "refresh");
+      refresh2renderer = sinon.spy(juicyTileList2, "renderer");
       done();
     });
   })
@@ -90,7 +91,9 @@ describe('juicy-tile-list', function() {
 
         // wait for mutation observer callback
         setTimeout(function whenMutated(){
-          expect( juicyTileList2.refresh.callCount ).to.equal(1);
+          // refresh is being passed as a reference on attached, before sinon attached it's spy
+          // expect( juicyTileList2.refresh.callCount ).to.equal(1);
+          expect( juicyTileList2.renderer.callCount ).to.equal(1);
           juicyTileList2.refresh.restore();
           done();
         });

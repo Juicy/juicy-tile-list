@@ -205,8 +205,8 @@
                     });
 
                     it('refresh method should not be called', function(done) {
-                        noSetup.setup = JSON.stringify(newSetup());
-                        inlineSetup.setup = JSON.stringify(newSetup());
+                        noSetup.setup = newSetup();
+                        inlineSetup.setup = newSetup();
                         // wait for mutation observer callback
                         setTimeout(function whenMutated() {
                             expect(noSetup_refresh.callCount).to.equal(0);
