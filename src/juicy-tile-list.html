@@ -242,6 +242,7 @@ version: 1.1.2
             }
             element.shadowContainer.appendChild(wrappers);
             tiles["root"] = element.shadowContainer;
+            this._isShadomDOMOutdated = false;
             return tiles;
         }
 
@@ -350,8 +351,35 @@ version: 1.1.2
 
         proto.defaultTileSetup = defaultTileSetup;
 
+        /**
+         * Flage used to force updating ShadowDOM wrappers on regular .setup change
+         * @private
+         * @type {Boolean}
+         */
+        proto._isShadomDOMOutdated = true;
+
         proto.createdCallback = function () {
-            this.setup = {}; // Polymer's type detection.
+            var setup;
+            Object.defineProperty(this, 'setup', {
+                get: function (){
+                    return setup;
+                },
+                set: function (newVal) {
+                    var oldVal;
+                    if(newVal === setup){
+                        // do nothing as nothing have changed
+                        return;
+                    } else {
+                        oldVal = setup;
+                        setup = newVal;
+                        this._setupChanged(oldVal, newVal);
+                    }
+                }
+            });
+            // read if we already got something
+            this.attributeChangedCallback("setup", undefined, this.getAttribute("setup"));
+
+            // Polymer 0.5 legacy? this.setup = {}; // Polymer's type detection.
             // Define mutation observer to observe changes
             // TODO: Make it cleaner
             // create an observer instance
@@ -425,21 +453,20 @@ version: 1.1.2
             this.attributeChangedCallback("refreshonmutation", this.refreshOnMutation);
             this.attributeChangedCallback("refreshonattached", this.refreshOnAttached);
             this.attributeChangedCallback("defaulttilesetup", this.defaultTileSetup, this.getAttribute("defaulttilesetup"));
-            this.attributeChangedCallback("setup", null, this.getAttribute("setup"));
 
-            if (this.refreshOnAttached) {
-                setTimeout(function () {
-                    this.refresh();
-                }.bind(this));
-            }
 
             // console.timeEnd("attached");
             // console.profileEnd("attached");
             // This is ugly hack not to run attrChanged observers until domReady and our element is fully set up.(tomalec)
             // TODO: check if it can be sync after we made template native
+            // if (this.refreshOnAttached) {
             //setTimeout(function () {
-                //this.isReady = true;
+            //         this.refresh();
             //}.bind(this));
+            // }
+            if (this.refreshOnAttached) {
+                this.refresh();
+            }
 
             this.isReady = true;
         };
@@ -586,12 +613,6 @@ version: 1.1.2
                 this.tiles = this.updateWrappers(this.elements, this);
             }
 
-            if (!this.setup) {
-                this.setup = {
-                    items: []
-                };
-            }
-
             // TODO: support LTR
             if (this.setup.direction != "vertical") {
                 this.setup.width = this.setup.width || innerWidth(this);
@@ -613,19 +634,21 @@ version: 1.1.2
         * Perform action when setup get changed
         * @param {Object} [oldVal] old value
         * @param {Object} [newVal] new value
-        * @param {Object} [changes] changes
-        * @param {Boolean} [hard=false] Set to true if ShadowDOM structure is also changed
         */
-        proto.setupChanged = function (oldVal, newVal, changes, hard) {
-            if (!this.isReady) {
+        proto._setupChanged = function (oldVal, newVal) {
+            // if we are not in DOM yet, no more action is needed
+            // if old value is null it means Package() finished it's job by chanign null to default value
+            // so we have nothing more to add
+            //   please note that attached callback which changes isReady to true also runs Package()
+            //   Therfore, setup will never be `null` for attached element
+            if (!this.isReady || oldVal === null){
                 return;
             }
-
             this.cleanupDOM();
             // console.log("setup changed")
             Package.call(this, this.setup);
             defaultSetup(this.tiles, this.setup.items, this.allItems, this.defaultTileSetup);
-            this.refresh(hard);
+            this.refresh(this._isShadomDOMOutdated);
         };
 
         proto.getBooleanAttribute = function (name, defaultValue) {
@@ -676,10 +699,8 @@ version: 1.1.2
                         } catch (ex) {
                             console.warn("Invalid JSON provided for setup\r\n", ex, newVal);
                         }
-                    }
-
-                    if (oldVal != newVal) {
-                        this.setupChanged(oldVal, newVal);
+                    } else {
+                        this.setup = newVal;
                     }
                     break;
                 case "defaulttilesetup":
