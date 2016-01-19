@@ -419,11 +419,12 @@ version: 1.1.2
             }
 
             this.createItemsList();
-
-            this.attributeChangedCallback("refreshonresize", this.refreshOnResize, this.getBooleanAttribute("refreshonresize", false));
-            this.attributeChangedCallback("refreshonmutation", this.refreshOnMutation, this.getBooleanAttribute("refreshonmutation", false));
-            this.attributeChangedCallback("refreshonattached", this.refreshOnAttached, this.getBooleanAttribute("refreshonattached", true));
-            this.attributeChangedCallback("defaulttilesetup", null, this.getAttribute("defaulttilesetup"));
+            // Setup initials
+            // attributeChangedCallback for refresh* checks the value itselfes
+            this.attributeChangedCallback("refreshonresize", this.refreshOnResize);
+            this.attributeChangedCallback("refreshonmutation", this.refreshOnMutation);
+            this.attributeChangedCallback("refreshonattached", this.refreshOnAttached);
+            this.attributeChangedCallback("defaulttilesetup", this.defaultTileSetup, this.getAttribute("defaulttilesetup"));
             this.attributeChangedCallback("setup", null, this.getAttribute("setup"));
 
             if (this.refreshOnAttached) {
