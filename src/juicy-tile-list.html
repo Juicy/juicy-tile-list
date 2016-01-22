@@ -689,10 +689,11 @@ version: 1.2.0
                         }
 
                         try {
-                            this.setup = JSON.parse(newVal);
+                            newVal = JSON.parse(newVal);
                         } catch (ex) {
                             console.warn("Invalid JSON provided for setup\r\n", ex, newVal);
                         }
+                        this.setup = newVal;
                     } else {
                         this.setup = newVal;
                     }

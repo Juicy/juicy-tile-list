@@ -181,7 +181,7 @@
                     });
 
                     it('refresh method should be called only once, after attached', function(done) {
-                        noSetup.setup = JSON.stringify(newSetup());
+                        noSetup.setup = newSetup();
                         document.body.appendChild(noSetup);
                         // wait for mutation observer callback
                         setTimeout(function whenMutated() {
