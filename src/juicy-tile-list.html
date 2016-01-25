@@ -459,10 +459,16 @@ version: 1.2.0
             // console.profileEnd("attached");
             if (this.refreshOnAttached){
                 // This is ugly hack to wait for most probably asynchronous content distribution (tomalec)
-                setTimeout(this.refresh);
+                var list = this;
+                setTimeout(function(){
+                    list.refresh();
+                    list.isReady = true;
+                });
+                // --
+            } else {
+                this.isReady = true;
             }
 
-            this.isReady = true;
         };
 
         proto.detachedCallback = function () {
