@@ -428,8 +428,34 @@ version: 1.2.0
               this.defaultTileSetup
             );
         };
+        proto.attachedCallback = function tableAttached() {
+            this.attributeChangedCallback("refreshonattached", this.refreshonattached);
 
-        proto.attachedCallback = function gridAttached() {
+            // tomalec: Ugly workaround for https://code.google.com/p/chromium/issues/detail?id=581176
+            // to wait for element to get attached, and Chromium HTML imports release metrics
+            // to measure elements inner dimention if not provided in setup
+            // XXX: causes FOUC
+            // if (this.refreshOnAttached &&
+            //         navigator.userAgent.toLowerCase().indexOf('chrome') > -1 && // is chrome
+            //         (!this.setup ||
+            //             (!this.setup.width || this.setup.direction == "vertical" && !this.setup.height)
+            //         )
+            //     ) {
+            //     What is worse, we need it anyway for `precalculate*`
+            if (
+                this.refreshOnAttached &&
+                navigator.userAgent.toLowerCase().indexOf('chrome') > -1 // is chrome
+                ) {
+                var list = this;
+                setTimeout(function(){
+                    list._attachedCallback();
+                });
+            } else {
+                this._attachedCallback();
+            }
+            // ---
+        };
+        proto._attachedCallback = function deferredListAttached() {
             var root = this.createShadowRoot();
             var template = tileListTemplate;
             var clone = document.importNode(template.content, true);
@@ -458,16 +484,9 @@ version: 1.2.0
             // console.timeEnd("attached");
             // console.profileEnd("attached");
             if (this.refreshOnAttached){
-                // This is ugly hack to wait for most probably asynchronous content distribution (tomalec)
-                var list = this;
-                setTimeout(function(){
-                    list.refresh();
-                    list.isReady = true;
-                });
-                // --
-            } else {
-                this.isReady = true;
+                this.refresh();
             }
+            this.isReady = true;
 
         };
 
@@ -699,8 +718,10 @@ version: 1.2.0
                         } catch (ex) {
                             console.warn("Invalid JSON provided for setup\r\n", ex, newVal);
                         }
+                        console.log('setup is being changed to', newVal);
                         this.setup = newVal;
                     } else {
+                        console.log('setup is being changed to', newVal);
                         this.setup = newVal;
                     }
                     break;
