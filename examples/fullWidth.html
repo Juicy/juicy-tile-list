@@ -20,51 +20,41 @@
         <blockquote><p>Masonry-like Custom Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only).</p></blockquote>
         <p>&lt;juicy-tile-list&gt; can adapt to screen/container width.</p>
         <!-- EXAMPLE STARTS HERE -->
-        <juicy-tile-list>
+        <juicy-tile-list setup='{
+            "gutter":8,
+            "items":[{
+                "id":0,
+                "priority":0.9,
+                "height":100,
+                "precalculateWidth":true
+            },{
+                "id":1,
+                "priority":0.6,
+                "height":100,
+                "width":200
+            },{
+                "id":2,
+                "priority":0.4,
+                "height":200,
+                "precalculateWidth":true,
+                "width":200
+            },{
+                "id":3,
+                "priority":0.3,
+                "height":100,
+                "precalculateHeight":true,
+                "width":400,
+                "precalculateWidth":true}]}'>
             <div>Try</div>
             <button>to</button>
             <input value="resize">
             <section>browser window</section>
         </juicy-tile-list>
-        <script type="text/javascript">
-            model = {
-                setup: {
-                    gutter: 8,
-                    items: [
-                        {
-                            id: 0,
-                            priority: 0.9,
-                            height: 100,
-                            precalculateWidth: true
-                        },
-                        {
-                            id: 1,
-                            priority: 0.6,
-                            height: 100,
-                            width: 200
-                        },
-                        {
-                            id: 2,
-                            priority: 0.4,
-                            height: 200,
-                            precalculateWidth: true,
-                            width: 200
-                        },
-                        {
-                            id: 3,
-                            priority: 0.3,
-                            height: 100,
-                            precalculateHeight: true,
-                            width: 400,
-                            precalculateWidth: true
-                        }
-                    ]
-                }
-            };
-
-            document.querySelector("juicy-tile-list").setAttribute("setup", JSON.stringify(model.setup));
-        </script>
         <!-- EXAMPLE ENDS HERE -->
+        <script>
+            var setup = document.querySelector('juicy-tile-list').setup;
+            console.log('for this demo purposes juicy-tile-list setup is exposed under `setup` variable', setup);
+        </script>
     </article>
 </body>
 </html>

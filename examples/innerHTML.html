@@ -23,7 +23,53 @@
         </p>
 
         <!-- EXAMPLE STARTS HERE -->
-        <juicy-tile-list>
+        <juicy-tile-list setup='{
+                "gutter": 24,
+                "items": [{
+                    "id": 2,
+                    "priority": 0.9,
+                    "height": 100,
+                    "width": 200
+                }, {
+                    "priority": 0.8,
+                    "height": 216,
+                    "width": 216,
+                    "background": "rgba(134,226,213,0.5)",
+                    "id": "group1",
+                    "gutter": 8,
+                    "direction": "vertical",
+                    "items": [{
+                        "priority": 0.8,
+                        "height": 100,
+                        "width": 100,
+                        "id": "group2",
+                        "gutter": 4,
+                        "direction": "horizontal",
+                        "content": "<div style=\"background: rgba(191, 81, 236, 0.5);width: calc(100% + 2 * 4px ); position:relative; top:-4px; left: -4px; height: calc(100% + 2 * 4px ); text-align: right;\">test</div>",
+                        "items": [{
+                            "id": 1,
+                            "priority": 1,
+                            "height": 20,
+                            "width": 80
+                        }, {
+                            "id": 4,
+                            "priority": 0,
+                            "height": 20,
+                            "width": 80
+                        }]
+                    }, {
+                        "id": 0,
+                        "priority": 1,
+                        "height": 100,
+                        "width": 100
+                    }]
+                }, {
+                    "id": 3,
+                    "priority": 0.6,
+                    "height": 100,
+                    "width": 400
+                }]
+            }'>
             <div>Item 0, 1x1, priority 0, nested</div>
             <div title="0.8x0.2, priority 1, nested twice">
                 <button>Item 1..</button>
@@ -34,74 +80,11 @@
             <section>Item3, 4x1, priority 0.6</section>
             <div title="0.8x0.2, priority 0, nested twice">Item 4..</div>
         </juicy-tile-list>
-        <script type="text/javascript">
-            model = {
-                setup: {
-                    gutter: 24,
-                    items: [
-                        {
-                            id: 2, //index of correcsponding DOM element (child)
-                            priority: 0.9, //priority of element in current scope/group/container
-                            height: 100,
-                            width: 200
-                        },
-                        {
-                            priority: 0.8,
-                            height: 216,
-                            width: 216,
-                            background: "rgba(134,226,213,0.5)",
-                            // group properties
-                            id: "group1", //group id (optional?)
-                            gutter: 8,
-                            direction: "vertical",
-                            //items property indicates it is a group
-                            items: [
-                                {
-                                    priority: 0.8,
-                                    height: 100,
-                                    width: 100,
-                                    // group properties
-                                    id: "group2", //group id (optional?)
-                                    gutter: 4,
-                                    direction: "horizontal",
-                                    content: "<div style=\"background: rgba(191, 81, 236, 0.5);width: calc(100% + 2 * 4px ); position:relative; top:-4px; left: -4px; height: calc(100% + 2 * 4px ); text-align: right;\">test</div>",
-                                    //items property indicates it is a group
-                                    items: [
-                                        {
-                                            id: 1,
-                                            priority: 1,
-                                            height: 20,
-                                            width: 80
-                                        },
-                                        {
-                                            id: 4,
-                                            priority: 0,
-                                            height: 20,
-                                            width: 80
-                                        }
-                                    ]
-                                },
-                                {
-                                    id: 0,
-                                    priority: 1,
-                                    height: 100,
-                                    width: 100
-                                }
-                            ]
-                        },
-                        {
-                            id: 3,
-                            priority: 0.6,
-                            height: 100,
-                            width: 400
-                        }
-                    ]
-                }
-            };
-
-            document.querySelector("juicy-tile-list").setAttribute("setup", JSON.stringify(model.setup));
-        </script>
         <!-- EXAMPLE ENDS HERE -->
+        <script>
+            var setup = document.querySelector('juicy-tile-list').setup;
+            console.log('for this demo purposes juicy-tile-list setup is exposed under `setup` variable', setup);
+        </script>
     </article>
 </body>
 </html>

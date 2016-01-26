@@ -1,5 +1,7 @@
-﻿<!DOCTYPE html>
+
+<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>&lt;juicy-tile-list&gt;</title>
@@ -12,42 +14,111 @@
 
     <link rel="stylesheet" href="examples/github-markdown.css">
     <style shim-shadowdom>
-            body {
-                font-family: sans-serif;
-                min-width: 200px;
-                width: 50%;
-                margin: 0 auto;
-                padding: 30px;
-            }
+        body {
+            font-family: sans-serif;
+            min-width: 200px;
+            width: 50%;
+            margin: 0 auto;
+            padding: 30px;
+        }
 
-            juicy-tile-list {
-                display: block;
-                width: 100%;
-                padding: 1em;
-                box-shadow: inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
-            }
+        juicy-tile-list {
+            display: block;
+            width: 100%;
+            padding: 1em;
+            box-shadow: inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
+        }
+        /* juicy-tile-list>*{ */
+        /** <-- oh, our `beloved` IE does not get concept of Shadow DOM */
 
-            /* juicy-tile-list>*{ */
-            /** <-- oh, our `beloved` IE does not get concept of Shadow DOM */
-            juicy-tile-list #container > *,
-            juicy-tile-list > *:not(#container) {
-                box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);
-                text-align: center;
-                border-radius: 2px;
-                height: 100%;
-            }
+        juicy-tile-list #container > *,
+        juicy-tile-list > *:not(#container) {
+            box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);
+            text-align: center;
+            border-radius: 2px;
+            height: 100%;
+        }
 
-            section input {
-                width: 4em;
-            }
+        section input {
+            width: 4em;
+        }
     </style>
 </head>
+
 <body>
-    <a href="https://github.com/Juicy/juicy-tile-list"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+    <a href="https://github.com/Juicy/juicy-tile-list">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub">
+    </a>
     <article class="markdown-body">
         <h1>&lt;juicy-tile-list&gt;</h1>
-        <blockquote><p>Masonry-like Custom Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only).</p></blockquote>
-        <juicy-tile-list gutter="10" refreshonresize>
+        <blockquote>
+            <p>Masonry-like Custom Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only).</p>
+        </blockquote>
+        <juicy-tile-list gutter="10" refreshonresize
+            setup='{
+                "gutter":8,
+                "items":[{
+                    "id":0,
+                    "priority":0.9,
+                    "height":50,
+                    "width":50
+                },{
+                    "id":1,
+                    "priority":0.8,
+                    "height":100,
+                    "width":50,
+                    "hidden":false
+                },{
+                    "id":2,
+                    "priority":0.7,
+                    "height":50,
+                    "width":200
+                },{
+                    "id":3,
+                    "priority":0.6,
+                    "height":50,
+                    "width":150
+                },{
+                    "id":4,
+                    "priority":0.5,
+                    "height":50,
+                    "width":200
+                },{
+                    "id":5,
+                    "priority":0.4,
+                    "height":100,
+                    "width":50
+                },{
+                    "id":6,
+                    "priority":0.3,
+                    "height":150,
+                    "width":100
+                },{
+                    "id":7,
+                    "priority":0.2,
+                    "height":50,
+                    "width":50
+                },{
+                    "id":8,
+                    "priority":0.1,
+                    "height":50,
+                    "width":50
+                },{
+                    "id":9,
+                    "priority":0.09,
+                    "height":150,
+                    "width":50
+                },{
+                    "id":10,
+                    "priority":0.08,
+                    "height":50,
+                    "width":100
+                },{
+                    "id":11,
+                    "priority":0.07,
+                    "height":50,
+                    "width":200
+                }]}'>
             <div>0</div>
             <div>
                 <button>1</button>
@@ -67,90 +138,9 @@
             <div>10</div>
             <div>11</div>
         </juicy-tile-list>
-        <script type="text/javascript">
-            model = {
-                setup: {
-                    gutter: 8,
-                    items: [
-                        {
-                            id: 0,
-                            priority: 0.9,// 0.6,
-                            height: 50,
-                            width: 50
-                        },
-                        {
-                            id: 1,
-                            priority: 0.8,// 0.9,
-                            height: 100,
-                            width: 50,
-                            hidden: false
-                        },
-                        {
-                            id: 2,
-                            priority: 0.7,// 0.3,
-                            height: 50,
-                            width: 200
-                        },
-                        {
-                            id: 3,
-                            priority: 0.6,
-                            height: 50,
-                            width: 150
-                        },
-                        {
-                            id: 4,
-                            priority: 0.5,
-                            height: 50,
-                            width: 200
-                        },
-                        {
-                            id: 5,
-                            priority: 0.4,
-                            height: 100,
-                            width: 50
-                        },
-                        {
-                            id: 6,
-                            priority: 0.3,
-                            height: 150,
-                            width: 100
-                        },
-                        {
-                            id: 7,
-                            priority: 0.2,
-                            height: 50,
-                            width: 50
-                        },
-                        {
-                            id: 8,
-                            priority: 0.1,
-                            height: 50,
-                            width: 50
-                        },
-                        {
-                            id: 9,
-                            priority: 0.09,
-                            height: 150,
-                            width: 50
-                        },
-                        {
-                            id: 10,
-                            priority: 0.08,
-                            height: 50,
-                            width: 100
-                        },
-                        {
-                            id: 11,
-                            priority: 0.07,
-                            height: 50,
-                            width: 200
-                        }
-
-                    ]
-                }
-            };
-
-            document.querySelector("juicy-tile-list").setAttribute("setup", JSON.stringify(model.setup));
+        <script>
+            var setup = document.querySelector('juicy-tile-list').setup;
+            console.log('for this demo purposes juicy-tile-list setup is exposed under `setup` variable', setup);
         </script>
         <section>
             <h3>Features</h3>
@@ -186,4 +176,5 @@
 
     </article>
 </body>
+
 </html>

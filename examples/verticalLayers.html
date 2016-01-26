@@ -25,7 +25,31 @@
                 height: 320px;
             }
         </style>
-        <juicy-tile-list>
+        <juicy-tile-list setup='{
+            "gutter": 8,
+            "direction": "vertical",
+            "items": [{
+                "id": 0,
+                "priority": 0.6,
+                "height": 100,
+                "width": 200
+            }, {
+                "id": 1,
+                "priority": 0.9,
+                "height": 100,
+                "width": 400
+            }, {
+                "id": 2,
+                "priority": 0.3,
+                "height": 100,
+                "width": 400
+            }, {
+                "id": 3,
+                "priority": 0.4,
+                "height": 200,
+                "width": 200
+            }]
+        }'>
             <div>Item 0 , priority 0.6</div>
             <div class="ple">
                 <button>Item 1, priority 0.9</button>
@@ -35,43 +59,11 @@
             </div>
             <section>Item3, priority 0.4</section>
         </juicy-tile-list>
-        <script type="text/javascript">
-            model = {
-                setup: {
-                    gutter: 8,
-                    direction: "vertical",
-                    items: [
-                        {
-                            id: 0,
-                            priority: 0.6,
-                            height: 100,
-                            width: 200
-                        },
-                        {
-                            id: 1,
-                            priority: 0.9,
-                            height: 100,
-                            width: 400
-                        },
-                        {
-                            id: 2,
-                            priority: 0.3,
-                            height: 100,
-                            width: 400
-                        },
-                        {
-                            id: 3,
-                            priority: 0.4,
-                            height: 200,
-                            width: 200
-                        }
-                    ]
-                }
-            };
-
-            document.querySelector("juicy-tile-list").setAttribute("setup", JSON.stringify(model.setup));
-        </script>
         <!-- EXAMPLE ENDS HERE -->
+        <script>
+            var setup = document.querySelector('juicy-tile-list').setup;
+            console.log('for this demo purposes juicy-tile-list setup is exposed under `setup` variable', setup);
+        </script>
     </article>
 </body>
 </html>
