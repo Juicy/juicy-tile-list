@@ -437,7 +437,7 @@ version: 1.2.0
          * @see #_attachedCallback
          */
         proto.attachedCallback = function listAttached() {
-            this.attributeChangedCallback("refreshonattached", this.refreshonattached);
+            this.attributeChangedCallback("refreshonattached", this.refreshOnAttached);
 
             // tomalec: Ugly workaround for https://code.google.com/p/chromium/issues/detail?id=581176
             // to wait for element to get attached, and Chromium HTML imports release metrics
