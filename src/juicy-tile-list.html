@@ -54,6 +54,9 @@ version: 1.2.0
         var ownerDocument = (document._currentScript || document.currentScript).ownerDocument;
         var tileDecorator = ownerDocument.getElementById("juicy-tile").content;
         var tileListTemplate = ownerDocument.getElementById("juicy-tile-list");
+        if (window.ShadowDOMPolyfill) {
+            WebComponents.ShadowCSS.shimStyling(tileListTemplate.content, 'juicy-tile-list');
+        }
         /**
          * For a given element, returns the available width excluding margin, border and padding
          * @param {Element} elem
