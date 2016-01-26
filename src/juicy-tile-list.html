@@ -431,7 +431,12 @@ version: 1.2.0
               this.defaultTileSetup
             );
         };
-        proto.attachedCallback = function tableAttached() {
+        /**
+         * attachedCallback wrapper to workaround Chromium Bugs
+         * https://code.google.com/p/chromium/issues/detail?id=581176
+         * @see #_attachedCallback
+         */
+        proto.attachedCallback = function listAttached() {
             this.attributeChangedCallback("refreshonattached", this.refreshonattached);
 
             // tomalec: Ugly workaround for https://code.google.com/p/chromium/issues/detail?id=581176
@@ -458,6 +463,9 @@ version: 1.2.0
             }
             // ---
         };
+        /**
+         * The real meat of attachedCallback
+         */
         proto._attachedCallback = function deferredListAttached() {
             var root = this.createShadowRoot();
             var template = tileListTemplate;
