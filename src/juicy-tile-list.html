@@ -362,7 +362,7 @@ version: 1.2.0
         proto._isShadomDOMOutdated = true;
 
         proto.createdCallback = function () {
-            var setup;
+            var setup = this.setup || null;
             Object.defineProperty(this, 'setup', {
                 get: function (){
                     return setup;
