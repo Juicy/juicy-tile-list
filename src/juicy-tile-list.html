@@ -115,34 +115,6 @@ version: 1.2.0
                         });
         }
 
-        /**
-         * Modifies setup array with default settings for not mapped tiles
-         * @param {Array} tiles
-         * @param {Array} setupItems
-         * @param {Array} item
-         * @param {Object} defaultTileSetup
-         */
-        function defaultSetup(tiles, setupItems, allItems, defaultTileSetup) {
-            for (var elNo = 0, eLen = tiles.length; elNo < eLen; elNo++) {
-                var tile = tiles[elNo];
-
-                if (!allItems[tile.id]) {
-                    var itemSetup = tile.defaultSetup ||  JSON.parse(JSON.stringify(defaultTileSetup));
-                    if (setupItems.length == 0) {
-                        itemSetup.priority = 0.5;
-                    }
-                    else {
-                        itemSetup.priority = getMinimumPriority(setupItems) * (1 - 1 / eLen);
-                    }
-                    //scoping magic
-                    itemSetup.id = tile.id;
-                    // itemSetup.id = elNo;
-                    Object.defineProperty(itemSetup, "container", { value: allItems["root"], writable: true })
-                    setupItems.push(itemSetup);
-                    allItems[tile.id] = itemSetup;
-                }
-            }
-        }
 
         /**
          * Returns the minimum value of the priority property from the given array of objects
@@ -202,7 +174,6 @@ version: 1.2.0
             }
             // console.log("updateWrappers", tileDecorator);
             var tiles = [], frag, tile, child, id,
-              perItemSetup,
               //scoping magic
               scopePrefix = "", scopedIndex = 0;
             var wrappers = document.createDocumentFragment();
@@ -220,16 +191,11 @@ version: 1.2.0
                 scopedIndex++;
                 //id = i;
 
-
-
                 frag = document.importNode(tileDecorator, true);
                 //tile = frag.firstChild;
                 tile = frag.children[0];
-                // parse declarative per-item setup
-                if(child.hasAttribute('juicy-style')){
-                    tile.defaultSetup = this.parseRules(child.getAttribute("juicy-style"));
-                }
                 tile.id = id;
+                tile.element = child;
                 tile.firstChild.setAttribute("select", "[juicytile='" + id + "']");
                 wrappers.appendChild(frag);
 
@@ -419,12 +385,47 @@ version: 1.2.0
         };
 
         proto.updateWrappers = updateWrappers;
+        /**
+         * Modifies setup array with default settings for not mapped tiles
+         * @param {Array} tiles
+         * @param {Array} setupItems
+         * @param {Array} item
+         * @param {Object} defaultTileSetup
+         */
+        proto._defaultSetup = function defaultSetup(tiles, setupItems, allItems, defaultTileSetup) {
+            var itemSetup;
+            for (var elNo = 0, eLen = tiles.length; elNo < eLen; elNo++) {
+                var tile = tiles[elNo];
+
+                if (!allItems[tile.id]) {
+                    // parse declarative per-item setup
+                    if(tile.element.hasAttribute('juicy-style')){
+                        itemSetup = this.parseRules(tile.element.getAttribute("juicy-style"));
+                    } else {
+                        itemSetup = tile.defaultSetup ||  JSON.parse(JSON.stringify(defaultTileSetup));
+                    }
+
+                    if (setupItems.length == 0) {
+                        itemSetup.priority = 0.5;
+                    }
+                    else {
+                        itemSetup.priority = getMinimumPriority(setupItems) * (1 - 1 / eLen);
+                    }
+                    //scoping magic
+                    itemSetup.id = tile.id;
+                    // itemSetup.id = elNo;
+                    Object.defineProperty(itemSetup, "container", { value: allItems["root"], writable: true })
+                    setupItems.push(itemSetup);
+                    allItems[tile.id] = itemSetup;
+                }
+            }
+        };
 
         proto.createItemsList = function () {
             // console.log("createItemsList");
             this.elements = filterNodes(this, this.childNodes);
             this.tiles = this.updateWrappers(this.elements, this);
-            defaultSetup(
+            this._defaultSetup(
               this.tiles,
               this.setup.items,
               this.allItems,
@@ -677,7 +678,7 @@ version: 1.2.0
             this.cleanupDOM();
             // console.log("setup changed")
             Package.call(this, this.setup);
-            defaultSetup(this.tiles, this.setup.items, this.allItems, this.defaultTileSetup);
+            this._defaultSetup(this.tiles, this.setup.items, this.allItems, this.defaultTileSetup);
             this.refresh(this._isShadomDOMOutdated);
         };
 

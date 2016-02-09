@@ -22,23 +22,27 @@
 <body>
 
     <!-- You can use the document as a place to set up your fixtures. -->
-    <juicy-tile-list id="list1">
-        <div juicy-style="width:100%; height: 50;">
-            <div>0 -
-                <code>width: 100%; height: 50;</code>
-            </div>
-        </div>
-        <div juicy-style="precalculateWidth: 1; precalculateHeight: 0; height: 100;">
-            <div style="height:50px; width: 250px;">1 -
-                <code>height:50px; width: 250px;</code>
-            </div>
-        </div>
-        <div juicy-style="width:100%; height: 100;">
-            <div>2 - setup overwrites with
-                <code>height:50px; width: 250px;</code>
-            </div>
-        </div>
-    </juicy-tile-list>
+    <test-fixture id="list">
+        <template>
+            <juicy-tile-list>
+                <div juicy-style="width:100%; height: 50;">
+                    <div>0 -
+                        <code>width: 100%; height: 50;</code>
+                    </div>
+                </div>
+                <div juicy-style="precalculateWidth: 1; precalculateHeight: 0; height: 100;">
+                    <div style="height:50px; width: 250px;">1 -
+                        <code>height:50px; width: 250px;</code>
+                    </div>
+                </div>
+                <div juicy-style="width:100%; height: 100;">
+                    <div>2 - setup overwrites with
+                        <code>height:50px; width: 250px;</code>
+                    </div>
+                </div>
+            </juicy-tile-list>
+        </template>
+    </test-fixture>
 
     <script>
         /**
@@ -47,7 +51,8 @@
         var juicyTileList = document.getElementById('list1');
         describe('juicy-tile-list precalculate size', function() {
             var initialSetup
-            before(function() {
+            before(function(done) {
+                juicyTileList = fixture('list');
                 initialSetup = {
                     width: 500,
                     items: [{
@@ -59,7 +64,7 @@
                 };
                 juicyTileList.setup = JSON.parse(JSON.stringify(initialSetup));
                 juicyTileList.style.width = initialSetup.width + "px";
-                juicyTileList.setupChanged();
+                setTimeout(function waitForAttached(){done();});
             });
             // TODO (tomalec) clean types and strickt equality
             it('tile with `height` and `width` given in `juicy-style` attribute, should get it in it\'s setup', function() {
