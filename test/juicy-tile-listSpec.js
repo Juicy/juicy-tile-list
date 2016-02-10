@@ -4,8 +4,10 @@
 describe('juicy-tile-list', function() {
   var JuicyTiles;
   before(function( done ){
-      JuicyTiles = document.createElement("juicy-tile-list").constructor;
-      done();
+      setTimeout(function waitFormWCTToLoadHTMLImports(){
+          JuicyTiles = document.createElement("juicy-tile-list").constructor;
+          done();
+      });
   });
 
   describe('method getMinimumDimensions', function () {

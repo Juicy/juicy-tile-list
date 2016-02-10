@@ -19,8 +19,14 @@
 /**
  * JuicyTiles tests
  */
-var juicyTileList = document.querySelector('juicy-tile-list');
+var juicyTileList;
 describe('juicy-tile-list', function() {
+  before(function( done ){
+    setTimeout(function waitFormWCTToLoadHTMLImports(){
+      juicyTileList = document.querySelector('juicy-tile-list');
+      done();
+    });
+  });
   describe('method getMinimumDimensions', function () {
 
     it('for a single element should return the element', function () {
