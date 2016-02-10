@@ -20,9 +20,9 @@
     "bugs",
     "Gruntfile.js"
   ],
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
-    "web-component-tester": "~4.1.0"
+    "web-component-tester": ">=4.2.0",
+    "webcomponentsjs": "^0.7.20"
   }
 }
