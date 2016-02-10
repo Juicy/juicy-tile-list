@@ -16,6 +16,7 @@
 </head>
 <body>
     <script>
+    setTimeout(function waitForShimmedHTMLImports(){
         // Load and run all tests (.html, .js):
         WCT.loadSuites([
           'rectangleSpec.js',
@@ -32,6 +33,7 @@
           'precalculate.html',
           'declarative_setup/juicy-style_attribute.html'
         ]);
+    },100);
     </script>
 </body>
 </html>
