@@ -107,7 +107,7 @@ Package.prototype.packItems = function packItems( setup ) {
 
   //pack rectangles, and calculate container size
   packer.items = setup.items
-    .sort(this.sorter) // sort- if neded
+    .sort(packer.sorter) // sort- if neded
     .map(function(itemSetup){
       if(itemSetup.hidden){
         return itemSetup;

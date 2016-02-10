@@ -7,6 +7,9 @@
     <script src="../../webcomponentsjs/webcomponents.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
+    <script src="../src/rectangle.js"></script>
+    <script src="../src/packer.js"></script>
+    <script src="../src/package.js"></script>
     <!-- if we use WCT suites, it is loaded per suite -->
     <link rel="import" href="../src/juicy-tile-list.html">
 
@@ -16,7 +19,6 @@
 </head>
 <body>
     <script>
-    setTimeout(function waitForShimmedHTMLImports(){
         // Load and run all tests (.html, .js):
         WCT.loadSuites([
           'rectangleSpec.js',
@@ -33,7 +35,6 @@
           'precalculate.html',
           'declarative_setup/juicy-style_attribute.html'
         ]);
-    },100);
     </script>
 </body>
 </html>

@@ -74,9 +74,6 @@
 
                                 });
                                 it('items should be arranged in ' + layoutDescription(direction, rightToLeft, bottomUp), function() {
-                                    if(direction == 'horizontal' && bottomUp == true){
-                                        debugger;
-                                    }
                                     expect(realRelativeOrientedPosition(juicyTileList.children[0], juicyTileList.tiles["root"], direction, rightToLeft, bottomUp)).to.deep.equal([0, 0]);
                                     expect(realRelativeOrientedPosition(juicyTileList.children[1], juicyTileList.tiles["root"], direction, rightToLeft, bottomUp)).to.deep.equal([0, 100]);
                                     expect(realRelativeOrientedPosition(juicyTileList.children[2], juicyTileList.tiles["root"], direction, rightToLeft, bottomUp)).to.deep.equal([100, 0]);
