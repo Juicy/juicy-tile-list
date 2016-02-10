@@ -7,13 +7,14 @@
     <script src="../../webcomponentsjs/webcomponents.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
-    <script src="../src/rectangle.js"></script>
-    <script src="../src/packer.js"></script>
-    <script src="../src/package.js"></script>
     <!-- if we use WCT suites, it is loaded per suite -->
     <link rel="import" href="../src/juicy-tile-list.html">
 
 
+    <script src="rectangleSpec.js"></script>
+    <script src="packerSpec.js"></script>
+    <script src="packageSpec.js"></script>
+    <script src="juicy-tile-listSpec.js"></script>
 
     <title>juicy-tile-list test suit</title>
 </head>
@@ -21,10 +22,6 @@
     <script>
         // Load and run all tests (.html, .js):
         WCT.loadSuites([
-          'rectangleSpec.js',
-          'packerSpec.js',
-          'packageSpec.js',
-          'juicy-tile-listSpec.js',
           'getMinimumDimensions.html',
           'sizing/presetElementDimensions.html',
           'refresh/onMutation.html',
