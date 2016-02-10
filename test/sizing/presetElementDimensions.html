@@ -71,9 +71,13 @@
 /**
  * JuicyTiles tests
  */
-var juicyTileList = document.getElementById('horizontal_list');
+var horizontal_list = document.getElementById('horizontal_list');
 
-describe('juicy-tile-list', function() {
+describe('juicy-tile-list', function(){
+  before(function(done){
+      // wait for attached
+      setTimeout(done);
+  });
   context('when get width/height in setup', function () {
       it('should pack items into a package of given size', function () {
         expect(horizontal_list.tiles[0].offsetLeft).to.equal(0);

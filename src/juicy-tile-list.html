@@ -638,8 +638,6 @@ version: 1.2.0
         * @param {Boolean} [hard=false] refresh also shadowDOM structure
         */
         proto.refresh = function (hard) {
-            // console.log("refresh");
-
             if (hard) {
                 this.tiles = this.updateWrappers(this.elements, this);
             }
@@ -730,10 +728,8 @@ version: 1.2.0
                         } catch (ex) {
                             console.warn("Invalid JSON provided for setup\r\n", ex, newVal);
                         }
-                        console.log('setup is being changed to', newVal);
                         this.setup = newVal;
                     } else {
-                        console.log('setup is being changed to', newVal);
                         this.setup = newVal;
                     }
                     break;

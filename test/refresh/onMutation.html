@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 
@@ -9,234 +10,232 @@
 
     <!-- Step 1: import the element to test -->
     <link rel="import" href="../../src/juicy-tile-list.html">
-  </head>
-  <body>
+</head>
+
+<body>
 
     <!-- You can use the document as a place to set up your fixtures. -->
-    <juicy-tile-list id="list1">
-      <div>0</div>
-      <span>1</span>
-      <p>3</p>
-    </juicy-tile-list>
-    <juicy-tile-list id="list2" refreshOnMutation>
-      <div>0</div>
-      <span>1</span>
-      <p>3</p>
-    </juicy-tile-list>
+    <test-fixture id="list_noAttr">
+        <template>
+            <juicy-tile-list>
+                <div>0</div>
+                <span>1</span>
+                <p>3</p>
+            </juicy-tile-list>
+        </template>
+    </test-fixture>
+    <test-fixture id="list_attr">
+        <template>
+            <juicy-tile-list refreshOnMutation>
+                <div>0</div>
+                <span>1</span>
+                <p>3</p>
+            </juicy-tile-list>
+        </template>
+    </test-fixture>
+</body>
+<script>
+    /**
+     * JuicyTiles tests
+     */
+    var list_noAttr, list_attr;
+    describe('juicy-tile-list', function() {
+        context('when onMutation attribute', function() {
+            beforeEach(function(done) {
+                list_noAttr = fixture('list_noAttr');
+                list_attr = fixture('list_attr');
+                setTimeout(function() {
+                    done();
+                    refresh_noAttr = sinon.spy(list_noAttr, "refresh");
+                    refresh_attr = sinon.spy(list_attr, "refresh");
+                });
+            });
+            afterEach(function() {
+                list_noAttr.refresh.restore && list_noAttr.refresh.restore();
+                list_attr.refresh.restore && list_attr.refresh.restore();
+            });
 
-    <script>
-/**
- * JuicyTiles tests
- */
-var juicyTileList = document.getElementById('list1');
-var juicyTileList2 = document.getElementById('list2');
-describe('juicy-tile-list', function() {
-  context('when onMutation attribute', function () {
-    afterEach(function(){
-      juicyTileList.refresh.restore && juicyTileList.refresh.restore();
-      juicyTileList2.refresh.restore && juicyTileList2.refresh.restore();
+            context('was not set', function() {
+                it('refresh method should not be called when some node is added', function(done) {
+                    var addedNode = document.createElement("div");
+                    addedNode.innerHTML = "4";
+                    list_noAttr.appendChild(addedNode);
+
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expect(list_noAttr.refresh.callCount).to.equal(0);
+                        list_noAttr.refresh.restore();
+                        done();
+                    });
+                });
+                it('refresh method should not be called when some node is removed', function(done) {
+                    list_noAttr.removeChild(list_noAttr.firstElementChild);
+
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expect(list_noAttr.refresh.callCount).to.equal(0);
+                        list_noAttr.refresh.restore();
+                        done();
+                    });
+                });
+
+            });
+            context('was set when element was created', function() {
+                it('refresh method should be called when some node is added', function(done) {
+                    var addedNode = document.createElement("div");
+                    addedNode.innerHTML = "4";
+                    list_attr.appendChild(addedNode);
+
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expect(list_attr.refresh.callCount).to.equal(1);
+                        list_attr.refresh.restore();
+                        done();
+                    });
+                });
+                it('refresh method should be called when some node is removed', function(done) {
+                    list_attr.removeChild(list_attr.firstElementChild);
+
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expect(list_attr.refresh.callCount).to.equal(1);
+                        list_attr.refresh.restore();
+                        done();
+                    });
+                });
+                describe('after node was detached from DOM', function() {
+
+                    afterEach(function() {
+                        document.body.insertBefore(list_attr, document.body.firstElementChild);
+                    });
+                    it('refresh method should not be called', function(done) {
+                        list_attr.parentElement.removeChild(list_attr);
+
+                        list_attr.removeChild(list_attr.firstElementChild);
+                        var addedNode = document.createElement("div");
+                        addedNode.innerHTML = "4";
+                        list_attr.appendChild(addedNode);
+
+                        // wait for mutation observer callback
+                        setTimeout(function whenMutated() {
+                            // This may fail in shimmed browsers due to https://github.com/webcomponents/webcomponentsjs/issues/491
+                            expect(list_attr.refresh.callCount).to.equal(0);
+                            list_attr.refresh.restore();
+                            done();
+                        });
+                    });
+                });
+
+            });
+            context('is set in runtime', function() {
+                beforeEach(function() {
+                    list_noAttr.setAttribute("refreshOnMutation", "");
+                });
+                it('refresh method should be called when some node is added', function(done) {
+                    var addedNode = document.createElement("div");
+                    addedNode.innerHTML = "4";
+                    list_noAttr.appendChild(addedNode);
+
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expect(list_noAttr.refresh.callCount).to.equal(1);
+                        list_noAttr.refresh.restore();
+                        done();
+                    });
+                });
+                it('refresh method should be called when some node is removed', function(done) {
+                    list_noAttr.removeChild(list_noAttr.firstElementChild);
+
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expect(list_noAttr.refresh.callCount).to.equal(1);
+                        list_noAttr.refresh.restore();
+                        done();
+                    });
+                });
+                describe('after node was detached from DOM', function() {
+
+                    afterEach(function() {
+                        document.body.appendChild(list_noAttr);
+                    });
+                    it('refresh method should not be called', function(done) {
+                        list_noAttr.parentElement.removeChild(list_noAttr);
+
+                        list_noAttr.removeChild(list_noAttr.firstElementChild);
+                        var addedNode = document.createElement("div");
+                        addedNode.innerHTML = "4";
+                        list_noAttr.appendChild(addedNode);
+
+                        // wait for mutation observer callback
+                        setTimeout(function whenMutated() {
+                            // This may fail in shimmed browsers due to https://github.com/webcomponents/webcomponentsjs/issues/491
+                            expect(list_noAttr.refresh.callCount).to.equal(0);
+                            list_noAttr.refresh.restore();
+                            done();
+                        });
+                    });
+                });
+
+            });
+
+            context('is removed in runtime', function() {
+                beforeEach(function() {
+                    list_attr.removeAttribute("refreshOnMutation");
+                });
+                it('refresh method should not be called when some node is added', function(done) {
+                    var addedNode = document.createElement("div");
+                    addedNode.innerHTML = "4";
+                    list_attr.appendChild(addedNode);
+
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expect(list_attr.refresh.callCount).to.equal(0);
+                        list_attr.refresh.restore();
+                        done();
+                    });
+                });
+                it('refresh method should not be called when some node is removed', function(done) {
+                    list_attr.removeChild(list_attr.firstElementChild);
+
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expect(list_attr.refresh.callCount).to.equal(0);
+                        list_attr.refresh.restore();
+                        done();
+                    });
+                });
+            });
+
+            context('is set for element created outside of DOM', function() {
+                var list_outside;
+                beforeEach(function() {
+                    list_outside = document.createElement('juicy-tile-list');
+                    var addedNode = document.createElement("div");
+                    addedNode.innerHTML = "1";
+                    list_outside.appendChild(addedNode);
+                    list_outside.setAttribute("refreshOnMutation", '');
+                    refresh_outside = sinon.spy(list_outside, "refresh");
+                });
+                describe('when some nodes are added or moved', function() {
+
+                    it('refresh method should not be called', function(done) {
+                        list_outside.removeChild(list_outside.firstElementChild);
+                        var addedNode = document.createElement("div");
+                        addedNode.innerHTML = "2";
+                        list_outside.appendChild(addedNode);
+
+                        // wait for mutation observer callback
+                        setTimeout(function whenMutated() {
+                            expect(list_outside.refresh.callCount).to.equal(0);
+                            list_outside.refresh.restore();
+                            done();
+                        });
+                    });
+                });
+            });
+
+        });
     });
+</script>
 
-    context('was not set', function () {
-      it('refresh method should not be called when some node is added', function (done) {
-        var refresh = sinon.spy(juicyTileList, "refresh");
-
-        var addedNode = document.createElement("div");
-        addedNode.innerHTML = "4";
-        juicyTileList.appendChild(addedNode);
-
-        // wait for mutation observer callback
-        setTimeout(function whenMutated(){
-          expect( juicyTileList.refresh.callCount ).to.equal(0);
-          juicyTileList.refresh.restore();
-          done();
-        });
-      });
-      it('refresh method should not be called when some node is removed', function (done) {
-        var refresh = sinon.spy(juicyTileList, "refresh");
-
-        juicyTileList.removeChild(juicyTileList.firstElementChild);
-
-        // wait for mutation observer callback
-        setTimeout(function whenMutated(){
-          expect( juicyTileList.refresh.callCount ).to.equal(0);
-          juicyTileList.refresh.restore();
-          done();
-        });
-      });
-
-    });
-    context('was set when element was created', function () {
-      it('refresh method should be called when some node is added', function (done) {
-        var refresh = sinon.spy(juicyTileList2, "refresh");
-
-        var addedNode = document.createElement("div");
-        addedNode.innerHTML = "4";
-        juicyTileList2.appendChild(addedNode);
-
-        // wait for mutation observer callback
-        setTimeout(function whenMutated(){
-          expect( juicyTileList2.refresh.callCount ).to.equal(1);
-          juicyTileList2.refresh.restore();
-          done();
-        });
-      });
-      it('refresh method should be called when some node is removed', function (done) {
-        var refresh = sinon.spy(juicyTileList2, "refresh");
-
-        juicyTileList2.removeChild(juicyTileList2.firstElementChild);
-
-        // wait for mutation observer callback
-        setTimeout(function whenMutated(){
-          expect( juicyTileList2.refresh.callCount ).to.equal(1);
-          juicyTileList2.refresh.restore();
-          done();
-        });
-      });
-      describe('after node was detached from DOM', function(){
-
-        afterEach(function(){
-          document.body.insertBefore(juicyTileList2, document.body.firstElementChild);
-        });
-        it('refresh method should not be called', function (done) {
-          var refresh = sinon.spy(juicyTileList2, "refresh");
-          juicyTileList2.parentElement.removeChild(juicyTileList2);
-
-          juicyTileList2.removeChild(juicyTileList2.firstElementChild);
-          var addedNode = document.createElement("div");
-          addedNode.innerHTML = "4";
-          juicyTileList2.appendChild(addedNode);
-
-          // wait for mutation observer callback
-          setTimeout(function whenMutated(){
-            expect( juicyTileList2.refresh.callCount ).to.equal(0);
-            juicyTileList2.refresh.restore();
-            done();
-          });
-        });
-      });
-
-    });
-    context('is set in runtime', function () {
-      beforeEach(function(){
-        juicyTileList.setAttribute("refreshOnMutation","");
-      });
-      it('refresh method should be called when some node is added', function (done) {
-        var refresh = sinon.spy(juicyTileList, "refresh");
-
-        var addedNode = document.createElement("div");
-        addedNode.innerHTML = "4";
-        juicyTileList.appendChild(addedNode);
-
-        // wait for mutation observer callback
-        setTimeout(function whenMutated(){
-          expect( juicyTileList.refresh.callCount ).to.equal(1);
-          juicyTileList.refresh.restore();
-          done();
-        });
-      });
-      it('refresh method should be called when some node is removed', function (done) {
-        var refresh = sinon.spy(juicyTileList, "refresh");
-
-        juicyTileList.removeChild(juicyTileList.firstElementChild);
-
-        // wait for mutation observer callback
-        setTimeout(function whenMutated(){
-          expect( juicyTileList.refresh.callCount ).to.equal(1);
-          juicyTileList.refresh.restore();
-          done();
-        });
-      });
-      describe('after node was detached from DOM', function(){
-
-        afterEach(function(){
-          document.body.appendChild(juicyTileList);
-        });
-        it('refresh method should not be called', function (done) {
-          var refresh = sinon.spy(juicyTileList, "refresh");
-          juicyTileList.parentElement.removeChild(juicyTileList);
-
-          juicyTileList.removeChild(juicyTileList.firstElementChild);
-          var addedNode = document.createElement("div");
-          addedNode.innerHTML = "4";
-          juicyTileList.appendChild(addedNode);
-
-          // wait for mutation observer callback
-          setTimeout(function whenMutated(){
-            expect( juicyTileList.refresh.callCount ).to.equal(0);
-            juicyTileList.refresh.restore();
-            done();
-          });
-        });
-      });
-
-    });
-
-    context('is removed in runtime', function () {
-      beforeEach(function(){
-        juicyTileList2.removeAttribute("refreshOnMutation");
-      });
-      it('refresh method should not be called when some node is added', function (done) {
-        var refresh = sinon.spy(juicyTileList2, "refresh");
-
-        var addedNode = document.createElement("div");
-        addedNode.innerHTML = "4";
-        juicyTileList2.appendChild(addedNode);
-
-        // wait for mutation observer callback
-        setTimeout(function whenMutated(){
-          expect( juicyTileList2.refresh.callCount ).to.equal(0);
-          juicyTileList2.refresh.restore();
-          done();
-        });
-      });
-      it('refresh method should not be called when some node is removed', function (done) {
-        var refresh = sinon.spy(juicyTileList2, "refresh");
-
-        juicyTileList2.removeChild(juicyTileList2.firstElementChild);
-
-        // wait for mutation observer callback
-        setTimeout(function whenMutated(){
-          expect( juicyTileList2.refresh.callCount ).to.equal(0);
-          juicyTileList2.refresh.restore();
-          done();
-        });
-      });
-    });
-
-    context('is set for element created outside of DOM',function(){
-      var juicyTileList;
-      beforeEach(function(){
-        juicyTileList = document.createElement('juicy-tile-list');
-        var addedNode = document.createElement("div");
-        addedNode.innerHTML = "1";
-        juicyTileList.appendChild(addedNode);
-        juicyTileList.setAttribute("refreshOnMutation", '');
-      });
-      describe('when some nodes are added or moved', function(){
-
-        it('refresh method should not be called', function (done) {
-          var refresh = sinon.spy(juicyTileList, "refresh");
-
-          juicyTileList.removeChild(juicyTileList.firstElementChild);
-          var addedNode = document.createElement("div");
-          addedNode.innerHTML = "2";
-          juicyTileList.appendChild(addedNode);
-
-          // wait for mutation observer callback
-          setTimeout(function whenMutated(){
-            expect( juicyTileList.refresh.callCount ).to.equal(0);
-            juicyTileList.refresh.restore();
-            done();
-          });
-        });
-      });
-    });
-
-  });
-});
-
-    </script>
-
-  </body>
 </html>

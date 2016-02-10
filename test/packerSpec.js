@@ -27,42 +27,44 @@ describe('Packer', function() {
     });
 
     describe("`.add`ing Rectangles", function() {
-      var pkr = new Packer({
-        width: 3
-      });
+      var pkr, rect1, rect2, rect3, rect4, rect5;
+      beforeEach(function(){
+          pkr = new Packer({
+            width: 3
+          });
 
-      // 122
-      // 145
-      // 333
-      // xxx
-      // xxx
-      var rect1 = new Rectangle({
-        width: 1,
-        height: 2
-      });
-      var rect2 = new Rectangle({
-        width: 2,
-        height: 1
-      });
-      var rect3 = new Rectangle({
-        width: 3,
-        height: 1
-      });
-      var rect4 = new Rectangle({
-        width: 1,
-        height: 1
-      });
-      var rect5 = new Rectangle({
-        width: 1,
-        height: 1
-      });
+          // 122
+          // 145
+          // 333
+          // xxx
+          // xxx
+          rect1 = new Rectangle({
+            width: 1,
+            height: 2
+          });
+          rect2 = new Rectangle({
+            width: 2,
+            height: 1
+          });
+          rect3 = new Rectangle({
+            width: 3,
+            height: 1
+          });
+          rect4 = new Rectangle({
+            width: 1,
+            height: 1
+          });
+          rect5 = new Rectangle({
+            width: 1,
+            height: 1
+          });
 
-      pkr.add(rect1);
-      pkr.add(rect2);
-      pkr.add(rect3);
-      pkr.add(rect4);
-      pkr.add(rect5);
-
+          pkr.add(rect1);
+          pkr.add(rect2);
+          pkr.add(rect3);
+          pkr.add(rect4);
+          pkr.add(rect5);
+      });
       it("packs them with as few 'holes' as possible, while trying to preserve given order", function() {
         assert.equal(rect1.x, 0, 'rect1.x top left');
         assert.equal(rect1.y, 0, 'rect1.y top left');
@@ -103,7 +105,7 @@ describe('Packer', function() {
           // 24x
           // x4x
           // xxx
-          //  
+          //
 
           var rect1 = new Rectangle({
             width: 2,
@@ -154,42 +156,44 @@ describe('Packer', function() {
         });
       });
       describe("with `direction: 'vertical'`", function() {
-        var pkr = new Packer({
-          height: 3,
-          direction: 'vertical'
-        });
+        var pkr, rect1, rect2, rect3, rect4, rect5;
+        beforeEach(function(){
+            pkr = new Packer({
+              height: 3,
+              direction: 'vertical'
+            });
 
-        // 153xx
-        // 223xx
-        // 443xx
+            // 153xx
+            // 223xx
+            // 443xx
 
-        var rect1 = new Rectangle({
-          width: 1,
-          height: 1
-        });
-        var rect2 = new Rectangle({
-          width: 2,
-          height: 1
-        });
-        var rect3 = new Rectangle({
-          width: 1,
-          height: 3
-        });
-        var rect4 = new Rectangle({
-          width: 2,
-          height: 1
-        });
-        var rect5 = new Rectangle({
-          width: 1,
-          height: 1
-        });
+            rect1 = new Rectangle({
+              width: 1,
+              height: 1
+            });
+            rect2 = new Rectangle({
+              width: 2,
+              height: 1
+            });
+            rect3 = new Rectangle({
+              width: 1,
+              height: 3
+            });
+            rect4 = new Rectangle({
+              width: 2,
+              height: 1
+            });
+            rect5 = new Rectangle({
+              width: 1,
+              height: 1
+            });
 
-        pkr.add(rect1);
-        pkr.add(rect2);
-        pkr.add(rect3);
-        pkr.add(rect4);
-        pkr.add(rect5);
-
+            pkr.add(rect1);
+            pkr.add(rect2);
+            pkr.add(rect3);
+            pkr.add(rect4);
+            pkr.add(rect5);
+        });
         it('packs them in vertical layers', function addVertical() {
           assert.equal(rect1.x, 0, 'rect1.x top left');
           assert.equal(rect1.y, 0, 'rect1.y top left');
@@ -218,30 +222,32 @@ describe('Packer', function() {
       });
 
       describe("with (default) infinite dimensions", function() {
-        var pkr = new Packer();
+        var pkr, rect1, rect2, huge;
+        beforeEach(function(){
+            pkr = new Packer();
 
-        // 12hh
-        // 12hh
-        //   hh
-        //   hh
+            // 12hh
+            // 12hh
+            //   hh
+            //   hh
 
-        var rect1 = new Rectangle({
-          width: 1,
-          height: 2
+            rect1 = new Rectangle({
+              width: 1,
+              height: 2
+            });
+            rect2 = new Rectangle({
+              width: 1,
+              height: 2
+            });
+            huge = new Rectangle({
+              width: Number.POSITIVE_INFINITY,
+              height: Number.POSITIVE_INFINITY
+            });
+
+            pkr.add(rect1);
+            pkr.add(rect2);
+            pkr.add(huge);
         });
-        var rect2 = new Rectangle({
-          width: 1,
-          height: 2
-        });
-        var huge = new Rectangle({
-          width: Number.POSITIVE_INFINITY,
-          height: Number.POSITIVE_INFINITY
-        });
-
-        pkr.add(rect1);
-        pkr.add(rect2);
-        pkr.add(huge);
-
         it('should pack finite size rectangles', function addVertical() {
           assert.equal(rect1.x, 0, 'rect1.x top left');
           assert.equal(rect1.y, 0, 'rect1.y top left');
@@ -270,7 +276,7 @@ describe('Packer', function() {
         // 7xx
         // .xx
         // ---
-        // 7    
+        // 7
         var rect6 = new Rectangle({
           width: 4,
           height: 1
