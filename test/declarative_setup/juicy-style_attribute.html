@@ -48,8 +48,8 @@
         /**
          * JuicyTiles tests
          */
-        var juicyTileList = document.getElementById('list1');
-        describe('juicy-tile-list precalculate size', function() {
+        var juicyTileList;
+        describe('juicy-tile-list declarative per-element setup', function() {
             var initialSetup
             before(function(done) {
                 juicyTileList = fixture('list');
