@@ -40,6 +40,12 @@
                         <code>height:50px; width: 250px;</code>
                     </div>
                 </div>
+                <!-- CSS-like px=> number -->
+                <div juicy-style="width:100px; height: 50px;">
+                    <div>3 - px => fixed
+                        <code>width: 100px; height: 50px; </code>
+                    </div>
+                </div>
             </juicy-tile-list>
         </template>
     </test-fixture>
@@ -81,6 +87,11 @@
             it('tile with `height` and `width` given in `juicy-style` attribute, and setup given in parent\'s JSON, should end up with JSON\'s setup', function() {
                 expect(juicyTileList.allItems[2].width).to.equal(250);
                 expect(juicyTileList.allItems[2].height).to.equal(50);
+            });
+
+            it('`px` given in `juicy-style` attribute, should be treated as just a number in tile\'s setup', function() {
+                assert(juicyTileList.allItems[3].width == 100);
+                assert(juicyTileList.allItems[3].height == 50);
             });
         });
     </script>

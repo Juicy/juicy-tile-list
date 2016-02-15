@@ -859,8 +859,9 @@ version: 1.2.0
         /*
           parses given string containing css directives
           and returns a map ruleName: ruleValue
-          @param {String} rules, css directive string example
-              \n\ncolor:white;\n    font-size:18px;\n
+          Parse `(width|height):NNpx` as `(width|height):NN`
+          @param {String} rules, css directive-like string example
+              \n\width:40%;\n    priority:0.5;\n
           Modified ver
         */
         proto.parseRules = function(rules) {
@@ -884,6 +885,11 @@ version: 1.2.0
               // but optimze to avoid regexps as much as possible
               if(cssValue === '0'){
                   cssValue = 0;
+              }
+              if(cssProperty === 'width' || cssProperty === 'height'){
+                  if(cssValue.indexOf('px')>-1){
+                      cssValue = parseFloat(cssValue);
+                  }
               }
 
               // silently ignore unknown values https://drafts.csswg.org/css2/syndata.html#unsupported-values
