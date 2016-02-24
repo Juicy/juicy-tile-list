@@ -208,6 +208,17 @@ juicytilelist.setup = {
 - [`<juicy-tile-editor>`](Juicy/juicy-tile-editor) - GUI for editing tiles JSON setup
 - [`<juicy-tile-grid>`](Juicy/juicy-tile-grid) - Tiles rendered with CSS Grid Layout
 
+## Development
+Naturally stary with `npm install` and `bower install`.
+
+#### Minify
+To minify  code you can use `grunt minify`
+
+#### Release
+
+To minify, bump versions and release it, use `grunt release`
+
+
 ## Contributing
 
 1. Fork it!
