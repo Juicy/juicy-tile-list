@@ -146,10 +146,12 @@ juicytilelist.setup = {
 }
 ```
 The importance of setups, looks as follows:
+
 1. `juicy-tile-list`'s `setup` attribute/property,
 2. `juicy-tile-list`'s child `juicy-style` attribute,
 3. `juicy-tile-list`'s `defaultTileSetup` attribute,
 3. `juicy-tile-list`'s build in default tile setup.
+
 Meaning, that a setup higher on the list overwrites previous values
 
 ## Tile ids
