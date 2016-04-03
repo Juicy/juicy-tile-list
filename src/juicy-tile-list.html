@@ -675,7 +675,14 @@ version: 1.3.0
             this.cleanupDOM();
             // console.log("setup changed")
             Package.call(this, this.setup);
-            this._defaultSetup(this.tiles, this.setup.items, this.allItems, this.defaultTileSetup);
+            // XXX (tomalec): needed only if mutation occured in meantime.
+            // Consider moving to (always obseving) mutation observer,
+            // or removing at all
+            // after filtering & co. will be moved to juicy-composer
+            this.createItemsList();
+            // otherwise this would be enough
+            // this._defaultSetup(this.tiles, this.setup.items, this.allItems, this.defaultTileSetup);
+            console.info('refresh')
             this.refresh(this._isShadomDOMOutdated);
         };
 
