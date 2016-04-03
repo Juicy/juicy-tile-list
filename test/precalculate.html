@@ -1,7 +1,7 @@
-
 <!doctype html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 
@@ -11,81 +11,90 @@
     <!-- Step 1: import the element to test -->
     <link rel="import" href="../src/juicy-tile-list.html">
     <style>
-      juicy-tile-list>*{
-        background-color: lightgray;
-        width: 100%;
-        height: 100%;
-      }
+        juicy-tile-list>* {
+            background-color: lightgray;
+            width: 100%;
+            height: 100%;
+        }
     </style>
-  </head>
-  <body>
+</head>
 
-    <!-- You can use the document as a place to set up your fixtures. -->
-    <juicy-tile-list id="list1">
-      <div>
-        <div style="width:200px;">0 - <code>width: 200px;</code></div>
-      </div>
-      <div>
-        <div style="height:100px;">1 - <code>height: 100px;</code></div>
-      </div>
-      <div>
-        <div style="height:50px; width: 250px;">2 - <code>height:50px; width: 250px;</code></div>
-      </div>
-    </juicy-tile-list>
+<body>
+
+
+    <test-fixture id="list">
+        <template>
+            <juicy-tile-list id="list1">
+                <div>
+                    <div style="width:200px;">0 - <code>width: 200px;</code></div>
+                </div>
+                <div>
+                    <div style="height:100px;">1 - <code>height: 100px;</code></div>
+                </div>
+                <div>
+                    <div style="height:50px; width: 250px;">2 - <code>height:50px; width: 250px;</code></div>
+                </div>
+            </juicy-tile-list>
+        </template>
+    </test-fixture>
 
     <script>
+        /**
+         * JuicyTiles tests
+         */
+        var juicyTileList;
+        describe('juicy-tile-list precalculate size', function() {
+            /** helpers*/
+            function initialSetup(){
+                return {
+                    width: 350,
+                    items: [{
+                        id: 0,
+                        priority: 0.9,
+                        height: 100,
+                        width: 111,
+                        precalculateWidth: true
+                    }, {
+                        id: 1,
+                        priority: 0.8,
+                        height: 222,
+                        precalculateHeight: true,
+                        width: 100
+                    }, {
+                        id: 2,
+                        priority: 0.7,
+                        height: 333,
+                        precalculateHeight: true,
+                        width: 444,
+                        precalculateWidth: true
+                    }]
+                };
+            }
+            beforeEach(function(done) {
+                juicyTileList = fixture('list');
+                var setup = initialSetup();
+                juicyTileList.style.width = setup.width + "px";
+                juicyTileList.setup = setup;
+                // wait for async attached
+                setTimeout(done, 100);
+            });
 
-/**
- * JuicyTiles tests
- */
-var juicyTileList = document.getElementById('list1');
-describe('juicy-tile-list precalculate size', function() {
-  var initialSetup
-  before(function(){
-    initialSetup = {
-      width: 350,
-      items:[
-        {
-          id: 0,
-          priority: 0.9,
-          height: 100,
-          width: 111,
-          precalculateWidth: true
-        },{
-          id: 1,
-          priority: 0.8,
-          height: 222,
-          precalculateHeight: true,
-          width: 100
-        },{
-          id: 2,
-          priority: 0.7,
-          height: 333,
-          precalculateHeight: true,
-          width: 444,
-          precalculateWidth: true
-        }
-      ]
-    };
-    juicyTileList.setup = JSON.parse(JSON.stringify(initialSetup));
-    juicyTileList.style.width = initialSetup.width + "px";
-    juicyTileList.refresh();
-  });
+            it('tile with `precalculateWidth` flag, should get it\'s DOM content width', function() {
+                debugger
+                expect(juicyTileList.tiles[0].getBoundingClientRect().width).to.deep.equal(200);
+            });
 
-  it('tile with `precalculateWidth` flag, should get it\'s DOM content width', function () {
-    expect( juicyTileList.tiles[0].getBoundingClientRect().width ).to.deep.equal(200);
-  });
+            it('tile with `precalculateHeight` flag, should get it\'s DOM content height', function() {
+                expect(juicyTileList.tiles[1].getBoundingClientRect().height).to.deep.equal(100);
+            });
 
-  it('tile with `precalculateHeight` flag, should get it\'s DOM content height', function () {
-    expect( juicyTileList.tiles[1].getBoundingClientRect().height ).to.deep.equal(100);
-  });
-
-  it('tile with `precalculateWidth` and `precalculateHeight` flags, should get it\'s DOM content dimensions', function () {
-    expect( juicyTileList.tiles[2].getBoundingClientRect().width ).to.deep.equal(250);
-    expect( juicyTileList.tiles[2].getBoundingClientRect().height ).to.deep.equal(50);
-  });
-});
+            it('tile with `precalculateWidth` and `precalculateHeight` flags, should get it\'s DOM content dimensions', function() {
+                expect(juicyTileList.tiles[2].getBoundingClientRect().width).to.deep.equal(250);
+                expect(juicyTileList.tiles[2].getBoundingClientRect().height).to.deep.equal(50);
+            });
+        });
     </script>
 
-  </body>
+</body>
+
 </html>
