@@ -30,8 +30,9 @@
                         <code>width: 100%; height: 50;</code>
                     </div>
                 </div>
-                <div juicy-style="precalculateWidth: 1; precalculateHeight: 0; height: 100;">
-                    <div style="height:50px; width: 250px;">1 -
+                <!-- CSS-like `"true", "false"` → `true, false` -->
+                <div juicy-style="precalculateWidth: true; precalculateHeight: false; height: 100;">
+                    <div style="height:50px; width: 250px;">6 - `"true", "false"` → `true, false`
                         <code>height:50px; width: 250px;</code>
                     </div>
                 </div>
@@ -40,9 +41,21 @@
                         <code>height:50px; width: 250px;</code>
                     </div>
                 </div>
-                <!-- CSS-like px=> number -->
+                <!-- CSS-like px → number -->
                 <div juicy-style="width:100px; height: 50px;">
-                    <div>3 - px => fixed
+                    <div>3 - px → fixed
+                        <code>width: 100px; height: 50px; </code>
+                    </div>
+                </div>
+                <!-- CSS-like % → string -->
+                <div juicy-style="width:100%; height: 50%;">
+                    <div>4 - % → string
+                        <code>width: 100%; height: 50%; </code>
+                    </div>
+                </div>
+                <!-- CSS-like number → number -->
+                <div juicy-style="width:100; height: 50;">
+                    <div>5 - number → number
                         <code>width: 100px; height: 50px; </code>
                     </div>
                 </div>
@@ -72,16 +85,14 @@
                 juicyTileList.style.width = initialSetup.width + "px";
                 setTimeout(function waitForAttached(){done();});
             });
-            // TODO (tomalec) clean types and strickt equality
             it('tile with `height` and `width` given in `juicy-style` attribute, should get it in it\'s setup', function() {
                 expect(juicyTileList.allItems[0].width).to.equal("100%");
-                expect(juicyTileList.allItems[0].height).to.equal('50');
+                expect(juicyTileList.allItems[0].height).to.equal(50);
             });
 
-            it('tile with `precalculateWidth` flag set to `1` and `precalculateHeight` to `0` in `juicy-style` attribute, should get it in it\'s setup', function() {
-                expect(juicyTileList.allItems[1].precalculateWidth).to.be.ok;
-                expect(juicyTileList.allItems[1].precalculateHeight).to.exist;
-                expect(juicyTileList.allItems[1].precalculateHeight).to.not.be.ok;
+            it('tile with `precalculateWidth` flag set to `"true"` and `precalculateHeight` to `"false"` in `juicy-style` attribute, should get it in it\'s setup', function() {
+                expect(juicyTileList.allItems[1].precalculateWidth).to.be.true;
+                expect(juicyTileList.allItems[1].precalculateHeight).to.be.false;
             });
 
             it('tile with `height` and `width` given in `juicy-style` attribute, and setup given in parent\'s JSON, should end up with JSON\'s setup', function() {
@@ -90,9 +101,20 @@
             });
 
             it('`px` given in `juicy-style` attribute, should be treated as just a number in tile\'s setup', function() {
-                assert(juicyTileList.allItems[3].width == 100);
-                assert(juicyTileList.allItems[3].height == 50);
+                expect(juicyTileList.allItems[3].width).to.equal(100);
+                expect(juicyTileList.allItems[3].height).to.equal(50);
             });
+
+            it('`nn%` given in `juicy-style` attribute, should get it in it\'s setup', function() {
+                expect(juicyTileList.allItems[4].width).to.equal('100%');
+                expect(juicyTileList.allItems[4].height).to.equal('50%');
+            });
+
+            it('Number given in `juicy-style` attribute, should get it in it\'s setup', function() {
+                expect(juicyTileList.allItems[5].width).to.equal(100);
+                expect(juicyTileList.allItems[5].height).to.equal(50);
+            });
+
         });
     </script>
 

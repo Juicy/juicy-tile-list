@@ -889,13 +889,14 @@ version: 1.3.2
               // TODO (tomalec): parse some values according to
               // https://drafts.csswg.org/css2/syndata.html#tokenization
               // but optimze to avoid regexps as much as possible
-              if(cssValue === '0'){
-                  cssValue = 0;
-              }
               if(cssProperty === 'width' || cssProperty === 'height'){
-                  if(cssValue.indexOf('px')>-1){
+                  if(cssValue.indexOf('%')==-1){
                       cssValue = parseFloat(cssValue);
                   }
+              } else if(cssValue === 'true'){
+                  cssValue = true;
+              } else if(cssValue === 'false'){
+                  cssValue = false;
               }
 
               // silently ignore unknown values https://drafts.csswg.org/css2/syndata.html#unsupported-values
