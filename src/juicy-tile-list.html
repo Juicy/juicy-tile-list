@@ -397,11 +397,10 @@ version: 1.3.3
                 var tile = tiles[elNo];
 
                 if (!allItems[tile.id]) {
+                    itemSetup = JSON.parse(JSON.stringify(this.defaultTileSetup || defaultTileSetup));
                     // parse declarative per-item setup
                     if(tile.element.hasAttribute('juicy-style')){
-                        itemSetup = this.parseRules(tile.element.getAttribute("juicy-style"));
-                    } else {
-                        itemSetup = tile.defaultSetup ||  JSON.parse(JSON.stringify(defaultTileSetup));
+                        this.parseRules(tile.element.getAttribute("juicy-style"), itemSetup);
                     }
 
                     if (setupItems.length == 0) {
@@ -870,8 +869,7 @@ version: 1.3.3
               \n\width:40%;\n    priority:0.5;\n
           Modified ver
         */
-        proto.parseRules = function(rules) {
-          var map = {};
+        proto.parseRules = function(rules, map) {
           rules = rules.split(';');
 
           //proccess rules

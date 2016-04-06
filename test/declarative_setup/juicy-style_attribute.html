@@ -59,6 +59,26 @@
                         <code>width: 100px; height: 50px; </code>
                     </div>
                 </div>
+                <!-- juicy-style extends build in defaults -->
+                <div juicy-style="width:100;">
+                    <div>6 - juicy-style extends build in defaults
+                        <code>width: 100px; height: 128px; </code>
+                    </div>
+                </div>
+            </juicy-tile-list>
+        </template>
+    </test-fixture>
+    <test-fixture id="withDefaultTileSetup">
+        <template>
+            <juicy-tile-list defaultTileSetup='{"width": "50%", "height": 50}'>
+                <div juicy-style="height: 70; background: #f00;">
+                    <div>0 - `defaultTileSetup` extended by `juicy-style`
+                        <code>width: 50%; height: 70;</code>
+                    </div>
+                    <div juicy-style="height: 70; background: #f00;">1 - all defaults overwritten by explicit setup
+                        <code>width: 250; height: 80;</code>
+                    </div>
+                </div>
             </juicy-tile-list>
         </template>
     </test-fixture>
@@ -115,6 +135,41 @@
                 expect(juicyTileList.allItems[5].height).to.equal(50);
             });
 
+            it('values given in `juicy-style` attribute, should extend build in default setup', function() {
+                expect(juicyTileList.allItems[6].width).to.equal(100);
+                expect(juicyTileList.allItems[6].height).to.equal(128);
+            });
+
+            describe('for element that has `defaultTileSetup` set', function() {
+                var withDefaultTileSetup, initialSetup
+                before(function(done) {
+                    withDefaultTileSetup = fixture('withDefaultTileSetup');
+                    initialSetup = {
+                        width: 500,
+                        items: [{
+                            id: 1,
+                            priority: 0.7,
+                            width: 250,
+                            height: 80
+                        }]
+                    };
+                    withDefaultTileSetup.setup = JSON.parse(JSON.stringify(initialSetup));
+                    withDefaultTileSetup.style.width = initialSetup.width + "px";
+                    setTimeout(function waitForAttached(){done();});
+                });
+                it('`juicy-style` attribute, should extend it\'s default', function() {
+                    expect(withDefaultTileSetup.allItems[0].width).to.equal("50%");
+                    expect(withDefaultTileSetup.allItems[0].height).to.equal(70);
+                    expect(withDefaultTileSetup.allItems[0].background).to.equal('#f00');
+                });
+                it('`juicy-style` attribute, should be overwritten by explicit setup entry', function() {
+                    expect(withDefaultTileSetup.allItems[1].width).to.equal(initialSetup.items[0].width);
+                    expect(withDefaultTileSetup.allItems[1].height).to.equal(initialSetup.items[0].height);
+                    expect(withDefaultTileSetup.allItems[1].priority).to.equal(initialSetup.items[0].priority);
+                    expect(withDefaultTileSetup.allItems[1]).not.to.have.property('background');
+                });
+
+            });
         });
     </script>
 
