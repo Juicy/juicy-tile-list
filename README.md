@@ -145,10 +145,12 @@ juicytilelist.setup = {
   ]
 }
 ```
+Properties provided in `juicy-style` **extends** defaults, but may be overwritten by explicit setup entry.
+
 The importance of setups, looks as follows:
 
 1. `juicy-tile-list`'s `setup` attribute/property,
-2. `juicy-tile-list`'s child `juicy-style` attribute,
+2. `juicy-tile-list`'s child `juicy-style` attribute (extends defaults mentioned below),
 3. `juicy-tile-list`'s `defaultTileSetup` attribute,
 3. `juicy-tile-list`'s build in default tile setup.
 
