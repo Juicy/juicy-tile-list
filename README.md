@@ -235,7 +235,6 @@ To minify, bump versions and release it, use `grunt release`
 
 For detailed changelog, check [Releases](https://github.com/Juicy/juicy-tile-list/releases).
 
-
 ## License
 
-[MIT License](http://opensource.org/licenses/MIT)
+MIT
