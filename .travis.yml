@@ -12,7 +12,7 @@ branches:
     - /.*/
 node_js: 4
 addons:
-  firefox: 46.0
+  firefox: latest
   apt:
     sources:
       - google-chrome
