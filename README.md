@@ -1,4 +1,4 @@
-# &lt;juicy-tile-list&gt; ![Bower Version](https://badge.fury.io/bo/juicy-tile-list.svg) [![Build Status](https://travis-ci.org/Juicy/juicy-tile-list.svg?branch=gh-pages)](https://travis-ci.org/Juicy/juicy-tile-list)
+# &lt;juicy-tile-list&gt; ![Bower Version](https://badge.fury.io/bo/juicy-tile-list.svg) [![Build Status](https://travis-ci.org/Juicy/juicy-tile-list.svg?branch=master)](https://travis-ci.org/Juicy/juicy-tile-list)
 
 > `<juicy-tile-list>` is masonry-like Custom Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only).
 
