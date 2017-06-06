@@ -13,7 +13,7 @@ version: 1.4.0
 <script src="package.js"></script>
 
 <template id="juicy-tile">
-    <div class="juicy-tile"><content></content></div>
+    <div class="juicy-tile"><slot></slot></div>
 </template>
 <template id="juicy-tile-list">
     <style>
@@ -45,7 +45,7 @@ version: 1.4.0
         }
     </style>
     <div id="container" class="animate"></div>
-    <content></content>
+    <slot></slot>
 </template>
 
 <script>
@@ -466,7 +466,13 @@ version: 1.4.0
          * The real meat of attachedCallback
          */
         proto._attachedCallback = function deferredListAttached() {
-            var root = this.createShadowRoot();
+            var root;
+            if (this.attachShadow) {
+                root = this.attachShadow({ mode: 'open' });
+            } else {
+                root = this.createShadowRoot();
+            }
+
             var template = tileListTemplate;
             var clone = document.importNode(template.content, true);
 
