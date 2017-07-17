@@ -1,3 +1,5 @@
+:warning: This element is **DEPRECATED**, we lack of resorces to support it any longer. Please write an issue if you are interested in maintaining it.
+
 # &lt;juicy-tile-list&gt; ![Bower Version](https://badge.fury.io/bo/juicy-tile-list.svg) [![Build Status](https://travis-ci.org/Juicy/juicy-tile-list.svg?branch=master)](https://travis-ci.org/Juicy/juicy-tile-list)
 
 > `<juicy-tile-list>` is masonry-like Custom Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only).
